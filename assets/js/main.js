@@ -697,10 +697,10 @@
     // letras maiúsculas e espaçadas, como na referência de copo minimalista
     cupNameText.textContent = (name || SAMPLE_NAME).toLocaleUpperCase('pt-BR');
     cupNameText.setAttribute('fill-opacity', name ? '1' : '.55');
-    fitText(cupNameText, 26, 168);
+    fitText(cupNameText, 34, 236);
     const sub = cupSubtitle();
     cupSubText.textContent = sub ? (state.cup.subMode === 'date' ? sub.replace(/\//g, ' · ') : sub.toUpperCase()) : SAMPLE_SUB;
-    fitText(cupSubText, 10.5, 160);
+    fitText(cupSubText, 13, 240);
     renderMessage();
   };
 

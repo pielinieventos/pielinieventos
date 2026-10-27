@@ -467,97 +467,6 @@
       </div>
     </section>
 
-    <!-- =========================================================
-         5b. SIMULADOR DE COPO PERSONALIZADO (ESTAÇÃO PLUS)
-    ========================================================== -->
-    <section id="copo" data-nav-theme="light" class="relative overflow-hidden py-24 sm:py-32">
-      <div class="container-site grid items-center gap-12 lg:grid-cols-12">
-        <div class="lg:col-span-5" data-reveal>
-          <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Exclusivo Estação Premium Plus</span>
-          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Seu evento, <em class="text-pielini">no copo</em></h2>
-          <p class="mt-6 max-w-lg text-torra/70">Personalizamos os copos com a identidade visual do seu evento. Teste agora: digite o nome e escolha a data ou um subtítulo — ele aparece no copo do meio.</p>
-
-          <form id="cup-form" class="mt-10 space-y-7" onsubmit="return false">
-            <div>
-              <label for="cup-name" class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60"><i data-lucide="type" class="h-3.5 w-3.5"></i> Nome ou iniciais do evento</label>
-              <input id="cup-name" type="text" maxlength="26" autocomplete="off" placeholder="Ana &amp; Lucas" class="mt-3 w-full rounded-2xl border border-torra/15 bg-creme px-5 py-4 font-display text-2xl outline-none transition placeholder:text-torra/30 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-            </div>
-
-            <div>
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <span class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60"><i data-lucide="calendar-heart" class="h-3.5 w-3.5"></i> Data ou subtítulo</span>
-                <div class="inline-flex rounded-full border border-torra/15 bg-creme p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
-                  <button type="button" class="seg-btn rounded-full px-4 py-1.5 transition" data-sub-mode="date" aria-pressed="true">Data</button>
-                  <button type="button" class="seg-btn rounded-full px-4 py-1.5 transition" data-sub-mode="text" aria-pressed="false">Subtítulo</button>
-                </div>
-              </div>
-              <input id="cup-date" type="date" aria-label="Data do evento" class="mt-3 w-full rounded-2xl border border-torra/15 bg-creme px-5 py-4 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-              <input id="cup-sub" type="text" maxlength="30" aria-label="Subtítulo do copo" placeholder="Turma 2026 · Medicina" hidden class="mt-3 w-full rounded-2xl border border-torra/15 bg-creme px-5 py-4 outline-none transition placeholder:text-torra/30 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-            </div>
-
-
-            <p class="flex items-start gap-2 rounded-2xl bg-pielini/5 p-4 text-sm text-pielini">
-              <i data-lucide="message-circle" class="mt-0.5 h-4 w-4 shrink-0"></i>
-              Sua personalização vai junto automaticamente na mensagem de agendamento.
-            </p>
-          </form>
-        </div>
-
-        <!-- Copos brancos: emblema | personalizável | logotipo -->
-        <div class="relative order-first lg:order-none lg:col-span-7" data-reveal style="--rd:.15s">
-          <svg id="cup-svg" viewBox="0 0 900 560" class="w-full overflow-hidden rounded-[2rem] shadow-xl shadow-torra/10" role="img" aria-labelledby="cup-title">
-            <title id="cup-title">Três copos brancos: o da esquerda com o emblema da Pielini, o do meio com a personalização do seu evento e o da direita com o logotipo Pielini Coffee</title>
-            <defs>
-              <linearGradient id="cup-white" x1="0" x2="1">
-                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#F7F6F3"/><stop offset=".8" stop-color="#ECEAE5"/><stop offset="1" stop-color="#DEDBD5"/>
-              </linearGradient>
-              <radialGradient id="top-latte" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#D9A877"/><stop offset=".75" stop-color="#C08048"/><stop offset="1" stop-color="#9A6232"/></radialGradient>
-              <radialGradient id="top-espresso" cx=".5" cy=".4" r=".62"><stop offset="0" stop-color="#E0A86C"/><stop offset=".6" stop-color="#C98A4D"/><stop offset="1" stop-color="#8A5428"/></radialGradient>
-              <radialGradient id="top-capp" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#F1E2CF"/><stop offset=".7" stop-color="#E2C6A6"/><stop offset="1" stop-color="#C9A27A"/></radialGradient>
-              <clipPath id="capp-clip"><ellipse cx="730" cy="131.5" rx="99" ry="17.5"/></clipPath>
-              <linearGradient id="shelf-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3EEE7"/><stop offset="1" stop-color="#ECE5DB"/></linearGradient>
-              <filter id="cup-shadow-blur" x="-40%" y="-80%" width="180%" height="260%"><feGaussianBlur stdDeviation="9"/></filter>
-            </defs>
-            <rect width="900" height="560" fill="#E7E1D9"/>
-            <rect y="400" width="900" height="80" fill="url(#shelf-top)"/>
-            <rect y="480" width="900" height="80" fill="#E2DBD1"/>
-            <path d="M0 480 H900" stroke="#CFC6BA" stroke-width="1.5"/>
-            <path d="M94 420 L240 420 L130 470 L-80 470 Z" fill="#1E1610" opacity=".13" filter="url(#cup-shadow-blur)"/><path d="M374 420 L520 420 L410 470 L200 470 Z" fill="#1E1610" opacity=".13" filter="url(#cup-shadow-blur)"/><path d="M654 420 L800 420 L690 470 L480 470 Z" fill="#1E1610" opacity=".13" filter="url(#cup-shadow-blur)"/>
-
-              <g>
-                <path d="M62 130 L278 130 L248 420 A78 9 0 0 1 92 420 Z" fill="url(#cup-white)"/>
-                <path d="M216 142 C188 240 256 300 196 426 L248 420 L278 130 Z" fill="#1E1610" opacity=".055"/>
-                <path d="M214 144 C186 242 254 302 194 426" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="2"/>
-                <ellipse cx="170" cy="130" rx="108" ry="22" fill="#FBFAF8" stroke="#E4E0D9" stroke-width="1.2"/>
-                <ellipse cx="170" cy="131.5" rx="99" ry="17.5" fill="url(#top-latte)"/>
-                <g opacity=".96"><path d="M118.0 118.5 Q133.0 131.5 118.0 144.5" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M129.0 119.7 Q142.6 131.5 129.0 143.3" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M140.0 120.9 Q152.2 131.5 140.0 142.1" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M151.0 122.1 Q161.8 131.5 151.0 140.9" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M162.0 123.3 Q171.4 131.5 162.0 139.7" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M173.0 124.5 Q181.0 131.5 173.0 138.5" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M184.0 125.7 Q190.6 131.5 184.0 137.3" fill="none" stroke="#FFF7EC" stroke-width="3.4" stroke-linecap="round"/><path d="M200 131.5 c0 -9 13 -12 17 -4 c4 -8 17 -5 17 4 c0 8 -12 13 -17 16 c-5 -3 -17 -8 -17 -16 Z" transform="rotate(90 217 134.5)" fill="#FFF7EC"/><path d="M110 131.5 L210 131.5" stroke="#FFF7EC" stroke-width="2" stroke-linecap="round"/></g>
-                <svg x="132" y="236" width="76" height="76" style="color:#1E1610" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-              </g>
-
-              <g>
-                <path d="M342 130 L558 130 L528 420 A78 9 0 0 1 372 420 Z" fill="url(#cup-white)"/>
-                <path d="M496 142 C468 240 536 300 476 426 L528 420 L558 130 Z" fill="#1E1610" opacity=".055"/>
-                <path d="M494 144 C466 242 534 302 474 426" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="2"/>
-                <ellipse cx="450" cy="130" rx="108" ry="22" fill="#FBFAF8" stroke="#E4E0D9" stroke-width="1.2"/>
-                <ellipse cx="450" cy="131.5" rx="99" ry="17.5" fill="url(#top-espresso)"/>
-                <text id="cup-name-text" x="450" y="276" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="26" letter-spacing="4" fill="#1E1610">ANA &amp; LUCAS</text>
-                <text id="cup-sub-text" x="450" y="302" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="10.5" letter-spacing="3" fill="#1E1610" fill-opacity=".7">12 · 03 · 2027</text>
-              </g>
-
-              <g>
-                <path d="M622 130 L838 130 L808 420 A78 9 0 0 1 652 420 Z" fill="url(#cup-white)"/>
-                <path d="M776 142 C748 240 816 300 756 426 L808 420 L838 130 Z" fill="#1E1610" opacity=".055"/>
-                <path d="M774 144 C746 242 814 302 754 426" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="2"/>
-                <ellipse cx="730" cy="130" rx="108" ry="22" fill="#FBFAF8" stroke="#E4E0D9" stroke-width="1.2"/>
-                <ellipse cx="730" cy="131.5" rx="99" ry="17.5" fill="url(#top-capp)"/>
-                <g clip-path="url(#capp-clip)"><circle cx="687.8" cy="124.4" r="1.1" fill="#8A5428" opacity="0.42"/><circle cx="660.6" cy="129.7" r="1.7" fill="#8A5428" opacity="0.71"/><circle cx="772.4" cy="126.5" r="1.2" fill="#8A5428" opacity="0.47"/><circle cx="677.6" cy="124.4" r="0.9" fill="#8A5428" opacity="0.77"/><circle cx="782.6" cy="137.0" r="1.6" fill="#8A5428" opacity="0.44"/><circle cx="699.6" cy="133.8" r="1.5" fill="#8A5428" opacity="0.73"/><circle cx="790.8" cy="124.1" r="1.3" fill="#8A5428" opacity="0.65"/><circle cx="731.0" cy="125.7" r="1.2" fill="#8A5428" opacity="0.39"/><circle cx="799.5" cy="138.1" r="1.3" fill="#8A5428" opacity="0.49"/><circle cx="795.4" cy="132.8" r="1.7" fill="#8A5428" opacity="0.73"/><circle cx="731.3" cy="130.0" r="1.3" fill="#8A5428" opacity="0.54"/><circle cx="675.8" cy="128.0" r="1.6" fill="#8A5428" opacity="0.37"/><circle cx="657.4" cy="133.8" r="0.9" fill="#8A5428" opacity="0.59"/><circle cx="725.4" cy="128.7" r="1.8" fill="#8A5428" opacity="0.44"/><circle cx="716.0" cy="126.1" r="1.4" fill="#8A5428" opacity="0.47"/><circle cx="706.9" cy="135.9" r="1.0" fill="#8A5428" opacity="0.60"/><circle cx="794.7" cy="124.3" r="0.7" fill="#8A5428" opacity="0.45"/><circle cx="772.4" cy="133.6" r="0.9" fill="#8A5428" opacity="0.50"/><circle cx="678.4" cy="130.8" r="0.7" fill="#8A5428" opacity="0.66"/><circle cx="793.3" cy="139.7" r="1.5" fill="#8A5428" opacity="0.78"/><circle cx="652.9" cy="127.7" r="1.8" fill="#8A5428" opacity="0.70"/><circle cx="715.7" cy="139.5" r="1.3" fill="#8A5428" opacity="0.72"/><circle cx="696.9" cy="125.9" r="1.1" fill="#8A5428" opacity="0.41"/><circle cx="711.1" cy="139.8" r="1.0" fill="#8A5428" opacity="0.35"/><circle cx="657.2" cy="125.6" r="1.5" fill="#8A5428" opacity="0.51"/><circle cx="696.5" cy="124.2" r="1.8" fill="#8A5428" opacity="0.54"/><circle cx="683.3" cy="123.6" r="0.7" fill="#8A5428" opacity="0.43"/><circle cx="758.3" cy="125.2" r="0.6" fill="#8A5428" opacity="0.57"/><circle cx="689.8" cy="140.5" r="0.7" fill="#8A5428" opacity="0.59"/><circle cx="773.8" cy="129.9" r="1.8" fill="#8A5428" opacity="0.56"/><circle cx="688.7" cy="129.9" r="0.6" fill="#8A5428" opacity="0.54"/><circle cx="689.8" cy="138.5" r="1.6" fill="#8A5428" opacity="0.57"/><circle cx="655.1" cy="127.1" r="0.9" fill="#8A5428" opacity="0.44"/><circle cx="687.0" cy="138.2" r="0.8" fill="#8A5428" opacity="0.37"/><circle cx="798.5" cy="132.7" r="1.8" fill="#8A5428" opacity="0.53"/><circle cx="794.2" cy="134.3" r="1.5" fill="#8A5428" opacity="0.69"/><circle cx="729.1" cy="124.2" r="0.9" fill="#8A5428" opacity="0.74"/><circle cx="794.0" cy="139.1" r="1.0" fill="#8A5428" opacity="0.65"/><circle cx="777.9" cy="134.1" r="1.6" fill="#8A5428" opacity="0.59"/><circle cx="754.8" cy="134.8" r="0.9" fill="#8A5428" opacity="0.77"/><circle cx="803.0" cy="123.8" r="1.8" fill="#8A5428" opacity="0.78"/><circle cx="756.9" cy="123.3" r="1.7" fill="#8A5428" opacity="0.41"/><circle cx="805.0" cy="134.5" r="0.7" fill="#8A5428" opacity="0.43"/><circle cx="751.6" cy="132.7" r="1.5" fill="#8A5428" opacity="0.77"/><circle cx="685.0" cy="122.6" r="1.7" fill="#8A5428" opacity="0.36"/><circle cx="790.2" cy="124.6" r="1.6" fill="#8A5428" opacity="0.70"/><circle cx="790.5" cy="132.4" r="1.7" fill="#8A5428" opacity="0.44"/><circle cx="757.4" cy="128.5" r="1.7" fill="#8A5428" opacity="0.70"/><circle cx="725.4" cy="132.0" r="0.6" fill="#8A5428" opacity="0.37"/><circle cx="745.1" cy="131.3" r="1.6" fill="#8A5428" opacity="0.62"/><circle cx="672.2" cy="129.0" r="1.5" fill="#8A5428" opacity="0.59"/><circle cx="651.7" cy="137.6" r="1.6" fill="#8A5428" opacity="0.39"/><circle cx="736.9" cy="129.4" r="1.5" fill="#8A5428" opacity="0.49"/><circle cx="687.4" cy="131.3" r="1.8" fill="#8A5428" opacity="0.39"/><circle cx="668.3" cy="133.7" r="1.7" fill="#8A5428" opacity="0.58"/><circle cx="719.4" cy="137.9" r="1.5" fill="#8A5428" opacity="0.38"/><circle cx="791.0" cy="126.0" r="1.0" fill="#8A5428" opacity="0.73"/><circle cx="717.6" cy="136.9" r="0.8" fill="#8A5428" opacity="0.74"/><circle cx="678.2" cy="125.2" r="1.2" fill="#8A5428" opacity="0.50"/><circle cx="736.7" cy="138.8" r="1.5" fill="#8A5428" opacity="0.35"/><circle cx="699.9" cy="132.3" r="1.2" fill="#8A5428" opacity="0.67"/><circle cx="727.5" cy="123.9" r="0.9" fill="#8A5428" opacity="0.73"/><circle cx="707.1" cy="136.3" r="1.8" fill="#8A5428" opacity="0.63"/><circle cx="758.3" cy="133.5" r="1.0" fill="#8A5428" opacity="0.76"/><circle cx="724.7" cy="138.9" r="1.0" fill="#8A5428" opacity="0.74"/><circle cx="775.9" cy="133.5" r="1.1" fill="#8A5428" opacity="0.41"/><circle cx="773.4" cy="129.0" r="1.4" fill="#8A5428" opacity="0.41"/><circle cx="663.2" cy="125.1" r="1.6" fill="#8A5428" opacity="0.43"/><circle cx="794.3" cy="129.2" r="1.3" fill="#8A5428" opacity="0.51"/><circle cx="749.3" cy="124.2" r="1.1" fill="#8A5428" opacity="0.77"/></g>
-                <svg x="664" y="246" width="132" height="64" viewBox="0 0 376 181" style="color:#1E1610" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
-              </g>
-          </svg>
-          <p class="mt-4 text-center text-xs text-torra/50">Copos brancos · o copo do meio leva a personalização do seu evento</p>
-        </div>
-      </div>
-    </section>
 
     <!-- =========================================================
          6. CONVERSÃO — VAMOS TOMAR UM CAFÉ?
@@ -611,6 +520,40 @@
                 <button type="button" class="pill" aria-pressed="false" data-value="Estação Premium Plus"><i data-lucide="check" class="pill-check"></i>Estação Premium Plus</button>
               </div>
             </fieldset>
+
+            <!-- Copos para personalizar (Estação Premium Plus) -->
+            <div id="copo" class="mt-8 scroll-mt-28 border-t border-torra/10 pt-7">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Personalize o copo do seu evento</p>
+                <span class="text-[11px] text-torra/45">Opcional · Estação Premium Plus</span>
+              </div>
+              <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
+                <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
+                <svg id="cup-svg" viewBox="0 0 1080 710" class="absolute inset-0 h-full w-full" style="mix-blend-mode:multiply" role="img" aria-labelledby="cup-title">
+                  <title id="cup-title">Três copos brancos de café: à esquerda com o emblema da Pielini, ao centro com a personalização do seu evento e à direita com o logotipo Pielini Coffee</title>
+                  <g fill="#1E1610" style="color:#1E1610" opacity=".9">
+                    <svg x="150" y="311" width="100" height="100" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+                    <text id="cup-name-text" x="541" y="364" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="34" letter-spacing="5">ANA &amp; LUCAS</text>
+                    <text id="cup-sub-text" x="541" y="401" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="13" letter-spacing="4" fill-opacity=".7">12 · 03 · 2027</text>
+                    <svg x="802" y="318" width="178" height="86" viewBox="0 0 376 181" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
+                  </g>
+                </svg>
+              </div>
+              <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label for="cup-name" class="sr-only">Nome ou iniciais do evento</label>
+                  <input id="cup-name" type="text" maxlength="24" autocomplete="off" placeholder="Nome no copo (ex.: Ana &amp; Lucas)" class="w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+                </div>
+                <div class="flex items-stretch gap-2">
+                  <div class="inline-flex shrink-0 rounded-2xl border border-torra/15 bg-white p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
+                    <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="date" aria-pressed="true">Data</button>
+                    <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="text" aria-pressed="false">Texto</button>
+                  </div>
+                  <input id="cup-date" type="date" aria-label="Data do evento" class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+                  <input id="cup-sub" type="text" maxlength="26" aria-label="Subtítulo do copo" placeholder="Turma 2026" hidden class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+                </div>
+              </div>
+            </div>
 
             <div class="mt-7">
               <label for="lead-name" class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Seu nome <span class="normal-case tracking-normal text-torra/40">(opcional)</span></label>
