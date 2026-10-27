@@ -422,9 +422,14 @@
       node.classList.add('swap-enter');
     });
   };
+  // leva ao "Nível de Experiência Sensorial" já com a estação recomendada marcada
   $('[data-m="rec-btn"]', momentPanel).addEventListener('click', (e) => {
-    selectPill('station', e.currentTarget.dataset.station);
-    $('#degustacao').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    const station = e.currentTarget.dataset.station;
+    const idx = ['Estação Básica', 'Estação Filtrados', 'Estação Espressos', 'Estação Premium Plus'].indexOf(station);
+    selectPill('station', station);
+    lockedStation = idx;
+    $('#level-bar').closest('.rounded-3xl').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(() => showLevel(idx), prefersReducedMotion ? 0 : 450);
   });
   momentTabs.forEach((tab, i) => {
     tab.addEventListener('click', () => setMoment(i));
