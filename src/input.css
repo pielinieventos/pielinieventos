@@ -183,3 +183,15 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
   [data-reveal] { opacity: 1; transform: none; }
   .steam { display: none; }
 }
+
+/* ------------------------------------------------------------------
+   Indicador de rolagem e "Quem somos nós?"
+------------------------------------------------------------------- */
+.scroll-cue-arrow { animation: cue-arrow 1.8s ease-in-out infinite; }
+@keyframes cue-arrow { 0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(6px); opacity: 1; } }
+.scroll-cue:hover .scroll-cue-arrow { color: var(--pielini); }
+
+.about-dialog { margin: auto; max-height: 90svh; overflow: auto; border: 0; }
+.about-dialog::backdrop { background: rgba(30, 22, 16, .45); backdrop-filter: blur(6px); }
+.about-dialog[open] { animation: about-in .45s cubic-bezier(.2,.8,.2,1); }
+@keyframes about-in { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }

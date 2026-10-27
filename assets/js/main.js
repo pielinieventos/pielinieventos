@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const WHATSAPP_NUMBER = '5551920046433';
+  const WHATSAPP_NUMBER = '5551995168104';
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
@@ -41,20 +41,30 @@
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('hero-in')));
 
   /* ===================================================================
-     0b. MOTION — grão de café se partindo conforme a rolagem
+     0b. MOTION — o grão se parte e cai, já moído, dentro do filtro
   =================================================================== */
   const bean = (() => {
     const section = $('#do-grao');
+    const stage = $('#bean-stage');
     const canvas = $('#bean-canvas');
+    const grains = $('#grain-canvas');
     const ctx = canvas.getContext('2d');
+    const gctx = grains.getContext('2d');
+    const filterFront = $('#filter-front');
+    const bed = $('#filter-bed');
     const steps = $$('.bean-step', section);
     const indexes = $$('.bean-index', section);
     const bar = $('#bean-progress');
     const FRAMES = 76;
     const src = (i) => `assets/seq/grao-${String(i).padStart(3, '0')}.webp`;
     const images = new Array(FRAMES);
-    let current = -1;
+    const ease = (x) => x * x * (3 - 2 * x);
     let loadingStarted = false;
+    let lastProgress = 0;
+    let dpr = 1;
+    let W = 0, H = 0;
+    let mouth = { x: 0, y: 0, rx: 0, ry: 0, tipY: 0, tipRx: 0 };
+    let beanRect = null;
 
     const load = (i) => new Promise((resolve) => {
       const img = new Image();
@@ -69,20 +79,11 @@
       loadingStarted = true;
       // primeiro quadros espaçados (prévia rápida), depois os intermediários
       const order = [];
-      for (let stepSize of [8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += stepSize) if (!order.includes(i)) order.push(i);
+      for (const gap of [8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += gap) if (!order.includes(i)) order.push(i);
       for (let k = 0; k < order.length; k += 6) {
         await Promise.all(order.slice(k, k + 6).map(load));
-        current = -1; draw(lastProgress);
+        draw(lastProgress);
       }
-    };
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const r = canvas.getBoundingClientRect();
-      canvas.width = Math.round(r.width * dpr);
-      canvas.height = Math.round(r.height * dpr);
-      current = -1;
-      draw(lastProgress);
     };
 
     const nearestLoaded = (i) => {
@@ -93,21 +94,110 @@
       return null;
     };
 
-    let lastProgress = 0;
+    // Geometria do filtro (viewBox 240×200: boca em y=30, rx=110; ponta em y≈190)
+    const measure = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const s = stage.getBoundingClientRect();
+      const f = filterFront.getBoundingClientRect();
+      W = s.width; H = s.height;
+      [canvas, grains].forEach((c) => { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); });
+      const k = f.width / 240;
+      mouth = {
+        x: f.left - s.left + f.width / 2,
+        y: f.top - s.top + 30 * k,
+        rx: 108 * k, ry: 17 * k,
+        tipY: f.top - s.top + 186 * k, tipRx: 32 * k,
+      };
+    };
+
+    // Região onde o café pode aparecer: tudo acima da boca + o interior do cone
+    const clipToFilter = (c) => {
+      c.beginPath();
+      c.rect(0, 0, W, mouth.y);
+      c.moveTo(mouth.x - mouth.rx, mouth.y);
+      c.lineTo(mouth.x + mouth.rx, mouth.y);
+      c.lineTo(mouth.x + mouth.tipRx, mouth.tipY);
+      c.lineTo(mouth.x - mouth.tipRx, mouth.tipY);
+      c.closePath();
+      c.clip();
+    };
+
     const draw = (p) => {
       lastProgress = p;
-      // o grão fica parado no início e termina em pó antes do fim da seção
-      const t = clamp((p - 0.06) / 0.82, 0, 1);
+      if (!W) return;
+      const t = clamp((p - 0.04) / 0.7, 0, 1);
       const i = Math.round(t * (FRAMES - 1));
-      if (i === current) return;
       const img = nearestLoaded(i);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
       if (!img) return;
-      if (images[i]) current = i;
-      const cw = canvas.width, ch = canvas.height;
-      const scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
+
+      // posição base: o grão ocupa a área acima do filtro
+      const boxH = mouth.y + mouth.ry * 2;
+      const base = Math.min(W / img.naturalWidth, boxH / img.naturalHeight);
+      // depois de partir, o pó desce, encolhe e some dentro do filtro
+      const fall = ease(clamp((p - 0.5) / 0.42, 0, 1));
+      const scale = base * (1 - 0.62 * fall);
       const w = img.naturalWidth * scale, h = img.naturalHeight * scale;
-      ctx.clearRect(0, 0, cw, ch);
-      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      const cx = mouth.x;
+      const cy = boxH / 2 + (mouth.y + h * 0.18 - boxH / 2) * fall;
+      beanRect = { x: cx - w / 2, y: cy - h / 2, w, h };
+
+      ctx.save();
+      clipToFilter(ctx);
+      ctx.globalAlpha = 1 - ease(clamp((p - 0.82) / 0.14, 0, 1));
+      ctx.drawImage(img, beanRect.x, beanRect.y, w, h);
+      ctx.restore();
+
+      // o leito de café no filtro cresce conforme a moagem cai
+      const level = ease(clamp((p - 0.32) / 0.62, 0, 1));
+      bed.setAttribute('rx', (100 * level).toFixed(1));
+      bed.setAttribute('ry', (4 + 13 * level).toFixed(1));
+      bed.setAttribute('cy', (44 - 12 * level).toFixed(1));
+    };
+
+    /* Grãos de pó caindo no filtro (partículas guiadas pela rolagem) */
+    const particles = [];
+    const palette = ['#5A3418', '#7A4A22', '#8A5428', '#B07A45', '#3A2010'];
+    let animating = false;
+    let lastSpawnP = 0;
+
+    const spawn = (n) => {
+      if (!beanRect) return;
+      for (let k = 0; k < n; k++) {
+        const fromX = beanRect.x + beanRect.w * (0.3 + Math.random() * 0.4);
+        const fromY = beanRect.y + beanRect.h * (0.45 + Math.random() * 0.35);
+        const targetX = mouth.x + (Math.random() - 0.5) * mouth.rx * 1.3;
+        particles.push({
+          x: fromX, y: fromY,
+          vx: (targetX - fromX) / 60 + (Math.random() - 0.5) * 0.6,
+          vy: Math.random() * 1.2,
+          r: 0.8 + Math.random() * 2.2,
+          c: palette[(Math.random() * palette.length) | 0],
+          rot: Math.random() * Math.PI,
+        });
+      }
+      if (!animating) { animating = true; requestAnimationFrame(tick); }
+    };
+
+    const tick = () => {
+      gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      gctx.clearRect(0, 0, W, H);
+      gctx.save();
+      clipToFilter(gctx);
+      for (let k = particles.length - 1; k >= 0; k--) {
+        const g = particles[k];
+        g.vy += 0.32;
+        g.x += g.vx; g.y += g.vy; g.rot += 0.1;
+        if (g.y > mouth.y + mouth.ry * 2.2 || g.y > H) { particles.splice(k, 1); continue; }
+        gctx.fillStyle = g.c;
+        gctx.beginPath();
+        gctx.ellipse(g.x, g.y, g.r * 1.3, g.r, g.rot, 0, Math.PI * 2);
+        gctx.fill();
+      }
+      gctx.restore();
+      if (particles.length) requestAnimationFrame(tick);
+      else animating = false;
     };
 
     const update = (vh) => {
@@ -115,17 +205,24 @@
       const total = r.height - vh;
       const p = clamp(-r.top / (total || 1), 0, 1);
       draw(p);
+      // grãos caem enquanto o usuário rola pela fase de moagem
+      if (!prefersReducedMotion && p > 0.24 && p < 0.95) {
+        const dp = Math.abs(p - lastSpawnP);
+        spawn(Math.min(40, Math.round(dp * 1400)));
+      }
+      lastSpawnP = p;
       bar.style.transform = `scaleX(${p})`;
       bar.parentElement.style.opacity = p > 0.97 ? '0' : '1';
-      const stage = p < 0.36 ? 0 : p < 0.68 ? 1 : 2;
-      steps.forEach((el, k) => el.classList.toggle('is-on', k === stage));
-      indexes.forEach((el, k) => el.classList.toggle('is-on', k === stage));
+      const stageIdx = p < 0.3 ? 0 : p < 0.72 ? 1 : 2;
+      steps.forEach((el, k) => el.classList.toggle('is-on', k === stageIdx));
+      indexes.forEach((el, k) => el.classList.toggle('is-on', k === stageIdx));
     };
 
-    load(0).then(() => { current = -1; draw(lastProgress); });
+    const resize = () => { measure(); draw(lastProgress); };
+    load(0).then(() => draw(lastProgress));
     new IntersectionObserver((entries) => { if (entries[0].isIntersecting) loadAll(); }, { rootMargin: '150% 0px' }).observe(section);
     window.addEventListener('resize', resize);
-    resize();
+    measure();
     return { update };
   })();
 
@@ -135,9 +232,8 @@
   const nav = $('#site-nav');
   const progressBar = $('#scroll-progress');
   const themedSections = $$('[data-nav-theme]');
-  const navLinks = $$('#site-nav .nav-link');
+  const navLinks = $$('#site-nav a.nav-link[href^="#"]');
   const waFloat = $('#wa-float');
-  const hero = $('#inicio');
 
   const menuToggle = $('#menu-toggle');
   const mobileMenu = $('#mobile-menu');
@@ -151,6 +247,25 @@
   };
   menuToggle.addEventListener('click', () => setMenu(mobileMenu.hidden));
   $$('a', mobileMenu).forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  const aboutDialog = $('#about-dialog');
+  const openAbout = () => {
+    setMenu(false);
+    if (typeof aboutDialog.showModal === 'function') aboutDialog.showModal(); else aboutDialog.setAttribute('open', '');
+  };
+  const closeAbout = () => { if (aboutDialog.open) aboutDialog.close(); };
+  $$('[data-open-about]').forEach((b) => b.addEventListener('click', openAbout));
+  $$('[data-close-about]', aboutDialog).forEach((b) => b.addEventListener('click', closeAbout));
+  aboutDialog.addEventListener('click', (e) => { if (e.target === aboutDialog) closeAbout(); });
+
+  // Vídeo da torrefação: toca só quando está na tela
+  const roastVideo = $('#protagonista video');
+  if (roastVideo) {
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !prefersReducedMotion) roastVideo.play().catch(() => {});
+      else roastVideo.pause();
+    }, { threshold: 0.2 }).observe(roastVideo);
+  }
 
   /* ===================================================================
      2. SCROLLYTELLING — parallax, revelações, texto que "acende"
@@ -209,7 +324,7 @@
     }
 
     // Botão flutuante surge depois do Hero
-    waFloat.dataset.show = String(hero.getBoundingClientRect().bottom < vh * 0.25);
+    waFloat.dataset.show = String($('#do-grao').getBoundingClientRect().bottom < vh * 0.9);
 
     if (!prefersReducedMotion) {
       parallaxEls.forEach(({ el, speed, host }) => {

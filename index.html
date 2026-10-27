@@ -83,20 +83,24 @@
 
   <header id="site-nav" data-theme="light" class="fixed inset-x-0 top-[3px] z-50 border-b backdrop-blur-xl">
     <nav class="container-site flex h-[72px] items-center justify-between gap-4" aria-label="Principal">
-      <a href="#inicio" class="flex items-center gap-3" aria-label="Pielini Coffee — início">
-        <svg class="nav-emblem h-12 w-12 shrink-0" id="nav-emblem" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-        <span class="hidden flex-col leading-none sm:flex">
-          <span class="font-display text-xl font-semibold tracking-wide">Pielini Coffee</span>
-          <span class="mt-1 text-[10px] uppercase tracking-[0.3em] opacity-60">Cafés especiais • Eventos</span>
+      <div class="flex min-w-0 items-center gap-3">
+        <a href="#inicio" aria-label="Pielini Coffee — início" class="shrink-0">
+          <svg class="nav-emblem h-12 w-12" id="nav-emblem" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+        </a>
+        <span class="flex min-w-0 flex-col leading-none">
+          <a href="#inicio" class="font-display text-lg font-semibold tracking-wide sm:text-xl">Pielini Coffee</a>
+          <a href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener" class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold tracking-wide text-caramelo-dark transition hover:text-pielini" aria-label="Instagram @pielinicoffee (abre em nova aba)">
+            <i data-lucide="instagram" class="h-3.5 w-3.5"></i> @pielinicoffee
+          </a>
         </span>
-      </a>
+      </div>
 
-      <ul class="hidden items-center gap-8 text-sm font-medium lg:flex">
+      <ul class="hidden items-center gap-6 text-sm font-medium lg:flex xl:gap-8">
+        <li><button type="button" class="nav-link" data-open-about>Quem somos nós?</button></li>
         <li><a class="nav-link" href="#protagonista">O Café</a></li>
-        <li><a class="nav-link" href="#estacoes">Estações</a></li>
+        <li><a class="nav-link" href="#estacoes">Conhecer as Ilhas</a></li>
         <li><a class="nav-link" href="#metodos">Métodos</a></li>
         <li><a class="nav-link" href="#copo">Seu Copo</a></li>
-        <li><a class="nav-link" href="#degustacao">Degustação</a></li>
       </ul>
 
       <div class="flex items-center gap-2">
@@ -114,8 +118,9 @@
 
     <div id="mobile-menu" hidden class="border-t border-current/10 lg:hidden">
       <ul class="container-site flex flex-col gap-1 py-4 font-display text-2xl">
+        <li><button type="button" class="block w-full py-2 text-left" data-open-about>Quem somos nós?</button></li>
         <li><a class="block py-2" href="#protagonista">O Café como Protagonista</a></li>
-        <li><a class="block py-2" href="#estacoes">Menu de Experiências</a></li>
+        <li><a class="block py-2" href="#estacoes">Conhecer as Ilhas</a></li>
         <li><a class="block py-2" href="#metodos">Métodos de Preparo</a></li>
         <li><a class="block py-2" href="#copo">Copo Personalizado</a></li>
         <li class="pt-3"><a class="btn-gold w-full font-sans text-sm" href="#degustacao"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a></li>
@@ -127,7 +132,7 @@
     <!-- =========================================================
          2. HERO — limpo, com o logo em destaque
     ========================================================== -->
-    <section id="inicio" data-nav-theme="light" class="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-36 pt-28 text-center sm:pb-32">
+    <section id="inicio" data-nav-theme="light" class="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-28 text-center">
       <!-- Raios de sol sutis atrás do emblema (eco do logo) -->
       <div class="pointer-events-none absolute left-1/2 top-[44%] -z-10 aspect-square w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
         <svg viewBox="-100 -100 200 200" class="hero-rays h-full w-full text-caramelo">
@@ -150,16 +155,13 @@
         <span class="line"><span class="text-[clamp(1.8rem,5vw,3.4rem)] font-normal italic text-caramelo-dark">para momentos especiais</span></span>
       </h1>
       <p class="hero-fade d2 mt-6 max-w-xl text-lg font-light text-torra/70">Um toque de excelência em cada detalhe.</p>
-      <div class="hero-fade d3 mt-9 flex flex-wrap justify-center gap-3">
-        <a href="#degustacao" class="btn bg-pielini text-creme hover:bg-pielini-dark"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a>
-        <a href="#estacoes" class="btn border border-torra/15 bg-white/60 text-torra hover:border-caramelo hover:text-caramelo-dark">Conhecer as Ilhas <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
-      </div>
-
-      <a href="#do-grao" class="hero-fade d4 absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-torra/50 transition hover:text-caramelo-dark">
-        <span class="flex h-11 w-7 justify-center rounded-full border border-current pt-2">
-          <span class="scroll-cue-dot block h-2 w-1 rounded-full bg-current"></span>
+      <a href="#do-grao" class="hero-fade d3 scroll-cue group mt-12 flex flex-col items-center gap-4 text-pielini" aria-label="Role para baixo para sentir a experiência">
+        <span class="relative flex h-16 w-10 justify-center rounded-full border-2 border-current pt-3">
+          <span class="scroll-cue-dot block h-3 w-1.5 rounded-full bg-caramelo"></span>
         </span>
-        <span class="text-[10px] uppercase tracking-[0.3em]">Role para sentir a experiência</span>
+        <span class="text-xs font-semibold uppercase tracking-[0.32em]">Role para baixo</span>
+        <span class="-mt-2 font-display text-lg italic text-torra/60">e sinta a experiência do grão à xícara</span>
+        <i data-lucide="chevrons-down" class="scroll-cue-arrow h-5 w-5 text-caramelo"></i>
       </a>
     </section>
 
@@ -167,41 +169,66 @@
          2b. MOTION — o grão se partindo conforme a rolagem
     ========================================================== -->
     <section id="do-grao" data-nav-theme="light" class="relative h-[340vh]" aria-label="Do grão à xícara">
-      <div class="sticky top-0 flex h-[100svh] items-center overflow-hidden">
-        <div class="container-site relative grid h-full items-center lg:grid-cols-12">
-          <!-- Texto -->
-          <div class="pointer-events-none absolute inset-x-5 bottom-[7svh] z-10 text-center sm:inset-x-8 lg:static lg:col-span-4 lg:text-left">
-            <p class="eyebrow justify-center text-pielini lg:justify-start"><span class="h-px w-8 bg-pielini"></span> Do grão à xícara</p>
-            <div class="relative mt-4 min-h-[9.5rem] sm:min-h-[8.5rem]">
+      <div class="sticky top-0 h-[100svh] overflow-hidden">
+        <div class="mx-auto flex h-full max-w-site flex-col items-center px-5 pb-[4svh] pt-[88px]">
+          <!-- Palco: grão (canvas) + grãos caindo + filtro de papel -->
+          <div id="bean-stage" class="relative min-h-0 w-full max-w-[560px] flex-1">
+            <svg id="filter-back" class="absolute bottom-0 left-1/2 z-0 w-[min(56vw,230px)] -translate-x-1/2 overflow-visible" viewBox="0 0 240 200" aria-hidden="true">
+              <defs>
+                <clipPath id="filter-mouth"><ellipse cx="120" cy="30" rx="108" ry="17"/></clipPath>
+                <linearGradient id="filter-inner" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7DCC8"/><stop offset="1" stop-color="#F4EEE3"/></linearGradient>
+                <radialGradient id="filter-bed-g" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#8A5428"/><stop offset=".7" stop-color="#5A3418"/><stop offset="1" stop-color="#3A2010"/></radialGradient>
+              </defs>
+              <ellipse cx="120" cy="30" rx="110" ry="18" fill="url(#filter-inner)" stroke="#D8CBB4" stroke-width="1.2"/>
+              <g clip-path="url(#filter-mouth)">
+                <ellipse id="filter-bed" cx="120" cy="40" rx="0" ry="0" fill="url(#filter-bed-g)"/>
+              </g>
+            </svg>
+            <canvas id="bean-canvas" class="absolute inset-0 z-10 h-full w-full" role="img" aria-label="Grão de café torrado se partindo e caindo, já moído, dentro de um filtro de papel"></canvas>
+            <canvas id="grain-canvas" class="pointer-events-none absolute inset-0 z-10 h-full w-full" aria-hidden="true"></canvas>
+            <svg id="filter-front" class="pointer-events-none absolute bottom-0 left-1/2 z-20 w-[min(56vw,230px)] -translate-x-1/2 overflow-visible" viewBox="0 0 240 200" aria-hidden="true">
+              <defs>
+                <linearGradient id="filter-paper" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#E9DFCD"/><stop offset=".22" stop-color="#FBF8F2"/><stop offset=".6" stop-color="#F6F0E5"/><stop offset="1" stop-color="#DED1BB"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="120" cy="196" rx="70" ry="6" fill="#1E1610" opacity=".08"/>
+              <path d="M10 30 A110 18 0 0 0 230 30 L152 186 Q120 196 88 186 Z" fill="url(#filter-paper)" stroke="#D8CBB4" stroke-width="1.2"/>
+              <g stroke="#CDBFA6" stroke-opacity=".55" stroke-width=".9" fill="none">
+                <path d="M46 44 L99 190"/><path d="M84 48 L110 192"/><path d="M120 48 L120 194"/><path d="M156 48 L130 192"/><path d="M194 44 L141 190"/>
+              </g>
+              <!-- costura crepada lateral, típica do filtro de papel -->
+              <path d="M214 50 l6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4" transform="rotate(26 214 50)" fill="none" stroke="#C9B898" stroke-width="1.1"/>
+              <path d="M10 30 A110 18 0 0 0 230 30" fill="none" stroke="#CDBFA6" stroke-width="1.6"/>
+            </svg>
+          </div>
+
+          <!-- Legenda logo abaixo do filtro -->
+          <div class="pointer-events-none relative z-30 mt-5 w-full text-center">
+            <p class="eyebrow justify-center text-pielini"><span class="h-px w-8 bg-pielini"></span> Do grão à xícara <span class="h-px w-8 bg-pielini"></span></p>
+            <div class="relative mx-auto mt-3 h-[6.6rem] max-w-md sm:h-[6.2rem]">
               <div class="bean-step absolute inset-0" data-step="0">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">O <em class="text-pielini">grão</em></h2>
-                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Selecionado com rigor e torrado em nossa própria torrefação.</p>
+                <p class="mt-2 text-torra/70">Selecionado com rigor e torrado em nossa própria torrefação.</p>
               </div>
               <div class="bean-step absolute inset-0" data-step="1">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">moagem</em></h2>
-                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Moído na hora do preparo, para preservar cada nota aromática.</p>
+                <p class="mt-2 text-torra/70">Moído na hora do preparo, direto para o filtro.</p>
               </div>
               <div class="bean-step absolute inset-0" data-step="2">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">experiência</em></h2>
-                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Extraído ao vivo, diante dos seus convidados.</p>
+                <p class="mt-2 text-torra/70">Extraído ao vivo, diante dos seus convidados.</p>
               </div>
             </div>
           </div>
-
-          <!-- Canvas da sequência de quadros -->
-          <div class="absolute inset-x-0 top-[9svh] flex justify-center lg:static lg:col-span-5 lg:flex lg:h-full lg:items-center">
-            <canvas id="bean-canvas" class="h-[58svh] w-full max-w-[460px] lg:h-[88svh]" role="img" aria-label="Grão de café torrado se partindo e virando pó"></canvas>
-          </div>
-
-          <!-- Progresso -->
-          <div class="hidden lg:col-span-3 lg:flex lg:justify-end">
-            <ol class="flex flex-col gap-5 text-right text-xs font-semibold uppercase tracking-[0.22em]">
-              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="0">Grão <span class="font-display text-2xl tracking-normal">01</span></li>
-              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="1">Moagem <span class="font-display text-2xl tracking-normal">02</span></li>
-              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="2">Experiência <span class="font-display text-2xl tracking-normal">03</span></li>
-            </ol>
-          </div>
         </div>
+
+        <!-- Progresso lateral -->
+        <ol class="absolute right-8 top-1/2 hidden -translate-y-1/2 flex-col gap-5 text-right text-xs font-semibold uppercase tracking-[0.22em] lg:flex xl:right-[max(2rem,calc((100vw-76rem)/2))]">
+          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="0">Grão <span class="font-display text-2xl tracking-normal">01</span></li>
+          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="1">Moagem <span class="font-display text-2xl tracking-normal">02</span></li>
+          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="2">Experiência <span class="font-display text-2xl tracking-normal">03</span></li>
+        </ol>
         <div class="absolute bottom-0 left-0 h-[2px] w-full bg-torra/5 transition-opacity duration-500"><div id="bean-progress" class="h-full origin-left scale-x-0 bg-caramelo"></div></div>
       </div>
     </section>
@@ -218,10 +245,10 @@
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
               O café como <em class="text-pielini">protagonista</em>
             </h2>
-            <figure class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-gradient-to-b from-offwhite/70 to-white/40 ring-1 ring-torra/5" data-reveal>
-              <img src="assets/seq/grao-024.webp" alt="Grão de café torrado se abrindo" class="mx-auto aspect-[4/5] h-full w-[70%] object-contain object-[50%_30%]" data-parallax-inner="0.06" loading="lazy">
-              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white/95 via-white/70 to-transparent p-6 pt-16 text-torra">
-                <span class="text-[11px] uppercase tracking-[0.25em] text-caramelo-dark">Torrefação própria</span>
+            <figure class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15" data-reveal>
+              <video class="aspect-[4/5] w-full object-cover" src="assets/video/torrefacao.mp4" poster="assets/img/torrefacao-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Grãos de café sendo resfriados após a torra na torrefação da Pielini"></video>
+              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/90 via-torra/50 to-transparent p-6 pt-20 text-creme">
+                <span class="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-caramelo-light"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-caramelo-light"></span> Torrefação própria</span>
                 <p class="mt-1 font-display text-2xl italic">Grãos recém-torrados, moídos na hora do preparo.</p>
               </figcaption>
             </figure>
@@ -234,11 +261,6 @@
             Um evento inesquecível é construído nos detalhes. Seja para dar as boas-vindas aos convidados, harmonizar perfeitamente com a mesa de doces, acompanhar o jantar ou energizar a pista de dança, o café é uma presença constante.
           </p>
 
-          <div class="mt-14 grid gap-8 border-l-2 border-caramelo/50 pl-6 sm:pl-8" data-reveal>
-            <p class="text-lg leading-relaxed text-torra/80">
-              A Pielini Coffee nasceu para garantir que essa bebida tão importante esteja à altura do evento que você planejou com tanto cuidado. Somos cafeteria e torrefação, e substituímos o tradicional por ilhas de preparo ao vivo. Entregamos estética, frescor e o verdadeiro sabor do café especial para criar uma experiência sensorial completa em qualquer momento da festa.
-            </p>
-          </div>
 
           <ul class="mt-10 flex flex-wrap gap-3" aria-label="Tipos de eventos atendidos">
             <li data-reveal style="--rd:.0s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="heart" class="h-4 w-4"></i> Casamentos</span></li>
@@ -654,11 +676,11 @@
               </div>
             </div>
 
-            <a id="wa-cta" href="https://wa.me/5551920046433" target="_blank" rel="noopener" class="btn-pulse mt-8 flex w-full items-center justify-center gap-3 rounded-full bg-caramelo px-6 py-5 text-center text-[13px] font-bold uppercase leading-snug tracking-[0.08em] text-torra transition hover:bg-caramelo-light sm:text-sm">
+            <a id="wa-cta" href="https://wa.me/5551995168104" target="_blank" rel="noopener" class="btn-pulse mt-8 flex w-full items-center justify-center gap-3 rounded-full bg-caramelo px-6 py-5 text-center text-[13px] font-bold uppercase leading-snug tracking-[0.08em] text-torra transition hover:bg-caramelo-light sm:text-sm">
               <svg viewBox="0 0 24 24" class="h-6 w-6 shrink-0" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg>
               Fale conosco no WhatsApp para agendarmos o seu horário
             </a>
-            <p class="mt-4 text-center text-xs text-torra/50">Atendimento por WhatsApp · (51) 92004-6433</p>
+            <p class="mt-4 text-center text-xs text-torra/50">Atendimento por WhatsApp · (51) 99516-8104</p>
           </div>
         </div>
       </div>
@@ -686,8 +708,9 @@
         <div class="md:col-span-3">
           <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-torra/45">Contato</p>
           <ul class="mt-4 space-y-3 text-torra/85">
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="tel:+5551920046433"><i data-lucide="phone" class="h-5 w-5 text-caramelo"></i> (51) 92004-6433</a></li>
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://wa.me/5551920046433" target="_blank" rel="noopener"><i data-lucide="message-circle" class="h-5 w-5 text-caramelo"></i> WhatsApp</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="tel:+5551995168104"><i data-lucide="phone" class="h-5 w-5 text-caramelo"></i> (51) 99516-8104</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="mailto:pielinieventos@gmail.com"><i data-lucide="mail" class="h-5 w-5 text-caramelo"></i> pielinieventos@gmail.com</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://wa.me/5551995168104" target="_blank" rel="noopener"><i data-lucide="message-circle" class="h-5 w-5 text-caramelo"></i> WhatsApp</a></li>
             <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener"><i data-lucide="instagram" class="h-5 w-5 text-caramelo"></i> @pielinicoffee</a></li>
             <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://pielinicoffee.com" target="_blank" rel="noopener"><i data-lucide="globe" class="h-5 w-5 text-caramelo"></i> pielinicoffee.com</a></li>
           </ul>
@@ -700,8 +723,28 @@
     </div>
   </footer>
 
+  <!-- Quem somos nós? -->
+  <dialog id="about-dialog" aria-labelledby="about-title" class="about-dialog w-[min(92vw,640px)] rounded-[2rem] bg-creme p-0 text-torra shadow-2xl">
+    <div class="relative overflow-hidden p-8 sm:p-12">
+      <svg class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 text-pielini/[0.07]" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+      <button type="button" data-close-about class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-torra/15 transition hover:border-caramelo hover:text-caramelo-dark" aria-label="Fechar">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+      <svg class="h-16 w-16 text-pielini" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+      <p class="eyebrow mt-6 text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Quem somos nós?</p>
+      <h2 id="about-title" class="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">Cafeteria &amp; <em class="text-pielini">Torrefação</em></h2>
+      <p class="mt-6 text-lg leading-relaxed text-torra/80">
+        A Pielini Coffee nasceu para garantir que essa bebida tão importante esteja à altura do evento que você planejou com tanto cuidado. Somos cafeteria e torrefação, e substituímos o tradicional por ilhas de preparo ao vivo. Entregamos estética, frescor e o verdadeiro sabor do café especial para criar uma experiência sensorial completa em qualquer momento da festa.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="#degustacao" data-close-about class="btn-gold"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a>
+        <a href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener" class="btn border border-torra/15 text-torra hover:border-caramelo hover:text-caramelo-dark"><i data-lucide="instagram" class="h-4 w-4"></i> @pielinicoffee</a>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Botão flutuante do WhatsApp -->
-  <a id="wa-float" data-show="false" href="https://wa.me/5551920046433" target="_blank" rel="noopener" aria-label="Falar com a Pielini Coffee no WhatsApp"
+  <a id="wa-float" data-show="false" href="https://wa.me/5551995168104" target="_blank" rel="noopener" aria-label="Falar com a Pielini Coffee no WhatsApp"
      class="fixed bottom-5 right-5 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/30 transition hover:scale-105 sm:bottom-8 sm:right-8">
     <span class="absolute inset-0 animate-ping rounded-full bg-[#25D366] opacity-30" aria-hidden="true"></span>
     <svg viewBox="0 0 24 24" class="relative h-8 w-8" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28z"/></svg>
