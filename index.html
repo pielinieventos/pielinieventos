@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body class="is-locked intro-active">
+<body>
 
   <!-- Símbolos SVG da marca (extraídos do manual da marca) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -75,43 +75,13 @@
   </svg>
 
   <!-- =========================================================
-       0. MOTION DE ABERTURA — grão de café se partindo
-  ========================================================== -->
-  <div id="intro" role="dialog" aria-label="Abertura Pielini Coffee" aria-modal="true">
-    <div class="intro-backdrop absolute inset-0">
-      <video class="intro-video" muted playsinline preload="auto" poster="assets/img/grao-poster.jpg" aria-hidden="true">
-        <source src="assets/video/grao-partindo.mp4" type="video/mp4">
-      </video>
-      <div class="intro-vignette"></div>
-    </div>
-
-    <svg class="intro-emblem" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-
-    <div class="intro-ui">
-      <p class="intro-kicker absolute left-1/2 top-[9vh] -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.42em] text-creme sm:text-[11px]">
-        Cafeteria &amp; Torrefação
-      </p>
-      <p class="intro-line font-display text-[clamp(1.6rem,4.6vw,2.6rem)] italic leading-tight">
-        <span class="word">do</span> <span class="word">grão</span> <span class="word">à</span> <span class="word">xícara,</span><br>
-        <span class="word not-italic text-caramelo-light">um</span> <span class="word not-italic text-caramelo-light">momento</span> <span class="word not-italic text-caramelo-light">especial.</span>
-      </p>
-      <button id="intro-skip" type="button" class="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-creme/25 bg-black/30 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-creme/80 backdrop-blur transition hover:border-caramelo hover:text-caramelo sm:right-6 sm:top-6">
-        Pular intro <i data-lucide="skip-forward" class="h-3.5 w-3.5"></i>
-      </button>
-      <div class="absolute bottom-6 left-1/2 h-px w-40 -translate-x-1/2 bg-creme/15">
-        <div class="intro-progress h-full w-full bg-caramelo"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
        1. HEADER & BARRA DE PROGRESSO
   ========================================================== -->
   <div class="fixed inset-x-0 top-0 z-[60] h-[3px] bg-transparent" aria-hidden="true">
     <div id="scroll-progress" class="h-full w-full bg-caramelo"></div>
   </div>
 
-  <header id="site-nav" data-theme="dark" class="fixed inset-x-0 top-[3px] z-50 border-b backdrop-blur-xl">
+  <header id="site-nav" data-theme="light" class="fixed inset-x-0 top-[3px] z-50 border-b backdrop-blur-xl">
     <nav class="container-site flex h-[72px] items-center justify-between gap-4" aria-label="Principal">
       <a href="#inicio" class="flex items-center gap-3" aria-label="Pielini Coffee — início">
         <svg class="nav-emblem h-12 w-12 shrink-0" id="nav-emblem" aria-hidden="true"><use href="#pielini-emblema"/></svg>
@@ -155,103 +125,37 @@
 
   <main>
     <!-- =========================================================
-         2. HERO
+         2. HERO — limpo, com o logo em destaque
     ========================================================== -->
-    <section id="inicio" data-nav-theme="dark" class="hero-grain relative isolate flex min-h-[100svh] items-center overflow-hidden bg-torra text-creme">
-      <!-- Camadas em parallax -->
-      <div class="absolute inset-0 -z-10" aria-hidden="true">
-        <div data-parallax="0.35" class="absolute -right-[10%] top-[-10%] h-[130%] w-[75%] opacity-40 sm:w-[55%]">
-          <img src="assets/img/grao-moido.jpg" alt="" class="h-full w-full object-cover object-center mix-blend-lighten [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_72%)]">
-        </div>
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_40%,rgba(200,138,75,.16),transparent_60%)]"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-torra via-torra/80 to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-torra to-transparent"></div>
+    <section id="inicio" data-nav-theme="light" class="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-36 pt-28 text-center sm:pb-32">
+      <!-- Raios de sol sutis atrás do emblema (eco do logo) -->
+      <div class="pointer-events-none absolute left-1/2 top-[44%] -z-10 aspect-square w-[min(140vw,1100px)] -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+        <svg viewBox="-100 -100 200 200" class="hero-rays h-full w-full text-caramelo">
+          <circle r="99" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width=".18"/>
+          <circle r="72" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width=".18"/>
+          <g id="hero-ray-lines" stroke="currentColor" stroke-opacity=".12" stroke-width=".22"></g>
+        </svg>
       </div>
 
-      <!-- Ilustração da extração de café filtrado (V60) em parallax -->
-      <div data-parallax="0.18" class="pointer-events-none absolute bottom-[4%] right-[-18%] w-[95%] max-w-[560px] opacity-35 sm:right-[2%] sm:w-[48%] sm:opacity-100 lg:right-[6%]" aria-hidden="true">
-        <div class="relative">
-          <div class="absolute left-[44%] top-[50%] h-0 w-0">
-            <span class="steam" style="--d:7s;--delay:0s;--x:18px;left:-30px"></span>
-            <span class="steam" style="--d:8s;--delay:1.6s;--x:-22px;left:0"></span>
-            <span class="steam" style="--d:6.5s;--delay:3.2s;--x:26px;left:-50px"></span>
-            <span class="steam" style="--d:7.5s;--delay:4.5s;--x:-14px;left:-10px"></span>
-          </div>
-          <svg viewBox="0 0 420 540" class="relative w-full" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <defs>
-              <linearGradient id="g-coffee" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#7A4A22"/><stop offset="1" stop-color="#2A160A"/>
-              </linearGradient>
-              <linearGradient id="g-glass" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#F5F2EB" stop-opacity=".16"/><stop offset=".5" stop-color="#F5F2EB" stop-opacity=".03"/><stop offset="1" stop-color="#F5F2EB" stop-opacity=".12"/>
-              </linearGradient>
-              <linearGradient id="g-cone" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#EAE3D5" stop-opacity=".95"/><stop offset="1" stop-color="#C9BFAE" stop-opacity=".95"/>
-              </linearGradient>
-            </defs>
-            <!-- Chaleira bico de ganso -->
-            <g stroke="#C88A4B" stroke-width="2.5">
-              <path d="M36 110 C36 70 70 52 112 52 C154 52 186 70 186 110 L180 160 C178 170 170 176 160 176 L64 176 C54 176 46 170 44 160 Z" fill="#2A1F17"/>
-              <path d="M84 52 C84 36 96 30 112 30 C128 30 140 36 140 52"/>
-              <path d="M186 118 C214 120 222 96 236 84 C246 76 258 80 262 92 L266 106" />
-              <path d="M36 92 C10 96 8 140 40 146"/>
-              <path d="M58 176 L58 186 M166 176 L166 186"/>
-            </g>
-            <!-- Fio de água -->
-            <path class="pour" d="M266 108 C268 140 268 170 268 214" stroke="#DDA971" stroke-width="3"/>
-            <!-- Cone V60 -->
-            <g>
-              <path d="M168 222 L368 222 L296 334 L240 334 Z" fill="url(#g-cone)" stroke="#F5F2EB" stroke-width="2"/>
-              <path d="M200 236 L254 322 M232 236 L262 322 M268 236 L270 322 M304 236 L278 322 M336 236 L286 322" stroke="#1E1610" stroke-opacity=".18" stroke-width="2"/>
-              <ellipse cx="268" cy="222" rx="100" ry="10" fill="#F5F2EB" stroke="#F5F2EB" stroke-width="2"/>
-              <ellipse cx="268" cy="226" rx="78" ry="7" fill="#4A2A14"/>
-              <ellipse cx="262" cy="224" rx="20" ry="3" fill="#C88A4B" opacity=".6"/>
-              <path d="M150 300 L160 300 M376 300 L386 300" stroke="#F5F2EB" stroke-opacity=".0"/>
-              <rect x="226" y="334" width="84" height="10" rx="3" fill="#EAE3D5"/>
-            </g>
-            <!-- Gotas -->
-            <circle class="drip" cx="268" cy="352" r="3.5" fill="#B87437"/>
-            <circle class="drip" style="animation-delay:.8s" cx="268" cy="352" r="3" fill="#B87437"/>
-            <!-- Jarra servidora de vidro -->
-            <g>
-              <path d="M184 352 L352 352 C358 352 362 356 360 362 C350 380 360 410 360 440 C360 488 326 510 268 510 C210 510 176 488 176 440 C176 410 186 380 176 362 C174 356 178 352 184 352 Z" fill="url(#g-glass)" stroke="#F5F2EB" stroke-opacity=".7" stroke-width="2"/>
-              <path d="M182 432 C200 426 236 424 268 424 C300 424 336 426 354 432 C356 486 322 504 268 504 C214 504 180 486 182 432 Z" fill="url(#g-coffee)"/>
-              <path d="M188 430 C212 424 240 422 268 422 C296 422 324 424 348 430" stroke="#C88A4B" stroke-opacity=".7" stroke-width="2"/>
-              <path d="M360 384 C392 384 400 400 398 420 C396 444 380 452 362 452" stroke="#F5F2EB" stroke-opacity=".7" stroke-width="2.5"/>
-              <path d="M196 380 C192 410 194 440 204 470" stroke="#F5F2EB" stroke-opacity=".35" stroke-width="3"/>
-            </g>
-            <!-- Balança -->
-            <rect x="150" y="514" width="236" height="16" rx="6" fill="#2A1F17" stroke="#C88A4B" stroke-opacity=".6" stroke-width="1.5"/>
-            <text x="268" y="526" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" letter-spacing="2" fill="#C88A4B">93°C · 1:15</text>
-          </svg>
-        </div>
+      <div id="hero-logo" class="hero-logo relative">
+        <div class="absolute inset-[-12%] rounded-full bg-[radial-gradient(circle,rgba(200,138,75,.14),transparent_65%)]" aria-hidden="true"></div>
+        <svg class="relative h-[min(58vw,300px)] w-[min(58vw,300px)] text-pielini" role="img" aria-label="Pielini Coffee"><use href="#pielini-emblema"/></svg>
       </div>
 
-      <div class="container-site relative pb-40 pt-32 sm:pb-28 sm:pt-36">
-        <div class="max-w-3xl">
-          <span class="hero-fade eyebrow rounded-full border border-caramelo/40 bg-caramelo/10 px-4 py-2 text-caramelo-light">
-            <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> Cafeteria &amp; Torrefação • Eventos Exclusivos
-          </span>
-          <h1 class="hero-title mt-8 font-display leading-[0.92]">
-            <span class="line"><span class="text-[clamp(3.2rem,10vw,7.5rem)] font-semibold tracking-[0.01em]">CAFÉS ESPECIAIS</span></span>
-            <span class="line"><span class="text-[clamp(2.2rem,6.4vw,4.8rem)] font-normal italic text-caramelo-light">para momentos especiais</span></span>
-          </h1>
-          <p class="hero-fade d1 mt-8 max-w-xl text-lg font-light text-creme/75 sm:text-xl">
-            Um toque de excelência em cada detalhe.
-          </p>
-          <div class="hero-fade d2 mt-10 flex flex-wrap gap-3">
-            <a href="#degustacao" class="btn-gold"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a>
-            <a href="#estacoes" class="btn-ghost-light">Conhecer as Ilhas <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
-          </div>
-          <dl class="hero-fade d3 mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-creme/10 pt-8">
-            <div><dt class="text-[11px] uppercase tracking-[0.2em] text-creme/50">Preparo</dt><dd class="mt-1 font-display text-2xl">Ao vivo</dd></div>
-            <div><dt class="text-[11px] uppercase tracking-[0.2em] text-creme/50">Grãos</dt><dd class="mt-1 font-display text-2xl">Torra própria</dd></div>
-            <div><dt class="text-[11px] uppercase tracking-[0.2em] text-creme/50">Estações</dt><dd class="mt-1 font-display text-2xl">4 ilhas</dd></div>
-          </dl>
-        </div>
+      <span class="hero-fade d1 eyebrow mt-10 rounded-full border border-pielini/20 bg-white/70 px-4 py-2 text-pielini backdrop-blur">
+        <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> Cafeteria &amp; Torrefação • Eventos Exclusivos
+      </span>
+      <h1 class="hero-title mt-7 font-display leading-[0.95] text-torra">
+        <span class="line"><span class="text-[clamp(2.6rem,8vw,5.6rem)] font-semibold tracking-[0.04em]">CAFÉS ESPECIAIS</span></span>
+        <span class="line"><span class="text-[clamp(1.8rem,5vw,3.4rem)] font-normal italic text-caramelo-dark">para momentos especiais</span></span>
+      </h1>
+      <p class="hero-fade d2 mt-6 max-w-xl text-lg font-light text-torra/70">Um toque de excelência em cada detalhe.</p>
+      <div class="hero-fade d3 mt-9 flex flex-wrap justify-center gap-3">
+        <a href="#degustacao" class="btn bg-pielini text-creme hover:bg-pielini-dark"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a>
+        <a href="#estacoes" class="btn border border-torra/15 bg-white/60 text-torra hover:border-caramelo hover:text-caramelo-dark">Conhecer as Ilhas <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
       </div>
 
-      <a href="#protagonista" class="hero-fade d4 absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-creme/60 transition hover:text-caramelo">
+      <a href="#do-grao" class="hero-fade d4 absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-torra/50 transition hover:text-caramelo-dark">
         <span class="flex h-11 w-7 justify-center rounded-full border border-current pt-2">
           <span class="scroll-cue-dot block h-2 w-1 rounded-full bg-current"></span>
         </span>
@@ -260,9 +164,52 @@
     </section>
 
     <!-- =========================================================
+         2b. MOTION — o grão se partindo conforme a rolagem
+    ========================================================== -->
+    <section id="do-grao" data-nav-theme="light" class="relative h-[340vh]" aria-label="Do grão à xícara">
+      <div class="sticky top-0 flex h-[100svh] items-center overflow-hidden">
+        <div class="container-site relative grid h-full items-center lg:grid-cols-12">
+          <!-- Texto -->
+          <div class="pointer-events-none absolute inset-x-5 bottom-[7svh] z-10 text-center sm:inset-x-8 lg:static lg:col-span-4 lg:text-left">
+            <p class="eyebrow justify-center text-pielini lg:justify-start"><span class="h-px w-8 bg-pielini"></span> Do grão à xícara</p>
+            <div class="relative mt-4 min-h-[9.5rem] sm:min-h-[8.5rem]">
+              <div class="bean-step absolute inset-0" data-step="0">
+                <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">O <em class="text-pielini">grão</em></h2>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Selecionado com rigor e torrado em nossa própria torrefação.</p>
+              </div>
+              <div class="bean-step absolute inset-0" data-step="1">
+                <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">moagem</em></h2>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Moído na hora do preparo, para preservar cada nota aromática.</p>
+              </div>
+              <div class="bean-step absolute inset-0" data-step="2">
+                <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">experiência</em></h2>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Extraído ao vivo, diante dos seus convidados.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Canvas da sequência de quadros -->
+          <div class="absolute inset-x-0 top-[9svh] flex justify-center lg:static lg:col-span-5 lg:flex lg:h-full lg:items-center">
+            <canvas id="bean-canvas" class="h-[58svh] w-full max-w-[460px] lg:h-[88svh]" role="img" aria-label="Grão de café torrado se partindo e virando pó"></canvas>
+          </div>
+
+          <!-- Progresso -->
+          <div class="hidden lg:col-span-3 lg:flex lg:justify-end">
+            <ol class="flex flex-col gap-5 text-right text-xs font-semibold uppercase tracking-[0.22em]">
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="0">Grão <span class="font-display text-2xl tracking-normal">01</span></li>
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="1">Moagem <span class="font-display text-2xl tracking-normal">02</span></li>
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="2">Experiência <span class="font-display text-2xl tracking-normal">03</span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 h-[2px] w-full bg-torra/5 transition-opacity duration-500"><div id="bean-progress" class="h-full origin-left scale-x-0 bg-caramelo"></div></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          3. O CAFÉ COMO PROTAGONISTA + LINHA DO TEMPO
     ========================================================== -->
-    <section id="protagonista" data-nav-theme="light" class="relative bg-creme py-24 sm:py-32">
+    <section id="protagonista" data-nav-theme="light" class="relative py-24 sm:py-32">
       <div class="container-site grid gap-14 lg:grid-cols-12 lg:gap-16">
         <!-- Coluna fixa -->
         <div class="lg:col-span-5">
@@ -271,10 +218,10 @@
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
               O café como <em class="text-pielini">protagonista</em>
             </h2>
-            <figure class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra" data-reveal>
-              <img src="assets/img/grao-rachando.jpg" alt="Grão de café torrado se partindo em pó" class="aspect-[4/5] w-full object-cover object-[50%_35%]" data-parallax-inner="0.08" loading="lazy">
-              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/90 to-transparent p-6 text-creme">
-                <span class="text-[11px] uppercase tracking-[0.25em] text-caramelo-light">Torrefação própria</span>
+            <figure class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-gradient-to-b from-offwhite/70 to-white/40 ring-1 ring-torra/5" data-reveal>
+              <img src="assets/seq/grao-024.webp" alt="Grão de café torrado se abrindo" class="mx-auto aspect-[4/5] h-full w-[70%] object-contain object-[50%_30%]" data-parallax-inner="0.06" loading="lazy">
+              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white/95 via-white/70 to-transparent p-6 pt-16 text-torra">
+                <span class="text-[11px] uppercase tracking-[0.25em] text-caramelo-dark">Torrefação própria</span>
                 <p class="mt-1 font-display text-2xl italic">Grãos recém-torrados, moídos na hora do preparo.</p>
               </figcaption>
             </figure>
@@ -385,116 +332,116 @@
     <!-- =========================================================
          4. MENU DE EXPERIÊNCIAS — AS 4 ILHAS
     ========================================================== -->
-    <section id="estacoes" data-nav-theme="dark" class="hero-grain relative overflow-hidden bg-torra py-24 text-creme sm:py-32">
-      <div class="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-pielini/25 blur-[120px]" aria-hidden="true"></div>
-      <div class="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full bg-caramelo/15 blur-[120px]" aria-hidden="true"></div>
+    <section id="estacoes" data-nav-theme="light" class="relative overflow-hidden py-24 text-torra sm:py-32">
+      <div class="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-pielini/10 blur-[120px]" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full bg-caramelo/10 blur-[120px]" aria-hidden="true"></div>
 
       <div class="container-site relative">
         <div class="grid gap-10 lg:grid-cols-2 lg:items-end">
           <div data-reveal>
-            <span class="eyebrow text-caramelo-light"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
-            <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Menu de <em class="text-caramelo-light">Experiências</em></h2>
-            <p class="mt-6 max-w-lg text-creme/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Passe o mouse ou toque em uma estação para sentir a intensidade da experiência.</p>
+            <span class="eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
+            <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Menu de <em class="text-caramelo-dark">Experiências</em></h2>
+            <p class="mt-6 max-w-lg text-torra/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Passe o mouse ou toque em uma estação para sentir a intensidade da experiência.</p>
           </div>
 
           <!-- Barra de nível de experiência -->
-          <div class="rounded-3xl border border-creme/10 bg-creme/[0.04] p-6 backdrop-blur" data-reveal>
+          <div class="rounded-3xl border border-torra/10 bg-white/80 p-6 shadow-sm backdrop-blur" data-reveal>
             <div class="flex items-center justify-between">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-creme/60">Nível de Experiência Sensorial</p>
-              <p class="font-display text-4xl text-caramelo-light"><span id="level-value">0</span>%</p>
+              <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-torra/60">Nível de Experiência Sensorial</p>
+              <p class="font-display text-4xl text-caramelo-dark"><span id="level-value">0</span>%</p>
             </div>
-            <div class="relative mt-4 h-2 overflow-hidden rounded-full bg-creme/10" role="progressbar" aria-label="Nível de experiência sensorial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="level-bar">
+            <div class="relative mt-4 h-2 overflow-hidden rounded-full bg-torra/10" role="progressbar" aria-label="Nível de experiência sensorial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="level-bar">
               <div id="level-fill" class="level-fill absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-pielini-light via-caramelo to-caramelo-light" style="width:0"></div>
             </div>
-            <div class="mt-4 grid grid-cols-4 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-creme/50 sm:text-[11px]">
-              <span class="level-tick rounded-full border border-creme/15 py-1.5 transition" data-tick="0">Básica</span>
-              <span class="level-tick rounded-full border border-creme/15 py-1.5 transition" data-tick="1">Filtrados</span>
-              <span class="level-tick rounded-full border border-creme/15 py-1.5 transition" data-tick="2">Espressos</span>
-              <span class="level-tick rounded-full border border-creme/15 py-1.5 transition" data-tick="3">Premium</span>
+            <div class="mt-4 grid grid-cols-4 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-torra/50 sm:text-[11px]">
+              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="0">Básica</span>
+              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="1">Filtrados</span>
+              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="2">Espressos</span>
+              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="3">Premium</span>
             </div>
           </div>
         </div>
 
         <div id="station-grid" class="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <!-- Estação Básica -->
-          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-creme/10 bg-creme/[0.03] p-7" data-station="0" tabindex="0" data-reveal style="--rd:0s">
+          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-torra/10 bg-white/70 p-7" data-station="0" tabindex="0" data-reveal style="--rd:0s">
             <div class="flex items-center justify-between">
-              <span class="font-display text-5xl text-creme/20">01</span>
-              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-creme/5 text-caramelo-light"><i data-lucide="coffee" class="h-5 w-5"></i></span>
+              <span class="font-display text-5xl text-torra/15">01</span>
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-pielini/5 text-caramelo-dark"><i data-lucide="coffee" class="h-5 w-5"></i></span>
             </div>
             <h3 class="mt-6 font-display text-3xl">Estação Básica</h3>
-            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-light">O ritual essencial</p>
-            <p class="mt-5 text-sm leading-relaxed text-creme/70">O ritual do café passado na hora. Preparo artesanal focado nos métodos filtrados Hario V60 e Prensa Francesa.</p>
-            <ul class="mb-8 mt-6 space-y-2 text-sm text-creme/80">
+            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-dark">O ritual essencial</p>
+            <p class="mt-5 text-sm leading-relaxed text-torra/70">O ritual do café passado na hora. Preparo artesanal focado nos métodos filtrados Hario V60 e Prensa Francesa.</p>
+            <ul class="mb-8 mt-6 space-y-2 text-sm text-torra/80">
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Hario V60</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Prensa Francesa</li>
             </ul>
-            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-creme/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-light" data-choose="Estação Básica">
+            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-torra/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-dark" data-choose="Estação Básica">
               <span class="choose-label-default inline-flex items-center gap-2">Quero esta estação <i data-lucide="arrow-right" class="h-4 w-4"></i></span>
               <span class="choose-label-chosen inline-flex items-center gap-2"><i data-lucide="check" class="h-4 w-4"></i> Selecionada</span>
             </button>
           </article>
 
           <!-- Estação Filtrados -->
-          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-creme/10 bg-creme/[0.03] p-7" data-station="1" tabindex="0" data-reveal style="--rd:.1s">
+          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-torra/10 bg-white/70 p-7" data-station="1" tabindex="0" data-reveal style="--rd:.1s">
             <div class="flex items-center justify-between">
-              <span class="font-display text-5xl text-creme/20">02</span>
-              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-creme/5 text-caramelo-light"><i data-lucide="droplets" class="h-5 w-5"></i></span>
+              <span class="font-display text-5xl text-torra/15">02</span>
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-pielini/5 text-caramelo-dark"><i data-lucide="droplets" class="h-5 w-5"></i></span>
             </div>
             <h3 class="mt-6 font-display text-3xl">Estação Filtrados</h3>
-            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-light">Visual &amp; sensorial</p>
-            <p class="mt-5 text-sm leading-relaxed text-creme/70">Amplia a experiência visual e sensorial com mais métodos de extração: Hario V60, Prensa Francesa, Koar e Chemex.</p>
-            <ul class="mb-8 mt-6 space-y-2 text-sm text-creme/80">
+            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-dark">Visual &amp; sensorial</p>
+            <p class="mt-5 text-sm leading-relaxed text-torra/70">Amplia a experiência visual e sensorial com mais métodos de extração: Hario V60, Prensa Francesa, Koar e Chemex.</p>
+            <ul class="mb-8 mt-6 space-y-2 text-sm text-torra/80">
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Hario V60</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Prensa Francesa</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Koar</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Chemex</li>
             </ul>
-            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-creme/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-light" data-choose="Estação Filtrados">
+            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-torra/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-dark" data-choose="Estação Filtrados">
               <span class="choose-label-default inline-flex items-center gap-2">Quero esta estação <i data-lucide="arrow-right" class="h-4 w-4"></i></span>
               <span class="choose-label-chosen inline-flex items-center gap-2"><i data-lucide="check" class="h-4 w-4"></i> Selecionada</span>
             </button>
           </article>
 
           <!-- Estação Espressos (destaque) -->
-          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-caramelo/60 bg-gradient-to-b from-caramelo/[0.14] to-creme/[0.03] p-7" data-station="2" tabindex="0" data-reveal style="--rd:.2s">
+          <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-caramelo/60 bg-gradient-to-b from-caramelo/[0.14] to-white/70 p-7" data-station="2" tabindex="0" data-reveal style="--rd:.2s">
             <span class="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-caramelo px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-torra shadow-lg shadow-caramelo/30">
               <i data-lucide="star" class="h-3.5 w-3.5 fill-current"></i> A Queridinha dos Eventos
             </span>
             <div class="flex items-center justify-between">
               <span class="font-display text-5xl text-caramelo/40">03</span>
-              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-caramelo/15 text-caramelo-light"><i data-lucide="flame" class="h-5 w-5"></i></span>
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-caramelo/15 text-caramelo-dark"><i data-lucide="flame" class="h-5 w-5"></i></span>
             </div>
             <h3 class="mt-6 font-display text-3xl">Estação Espressos</h3>
-            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-light">Clássicos da cafeteria</p>
-            <p class="mt-5 text-sm leading-relaxed text-creme/70">Contempla os métodos filtrados e traz os clássicos da cafeteria: Espresso, Cappuccino, Caramel Macchiato e Mocaccino.</p>
-            <ul class="mb-8 mt-6 space-y-2 text-sm text-creme/80">
+            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-dark">Clássicos da cafeteria</p>
+            <p class="mt-5 text-sm leading-relaxed text-torra/70">Contempla os métodos filtrados e traz os clássicos da cafeteria: Espresso, Cappuccino, Caramel Macchiato e Mocaccino.</p>
+            <ul class="mb-8 mt-6 space-y-2 text-sm text-torra/80">
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Todos os filtrados</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Espresso &amp; Cappuccino</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Caramel Macchiato</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Mocaccino</li>
             </ul>
-            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-caramelo/60 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-light" data-choose="Estação Espressos">
+            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-caramelo/60 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-dark" data-choose="Estação Espressos">
               <span class="choose-label-default inline-flex items-center gap-2">Quero esta estação <i data-lucide="arrow-right" class="h-4 w-4"></i></span>
               <span class="choose-label-chosen inline-flex items-center gap-2"><i data-lucide="check" class="h-4 w-4"></i> Selecionada</span>
             </button>
           </article>
 
           <!-- Estação Premium (Plus) -->
-          <article class="station-card group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-creme/10 bg-gradient-to-b from-pielini/40 to-creme/[0.03] p-7" data-station="3" tabindex="0" data-reveal style="--rd:.3s">
+          <article class="station-card group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-torra/10 bg-gradient-to-b from-pielini/10 to-white/70 p-7" data-station="3" tabindex="0" data-reveal style="--rd:.3s">
             <div class="flex items-center justify-between">
-              <span class="font-display text-5xl text-creme/20">04</span>
-              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-creme/10 text-caramelo-light"><i data-lucide="crown" class="h-5 w-5"></i></span>
+              <span class="font-display text-5xl text-torra/15">04</span>
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-pielini/10 text-pielini"><i data-lucide="crown" class="h-5 w-5"></i></span>
             </div>
-            <h3 class="mt-6 font-display text-3xl">Estação Premium <span class="italic text-caramelo-light">Plus</span></h3>
-            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-light">A experiência completa</p>
-            <p class="mt-5 text-sm leading-relaxed text-creme/70">A experiência completa. Todos os preparos de cafeteria + Sodas Italianas refrescantes e personalização exclusiva dos copos com a identidade visual do evento.</p>
-            <ul class="mb-8 mt-6 space-y-2 text-sm text-creme/80">
+            <h3 class="mt-6 font-display text-3xl">Estação Premium <span class="italic text-caramelo-dark">Plus</span></h3>
+            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-caramelo-dark">A experiência completa</p>
+            <p class="mt-5 text-sm leading-relaxed text-torra/70">A experiência completa. Todos os preparos de cafeteria + Sodas Italianas refrescantes e personalização exclusiva dos copos com a identidade visual do evento.</p>
+            <ul class="mb-8 mt-6 space-y-2 text-sm text-torra/80">
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Todos os preparos</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Sodas Italianas</li>
               <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-caramelo"></i> Copos personalizados</li>
             </ul>
-            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-creme/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-light" data-choose="Estação Premium Plus">
+            <button type="button" class="choose-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-torra/20 px-5 py-3 text-sm font-semibold transition hover:border-caramelo hover:text-caramelo-dark" data-choose="Estação Premium Plus">
               <span class="choose-label-default inline-flex items-center gap-2">Quero esta estação <i data-lucide="arrow-right" class="h-4 w-4"></i></span>
               <span class="choose-label-chosen inline-flex items-center gap-2"><i data-lucide="check" class="h-4 w-4"></i> Selecionada</span>
             </button>
@@ -506,7 +453,7 @@
     <!-- =========================================================
          5a. EXPLORADOR DE MÉTODOS
     ========================================================== -->
-    <section id="metodos" data-nav-theme="light" class="relative bg-creme py-24 sm:py-32">
+    <section id="metodos" data-nav-theme="light" class="relative py-24 sm:py-32">
       <div class="container-site">
         <div class="max-w-2xl" data-reveal>
           <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 03 · Guia sensorial</span>
@@ -555,7 +502,7 @@
     <!-- =========================================================
          5b. SIMULADOR DE COPO PERSONALIZADO (ESTAÇÃO PLUS)
     ========================================================== -->
-    <section id="copo" data-nav-theme="light" class="relative overflow-hidden bg-offwhite py-24 sm:py-32">
+    <section id="copo" data-nav-theme="light" class="relative overflow-hidden py-24 sm:py-32">
       <div class="container-site grid items-center gap-14 lg:grid-cols-2">
         <div data-reveal>
           <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Exclusivo Estação Premium Plus</span>
@@ -642,29 +589,29 @@
     <!-- =========================================================
          6. CONVERSÃO — VAMOS TOMAR UM CAFÉ?
     ========================================================== -->
-    <section id="degustacao" data-nav-theme="dark" class="hero-grain relative isolate overflow-hidden bg-torra py-24 text-creme sm:py-32">
+    <section id="degustacao" data-nav-theme="light" class="relative isolate overflow-hidden py-24 text-torra sm:py-32">
       <div class="absolute inset-0 -z-10" aria-hidden="true">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_20%_0%,rgba(200,138,75,.35),transparent_60%),radial-gradient(ellipse_60%_60%_at_100%_100%,rgba(44,94,79,.45),transparent_60%)]"></div>
-        <img src="assets/img/grao-moido.jpg" alt="" data-parallax="0.2" class="absolute -left-20 top-0 h-[120%] w-[50%] object-cover opacity-20 mix-blend-lighten [mask-image:linear-gradient(to_right,black,transparent)]">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_20%_0%,rgba(200,138,75,.12),transparent_60%),radial-gradient(ellipse_60%_60%_at_100%_100%,rgba(44,94,79,.10),transparent_60%)]"></div>
+        
       </div>
 
       <div class="container-site grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-5" data-reveal>
-          <svg class="h-20 w-20 text-caramelo-light" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-          <h2 class="mt-8 font-display text-6xl font-medium leading-[0.95] sm:text-7xl">Vamos tomar um <em class="text-caramelo-light">Café?</em></h2>
-          <p class="mt-8 text-lg leading-relaxed text-creme/80">
+          <svg class="h-20 w-20 text-pielini" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+          <h2 class="mt-8 font-display text-6xl font-medium leading-[0.95] sm:text-7xl">Vamos tomar um <em class="text-caramelo-dark">Café?</em></h2>
+          <p class="mt-8 text-lg leading-relaxed text-torra/80">
             Sabemos que o encanto do café especial não se explica, se prova. Queremos convidar você para uma Degustação Exclusiva em nossa cafeteria. Venha conhecer nossa estrutura, provar nossos grãos recém-torrados e poder levar para seus eventos a qualidade que sabemos que você preza.
           </p>
-          <p class="mt-8 border-l-2 border-caramelo pl-5 font-display text-2xl italic text-caramelo-light">
+          <p class="mt-8 border-l-2 border-caramelo pl-5 font-display text-2xl italic text-caramelo-dark">
             Agende sua degustação e leve o padrão Pielini para os seus próximos eventos.
           </p>
         </div>
 
         <!-- Widget 4: Gerador de mensagem WhatsApp -->
         <div class="lg:col-span-7" data-reveal style="--rd:.15s">
-          <div class="rounded-[2rem] bg-creme p-6 text-torra shadow-2xl shadow-black/40 sm:p-10">
+          <div class="rounded-[2rem] bg-white/90 p-6 text-torra shadow-2xl shadow-torra/10 ring-1 ring-torra/5 backdrop-blur sm:p-10">
             <div class="flex items-center gap-3">
-              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-pielini text-creme"><i data-lucide="send" class="h-4 w-4"></i></span>
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-pielini text-torra"><i data-lucide="send" class="h-4 w-4"></i></span>
               <div>
                 <p class="font-display text-2xl font-semibold leading-none">Monte seu agendamento</p>
                 <p class="mt-1 text-xs text-torra/60">Leva 10 segundos — a mensagem fica pronta para enviar.</p>
@@ -721,34 +668,34 @@
   <!-- =========================================================
        7. FOOTER
   ========================================================== -->
-  <footer data-nav-theme="dark" class="relative bg-[#140E0A] pb-10 pt-20 text-creme">
+  <footer data-nav-theme="light" class="relative border-t border-torra/10 pb-10 pt-20 text-torra">
     <div class="container-site">
       <div class="grid gap-12 md:grid-cols-12">
         <div class="md:col-span-5">
-          <svg class="h-14 w-auto text-creme" viewBox="0 0 376 181" aria-label="Pielini Coffee" role="img"><use href="#pielini-logotipo"/></svg>
-          <p class="mt-6 max-w-sm text-sm leading-relaxed text-creme/60">Cafeteria &amp; torrefação especializada em ilhas de cafés especiais com preparo ao vivo para eventos.</p>
-          <p class="mt-6 font-display text-xl italic text-caramelo-light">Cafés especiais para momentos especiais.</p>
+          <svg class="h-14 w-auto text-pielini" viewBox="0 0 376 181" aria-label="Pielini Coffee" role="img"><use href="#pielini-logotipo"/></svg>
+          <p class="mt-6 max-w-sm text-sm leading-relaxed text-torra/60">Cafeteria &amp; torrefação especializada em ilhas de cafés especiais com preparo ao vivo para eventos.</p>
+          <p class="mt-6 font-display text-xl italic text-caramelo-dark">Cafés especiais para momentos especiais.</p>
         </div>
         <div class="md:col-span-4">
-          <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-creme/40">Visite a cafeteria</p>
-          <a href="https://www.google.com/maps/search/?api=1&query=R.+Primeiro+de+Mar%C3%A7o%2C+1111%2C+Loja+14%2C+P%C3%A1tria+Nova%2C+Novo+Hamburgo+-+RS" target="_blank" rel="noopener" class="mt-4 flex gap-3 text-creme/85 transition hover:text-caramelo-light">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-torra/45">Visite a cafeteria</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=R.+Primeiro+de+Mar%C3%A7o%2C+1111%2C+Loja+14%2C+P%C3%A1tria+Nova%2C+Novo+Hamburgo+-+RS" target="_blank" rel="noopener" class="mt-4 flex gap-3 text-torra/85 transition hover:text-caramelo-dark">
             <i data-lucide="map-pin" class="mt-0.5 h-5 w-5 shrink-0 text-caramelo"></i>
             <span>R. Primeiro de Março, 1111, Loja 14<br>Pátria Nova, Novo Hamburgo/RS</span>
           </a>
         </div>
         <div class="md:col-span-3">
-          <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-creme/40">Contato</p>
-          <ul class="mt-4 space-y-3 text-creme/85">
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-light" href="tel:+5551920046433"><i data-lucide="phone" class="h-5 w-5 text-caramelo"></i> (51) 92004-6433</a></li>
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-light" href="https://wa.me/5551920046433" target="_blank" rel="noopener"><i data-lucide="message-circle" class="h-5 w-5 text-caramelo"></i> WhatsApp</a></li>
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-light" href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener"><i data-lucide="instagram" class="h-5 w-5 text-caramelo"></i> @pielinicoffee</a></li>
-            <li><a class="flex items-center gap-3 transition hover:text-caramelo-light" href="https://pielinicoffee.com" target="_blank" rel="noopener"><i data-lucide="globe" class="h-5 w-5 text-caramelo"></i> pielinicoffee.com</a></li>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-torra/45">Contato</p>
+          <ul class="mt-4 space-y-3 text-torra/85">
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="tel:+5551920046433"><i data-lucide="phone" class="h-5 w-5 text-caramelo"></i> (51) 92004-6433</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://wa.me/5551920046433" target="_blank" rel="noopener"><i data-lucide="message-circle" class="h-5 w-5 text-caramelo"></i> WhatsApp</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener"><i data-lucide="instagram" class="h-5 w-5 text-caramelo"></i> @pielinicoffee</a></li>
+            <li><a class="flex items-center gap-3 transition hover:text-caramelo-dark" href="https://pielinicoffee.com" target="_blank" rel="noopener"><i data-lucide="globe" class="h-5 w-5 text-caramelo"></i> pielinicoffee.com</a></li>
           </ul>
         </div>
       </div>
-      <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-creme/10 pt-8 text-xs text-creme/40 sm:flex-row">
+      <div class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-torra/10 pt-8 text-xs text-torra/45 sm:flex-row">
         <p>© <span id="year">2026</span> Pielini Coffee. Todos os direitos reservados.</p>
-        <a href="#inicio" class="inline-flex items-center gap-2 transition hover:text-caramelo-light">Voltar ao topo <i data-lucide="arrow-down" class="h-3.5 w-3.5 rotate-180"></i></a>
+        <a href="#inicio" class="inline-flex items-center gap-2 transition hover:text-caramelo-dark">Voltar ao topo <i data-lucide="arrow-down" class="h-3.5 w-3.5 rotate-180"></i></a>
       </div>
     </div>
   </footer>

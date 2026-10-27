@@ -26,81 +26,108 @@
   $('#year').textContent = new Date().getFullYear();
 
   /* ===================================================================
-     0. MOTION DE ABERTURA
+     0. ABERTURA — logo em destaque
   =================================================================== */
-  const intro = (() => {
-    const el = $('#intro');
-    const video = $('.intro-video', el);
-    const emblem = $('.intro-emblem', el);
-    const progress = $('.intro-progress', el);
-    const timers = [];
-    let finished = false;
-    let started = false;
+  const rayGroup = $('#hero-ray-lines');
+  if (rayGroup) {
+    const rays = [];
+    for (let k = 0; k < 36; k++) {
+      const a = (k / 36) * Math.PI * 2;
+      const c = Math.cos(a), s2 = Math.sin(a);
+      rays.push(`<line x1="${(c * 74).toFixed(2)}" y1="${(s2 * 74).toFixed(2)}" x2="${(c * 97).toFixed(2)}" y2="${(s2 * 97).toFixed(2)}"/>`);
+    }
+    rayGroup.innerHTML = rays.join('');
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('hero-in')));
 
-    const finishImmediately = () => {
-      el.remove();
-      document.body.classList.remove('is-locked', 'intro-active');
-      document.body.classList.add('hero-in');
-    };
+  /* ===================================================================
+     0b. MOTION — grão de café se partindo conforme a rolagem
+  =================================================================== */
+  const bean = (() => {
+    const section = $('#do-grao');
+    const canvas = $('#bean-canvas');
+    const ctx = canvas.getContext('2d');
+    const steps = $$('.bean-step', section);
+    const indexes = $$('.bean-index', section);
+    const bar = $('#bean-progress');
+    const FRAMES = 76;
+    const src = (i) => `assets/seq/grao-${String(i).padStart(3, '0')}.webp`;
+    const images = new Array(FRAMES);
+    let current = -1;
+    let loadingStarted = false;
 
-    const leave = () => {
-      if (finished) return;
-      finished = true;
-      timers.forEach(clearTimeout);
-      document.body.classList.add('hero-in');
-      el.classList.add('stage-emblem', 'is-leaving');
+    const load = (i) => new Promise((resolve) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.onload = () => { images[i] = img; resolve(); };
+      img.onerror = resolve;
+      img.src = src(i);
+    });
 
-      // O emblema "voa" até o logo da navbar (técnica FLIP)
-      const target = $('#nav-emblem').getBoundingClientRect();
-      const from = emblem.getBoundingClientRect();
-      const dx = target.left + target.width / 2 - (from.left + from.width / 2);
-      const dy = target.top + target.height / 2 - (from.top + from.height / 2);
-      const scale = target.width / from.width;
-      emblem.style.transition = 'transform 1.1s cubic-bezier(.7,0,.2,1), opacity .4s ease 1s';
-      emblem.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-
-      setTimeout(() => {
-        document.body.classList.remove('is-locked', 'intro-active');
-        emblem.style.opacity = '0';
-      }, 1100);
-      setTimeout(() => el.remove(), 1600);
-    };
-
-    const runTimeline = () => {
-      if (started) return;
-      started = true;
-      el.classList.add('stage-start');
-      progress.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 5200, easing: 'linear', fill: 'forwards' });
-      timers.push(setTimeout(() => video.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.45)' }], { duration: 1400, fill: 'forwards', easing: 'ease' }), 2000));
-      timers.push(setTimeout(() => el.classList.add('stage-emblem'), 2100));
-      timers.push(setTimeout(() => el.classList.add('stage-title'), 2700));
-      timers.push(setTimeout(leave, 5300));
-    };
-
-    const init = () => {
-      // Pula a intro com movimento reduzido ou quando a página abre direto numa âncora
-      if (prefersReducedMotion || (location.hash && location.hash !== '#inicio')) {
-        finishImmediately();
-        return;
+    const loadAll = async () => {
+      if (loadingStarted) return;
+      loadingStarted = true;
+      // primeiro quadros espaçados (prévia rápida), depois os intermediários
+      const order = [];
+      for (let stepSize of [8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += stepSize) if (!order.includes(i)) order.push(i);
+      for (let k = 0; k < order.length; k += 6) {
+        await Promise.all(order.slice(k, k + 6).map(load));
+        current = -1; draw(lastProgress);
       }
-      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-      window.scrollTo(0, 0);
-
-      $('#intro-skip').addEventListener('click', leave);
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') leave(); }, { once: true });
-
-      video.addEventListener('playing', runTimeline, { once: true });
-      video.addEventListener('ended', leave, { once: true });
-      const playAttempt = video.play();
-      if (playAttempt && typeof playAttempt.catch === 'function') playAttempt.catch(runTimeline);
-      // Garantia: se o vídeo demorar a carregar, a narrativa segue mesmo assim
-      timers.push(setTimeout(runTimeline, 1500));
-      timers.push(setTimeout(leave, 9000));
     };
 
-    return { init };
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      current = -1;
+      draw(lastProgress);
+    };
+
+    const nearestLoaded = (i) => {
+      for (let d = 0; d < FRAMES; d++) {
+        if (images[i - d]) return images[i - d];
+        if (images[i + d]) return images[i + d];
+      }
+      return null;
+    };
+
+    let lastProgress = 0;
+    const draw = (p) => {
+      lastProgress = p;
+      // o grão fica parado no início e termina em pó antes do fim da seção
+      const t = clamp((p - 0.06) / 0.82, 0, 1);
+      const i = Math.round(t * (FRAMES - 1));
+      if (i === current) return;
+      const img = nearestLoaded(i);
+      if (!img) return;
+      if (images[i]) current = i;
+      const cw = canvas.width, ch = canvas.height;
+      const scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
+      const w = img.naturalWidth * scale, h = img.naturalHeight * scale;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+    };
+
+    const update = (vh) => {
+      const r = section.getBoundingClientRect();
+      const total = r.height - vh;
+      const p = clamp(-r.top / (total || 1), 0, 1);
+      draw(p);
+      bar.style.transform = `scaleX(${p})`;
+      bar.parentElement.style.opacity = p > 0.97 ? '0' : '1';
+      const stage = p < 0.36 ? 0 : p < 0.68 ? 1 : 2;
+      steps.forEach((el, k) => el.classList.toggle('is-on', k === stage));
+      indexes.forEach((el, k) => el.classList.toggle('is-on', k === stage));
+    };
+
+    load(0).then(() => { current = -1; draw(lastProgress); });
+    new IntersectionObserver((entries) => { if (entries[0].isIntersecting) loadAll(); }, { rootMargin: '150% 0px' }).observe(section);
+    window.addEventListener('resize', resize);
+    resize();
+    return { update };
   })();
-  intro.init();
 
   /* ===================================================================
      1. HEADER — progresso, tema da navbar, menu mobile, link ativo
@@ -169,6 +196,17 @@
       if (sec) { const r = sec.getBoundingClientRect(); if (r.top <= vh * 0.4 && r.bottom > vh * 0.4) activeId = a.getAttribute('href'); }
     });
     navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === activeId));
+
+    bean.update(vh);
+
+    // O emblema da navbar só aparece quando o logo do Hero sai de cena
+    const heroLogoRect = $('#hero-logo').getBoundingClientRect();
+    document.body.classList.toggle('logo-docked-off', heroLogoRect.bottom > 90);
+    if (!prefersReducedMotion) {
+      const k = clamp(scrollY / (vh * 0.8), 0, 1);
+      $('#hero-logo').style.translate = `0 ${(k * vh * 0.18).toFixed(1)}px`;
+      $('#hero-logo').style.scale = String(1 - k * 0.25);
+    }
 
     // Botão flutuante surge depois do Hero
     waFloat.dataset.show = String(hero.getBoundingClientRect().bottom < vh * 0.25);

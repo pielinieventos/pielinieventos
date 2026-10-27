@@ -18,7 +18,8 @@ python3 -m http.server 8000   # http://localhost:8000
 | `assets/js/main.js` | Motion de abertura, scrollytelling e os 4 widgets interativos |
 | `assets/js/icons.js` | Somente os ícones Lucide usados (gerado) |
 | `assets/css/styles.css` | Tailwind compilado (gerado a partir de `src/input.css`) |
-| `assets/video/grao-partindo.mp4` | Motion de abertura: grão de café se partindo |
+| `assets/seq/` | Motion do grão: 76 quadros recortados (fundo transparente) desenhados conforme a rolagem |
+| `assets/img/papel-filtro.jpg` | Textura de papel de filtro do fundo (gerada por `scripts/paper-texture.py`) |
 | `assets/svg/` | Emblema e logotipo vetorizados do manual da marca |
 
 ## Editar estilos ou ícones
