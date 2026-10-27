@@ -169,66 +169,41 @@
          2b. MOTION — o grão se partindo conforme a rolagem
     ========================================================== -->
     <section id="do-grao" data-nav-theme="light" class="relative h-[340vh]" aria-label="Do grão à xícara">
-      <div class="sticky top-0 h-[100svh] overflow-hidden">
-        <div class="mx-auto flex h-full max-w-site flex-col items-center px-5 pb-[4svh] pt-[88px]">
-          <!-- Palco: grão (canvas) + grãos caindo + filtro de papel -->
-          <div id="bean-stage" class="relative min-h-0 w-full max-w-[560px] flex-1">
-            <svg id="filter-back" class="absolute bottom-0 left-1/2 z-0 w-[min(56vw,230px)] -translate-x-1/2 overflow-visible" viewBox="0 0 240 200" aria-hidden="true">
-              <defs>
-                <clipPath id="filter-mouth"><ellipse cx="120" cy="30" rx="108" ry="17"/></clipPath>
-                <linearGradient id="filter-inner" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7DCC8"/><stop offset="1" stop-color="#F4EEE3"/></linearGradient>
-                <radialGradient id="filter-bed-g" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#8A5428"/><stop offset=".7" stop-color="#5A3418"/><stop offset="1" stop-color="#3A2010"/></radialGradient>
-              </defs>
-              <ellipse cx="120" cy="30" rx="110" ry="18" fill="url(#filter-inner)" stroke="#D8CBB4" stroke-width="1.2"/>
-              <g clip-path="url(#filter-mouth)">
-                <ellipse id="filter-bed" cx="120" cy="40" rx="0" ry="0" fill="url(#filter-bed-g)"/>
-              </g>
-            </svg>
-            <canvas id="bean-canvas" class="absolute inset-0 z-10 h-full w-full" role="img" aria-label="Grão de café torrado se partindo e caindo, já moído, dentro de um filtro de papel"></canvas>
-            <canvas id="grain-canvas" class="pointer-events-none absolute inset-0 z-10 h-full w-full" aria-hidden="true"></canvas>
-            <svg id="filter-front" class="pointer-events-none absolute bottom-0 left-1/2 z-20 w-[min(56vw,230px)] -translate-x-1/2 overflow-visible" viewBox="0 0 240 200" aria-hidden="true">
-              <defs>
-                <linearGradient id="filter-paper" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#E9DFCD"/><stop offset=".22" stop-color="#FBF8F2"/><stop offset=".6" stop-color="#F6F0E5"/><stop offset="1" stop-color="#DED1BB"/>
-                </linearGradient>
-              </defs>
-              <ellipse cx="120" cy="196" rx="70" ry="6" fill="#1E1610" opacity=".08"/>
-              <path d="M10 30 A110 18 0 0 0 230 30 L152 186 Q120 196 88 186 Z" fill="url(#filter-paper)" stroke="#D8CBB4" stroke-width="1.2"/>
-              <g stroke="#CDBFA6" stroke-opacity=".55" stroke-width=".9" fill="none">
-                <path d="M46 44 L99 190"/><path d="M84 48 L110 192"/><path d="M120 48 L120 194"/><path d="M156 48 L130 192"/><path d="M194 44 L141 190"/>
-              </g>
-              <!-- costura crepada lateral, típica do filtro de papel -->
-              <path d="M214 50 l6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4 6 4 -6 4" transform="rotate(26 214 50)" fill="none" stroke="#C9B898" stroke-width="1.1"/>
-              <path d="M10 30 A110 18 0 0 0 230 30" fill="none" stroke="#CDBFA6" stroke-width="1.6"/>
-            </svg>
-          </div>
-
-          <!-- Legenda logo abaixo do filtro -->
-          <div class="pointer-events-none relative z-30 mt-5 w-full text-center">
-            <p class="eyebrow justify-center text-pielini"><span class="h-px w-8 bg-pielini"></span> Do grão à xícara <span class="h-px w-8 bg-pielini"></span></p>
-            <div class="relative mx-auto mt-3 h-[6.6rem] max-w-md sm:h-[6.2rem]">
+      <div class="sticky top-0 flex h-[100svh] items-center overflow-hidden">
+        <div class="container-site relative grid h-full items-center lg:grid-cols-12">
+          <!-- Texto -->
+          <div class="pointer-events-none absolute inset-x-5 bottom-[7svh] z-10 text-center sm:inset-x-8 lg:static lg:col-span-4 lg:text-left">
+            <p class="eyebrow justify-center text-pielini lg:justify-start"><span class="h-px w-8 bg-pielini"></span> Do grão à xícara</p>
+            <div class="relative mt-4 min-h-[9.5rem] sm:min-h-[8.5rem]">
               <div class="bean-step absolute inset-0" data-step="0">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">O <em class="text-pielini">grão</em></h2>
-                <p class="mt-2 text-torra/70">Selecionado com rigor e torrado em nossa própria torrefação.</p>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Selecionado com rigor e torrado em nossa própria torrefação.</p>
               </div>
               <div class="bean-step absolute inset-0" data-step="1">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">moagem</em></h2>
-                <p class="mt-2 text-torra/70">Moído na hora do preparo, direto para o filtro.</p>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Moído na hora do preparo, para preservar cada nota aromática.</p>
               </div>
               <div class="bean-step absolute inset-0" data-step="2">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">experiência</em></h2>
-                <p class="mt-2 text-torra/70">Extraído ao vivo, diante dos seus convidados.</p>
+                <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Extraído ao vivo, diante dos seus convidados.</p>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Progresso lateral -->
-        <ol class="absolute right-8 top-1/2 hidden -translate-y-1/2 flex-col gap-5 text-right text-xs font-semibold uppercase tracking-[0.22em] lg:flex xl:right-[max(2rem,calc((100vw-76rem)/2))]">
-          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="0">Grão <span class="font-display text-2xl tracking-normal">01</span></li>
-          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="1">Moagem <span class="font-display text-2xl tracking-normal">02</span></li>
-          <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="2">Experiência <span class="font-display text-2xl tracking-normal">03</span></li>
-        </ol>
+          <!-- Canvas da sequência de quadros -->
+          <div class="absolute inset-x-0 top-[9svh] flex justify-center lg:static lg:col-span-5 lg:flex lg:h-full lg:items-center">
+            <canvas id="bean-canvas" class="h-[58svh] w-full max-w-[460px] lg:h-[88svh]" role="img" aria-label="Grão de café torrado se partindo e virando pó"></canvas>
+          </div>
+
+          <!-- Progresso -->
+          <div class="hidden lg:col-span-3 lg:flex lg:justify-end">
+            <ol class="flex flex-col gap-5 text-right text-xs font-semibold uppercase tracking-[0.22em]">
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="0">Grão <span class="font-display text-2xl tracking-normal">01</span></li>
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="1">Moagem <span class="font-display text-2xl tracking-normal">02</span></li>
+              <li class="bean-index flex items-center justify-end gap-3 text-torra/30 transition" data-step="2">Experiência <span class="font-display text-2xl tracking-normal">03</span></li>
+            </ol>
+          </div>
+        </div>
         <div class="absolute bottom-0 left-0 h-[2px] w-full bg-torra/5 transition-opacity duration-500"><div id="bean-progress" class="h-full origin-left scale-x-0 bg-caramelo"></div></div>
       </div>
     </section>
@@ -245,18 +220,25 @@
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
               O café como <em class="text-pielini">protagonista</em>
             </h2>
-            <figure class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15" data-reveal>
-              <video class="aspect-[4/5] w-full object-cover" src="assets/video/torrefacao.mp4" poster="assets/img/torrefacao-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Grãos de café sendo resfriados após a torra na torrefação da Pielini"></video>
-              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/90 via-torra/50 to-transparent p-6 pt-20 text-creme">
-                <span class="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-caramelo-light"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-caramelo-light"></span> Torrefação própria</span>
-                <p class="mt-1 font-display text-2xl italic">Grãos recém-torrados, moídos na hora do preparo.</p>
+            <figure id="roast-figure" class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15" data-reveal>
+              <canvas id="roast-canvas" class="block aspect-[4/5] w-full bg-torra" role="img" aria-label="Grãos de café sendo torrados: do grão verde à torra completa, conforme a rolagem"></canvas>
+              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/95 via-torra/70 to-transparent p-6 pt-24 text-creme sm:p-7 sm:pt-28">
+                <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.25em]">
+                  <span class="inline-flex items-center gap-2 text-caramelo-light"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-caramelo-light"></span> Torrefação própria</span>
+                  <span class="text-creme/80"><span id="roast-temp">25</span>°C</span>
+                </div>
+                <p id="roast-stage" class="mt-2 font-display text-3xl italic">Grão verde</p>
+                <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-creme/15" aria-hidden="true">
+                  <div id="roast-bar" class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-[#9AA66B] via-caramelo to-[#5A3418]"></div>
+                </div>
+                <p class="mt-3 text-sm text-creme/70">Role a página e acompanhe a torra: do grão verde ao ponto ideal.</p>
               </figcaption>
             </figure>
           </div>
         </div>
 
         <!-- Narrativa -->
-        <div class="lg:col-span-7 lg:pt-16">
+        <div class="lg:col-span-7 lg:flex lg:min-h-[175vh] lg:flex-col lg:justify-between lg:pb-10 lg:pt-16">
           <p id="scrub-text" class="scrub-text font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.22]">
             Um evento inesquecível é construído nos detalhes. Seja para dar as boas-vindas aos convidados, harmonizar perfeitamente com a mesa de doces, acompanhar o jantar ou energizar a pista de dança, o café é uma presença constante.
           </p>

@@ -19,6 +19,7 @@ python3 -m http.server 8000   # http://localhost:8000
 | `assets/js/icons.js` | Somente os ícones Lucide usados (gerado) |
 | `assets/css/styles.css` | Tailwind compilado (gerado a partir de `src/input.css`) |
 | `assets/seq/` | Motion do grão: 76 quadros recortados (fundo transparente) desenhados conforme a rolagem |
+| `assets/seq-torra/` | Motion da torra: 64 quadros graduados do grão verde à torra completa (`scripts/roast-frames.py`) |
 | `assets/img/papel-filtro.jpg` | Textura de papel de filtro do fundo (gerada por `scripts/paper-texture.py`) |
 | `assets/svg/` | Emblema e logotipo vetorizados do manual da marca |
 
