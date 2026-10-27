@@ -19,7 +19,7 @@
     event: null,
     station: null,
     leadName: '',
-    cup: { name: '', subMode: 'date', date: '', sub: '', colorName: 'Verde Pielini' },
+    cup: { name: '', subMode: 'date', date: '', sub: '' },
   };
 
   renderIcons();
@@ -670,9 +670,6 @@
   const cupSub = $('#cup-sub');
   const cupNameText = $('#cup-name-text');
   const cupSubText = $('#cup-sub-text');
-  const cupBand = $('#cup-band');
-  const cupInk = $('#cup-ink');
-  const swatches = $$('.swatch');
   const segBtns = $$('.seg-btn');
   const SAMPLE_NAME = 'Ana & Lucas';
   const SAMPLE_SUB = '12 · 03 · 2027';
@@ -697,12 +694,13 @@
 
   const renderCup = () => {
     const name = state.cup.name.trim();
-    cupNameText.textContent = name || SAMPLE_NAME;
-    cupNameText.setAttribute('fill-opacity', name ? '1' : '.75');
-    fitText(cupNameText, 34, 150);
+    // letras maiúsculas e espaçadas, como na referência de copo minimalista
+    cupNameText.textContent = (name || SAMPLE_NAME).toLocaleUpperCase('pt-BR');
+    cupNameText.setAttribute('fill-opacity', name ? '1' : '.55');
+    fitText(cupNameText, 26, 168);
     const sub = cupSubtitle();
     cupSubText.textContent = sub ? (state.cup.subMode === 'date' ? sub.replace(/\//g, ' · ') : sub.toUpperCase()) : SAMPLE_SUB;
-    fitText(cupSubText, 11, 150);
+    fitText(cupSubText, 10.5, 160);
     renderMessage();
   };
 
@@ -718,25 +716,6 @@
     (state.cup.subMode === 'date' ? cupDate : cupSub).focus();
     renderCup();
   }));
-
-  const setSwatch = (sw, focus = false) => {
-    swatches.forEach((s) => { const on = s === sw; s.setAttribute('aria-checked', String(on)); s.tabIndex = on ? 0 : -1; });
-    if (focus) sw.focus();
-    cupBand.setAttribute('fill', sw.dataset.color);
-    cupInk.setAttribute('fill', sw.dataset.ink);
-    cupInk.style.color = sw.dataset.ink;
-    state.cup.colorName = sw.dataset.name;
-    $('#swatch-name').textContent = sw.dataset.name;
-    renderMessage();
-  };
-  swatches.forEach((sw, i) => {
-    sw.addEventListener('click', () => setSwatch(sw));
-    sw.addEventListener('keydown', (e) => {
-      const n = swatches.length;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); setSwatch(swatches[(i + 1) % n], true); }
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); setSwatch(swatches[(i + n - 1) % n], true); }
-    });
-  });
 
   /* ===================================================================
      6. WIDGET 4 — GERADOR DE MENSAGEM WHATSAPP
@@ -776,7 +755,7 @@
     const sub = cupSubtitle();
     if (cupNameValue || sub) {
       const parts = [cupNameValue ? `"${cupNameValue}"` : null, sub || null].filter(Boolean).join(' — ');
-      lines.push(`• Copo personalizado: ${parts} (cinta ${state.cup.colorName})`);
+      lines.push(`• Copo personalizado: ${parts}`);
     }
     lines.push('');
     lines.push('Podemos combinar um horário?');

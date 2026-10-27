@@ -183,10 +183,6 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 @keyframes bubble { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-60px); opacity: 0; } }
 
 /* Cup simulator */
-.swatch[aria-checked="true"] { box-shadow: 0 0 0 3px var(--creme), 0 0 0 5px var(--torra); transform: scale(1.08); }
-.swatch { transition: transform .25s ease, box-shadow .25s ease; }
-#cup-band, #cup-band-shade { transition: fill .6s ease; }
-#cup-wrap { animation: float 6s ease-in-out infinite; }
 @keyframes float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-10px) rotate(1deg); } }
 .seg-btn[aria-pressed="true"] { background: var(--torra); color: var(--creme); }
 
