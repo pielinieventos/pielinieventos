@@ -144,8 +144,37 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .level-tick.is-on { background: var(--caramelo); color: var(--torra); border-color: var(--caramelo); }
 
 /* Methods */
-.method-btn[aria-selected="true"] { background: var(--torra); color: var(--creme); border-color: var(--torra); }
-.method-btn[aria-selected="true"] .method-ico { color: var(--caramelo); }
+/* Métodos em pilha, como as abas de índice de um dicionário */
+.method-btn {
+  position: relative; display: flex; align-items: center; gap: 1rem; width: 100%;
+  margin-top: -10px; padding: 1.15rem 1.4rem 1.15rem 1.25rem;
+  border-radius: 1.1rem; border: 1px solid rgba(30,22,16,.08);
+  background: linear-gradient(180deg, #F7F2E9, #EFE7DA);
+  font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.45rem; font-weight: 500; color: rgba(30,22,16,.75);
+  box-shadow: 0 -8px 16px -12px rgba(30,22,16,.35);
+  transform-origin: left center;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1), background .4s ease, color .4s ease, box-shadow .55s ease;
+}
+.method-btn:first-child { margin-top: 0; }
+.method-btn:hover { transform: translateX(6px); color: var(--torra); }
+.method-btn .method-num { font-family: "Plus Jakarta Sans", sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .18em; color: var(--caramelo-dark, #A86D33); }
+.method-btn .method-ico { color: rgba(30,22,16,.35); transition: color .4s ease, transform .55s cubic-bezier(.2,.8,.2,1); }
+.method-btn[aria-selected="true"] {
+  z-index: 10; transform: translateX(18px) scale(1.05);
+  background: var(--torra); color: var(--creme); border-color: var(--torra);
+  box-shadow: 0 26px 44px -18px rgba(30,22,16,.6);
+}
+.method-btn[aria-selected="true"] .method-num { color: var(--caramelo); }
+.method-btn[aria-selected="true"] .method-ico { color: var(--caramelo); transform: rotate(-8deg) scale(1.15); }
+@media (max-width: 639px) {
+  .method-btn { font-size: 1.25rem; padding: 1rem 1.1rem; }
+  .method-btn[aria-selected="true"] { transform: translateX(10px) scale(1.03); }
+}
+
+/* Rótulos "Capítulo" entram de fora da página, da esquerda para a direita */
+.chapter-slide { opacity: 0; transform: translateX(-100vw); transition: transform 1.3s cubic-bezier(.16,.84,.24,1), opacity .9s ease .1s; }
+.chapter-slide.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .chapter-slide { opacity: 1; transform: none; } }
 .meter-fill { transition: width .8s cubic-bezier(.2,.8,.2,1); }
 .method-art svg .anim-drop { animation: drip 1.8s cubic-bezier(.55,0,1,.45) infinite; }
 .method-art svg .anim-bubble { animation: bubble 2.4s ease-in infinite; }

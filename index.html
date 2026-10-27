@@ -214,7 +214,7 @@
       <div class="container-site grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         <!-- Torra: fica centralizada na tela enquanto os pontos de torra passam -->
         <div class="lg:col-span-5">
-          <span class="eyebrow text-pielini" data-reveal><span class="h-px w-8 bg-pielini"></span> Capítulo 01</span>
+          <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 01</span>
           <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
             O café como <em class="text-pielini">protagonista</em>
           </h2>
@@ -309,7 +309,7 @@
       <div class="container-site relative">
         <div class="grid gap-10 lg:grid-cols-2 lg:items-end">
           <div data-reveal>
-            <span class="eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
+            <span class="chapter-slide eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Menu de <em class="text-caramelo-dark">Experiências</em></h2>
             <p class="mt-6 max-w-lg text-torra/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Passe o mouse ou toque em uma estação para sentir a intensidade da experiência.</p>
           </div>
@@ -426,21 +426,22 @@
     <section id="metodos" data-nav-theme="light" class="relative py-24 sm:py-32">
       <div class="container-site">
         <div class="max-w-2xl" data-reveal>
-          <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 03 · Guia sensorial</span>
+          <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 03 · Guia sensorial</span>
           <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Explore os <em class="text-pielini">métodos</em></h2>
           <p class="mt-6 text-torra/70">Cada método conta uma história diferente na xícara — e no visual da ilha. Escolha um preparo e descubra seu perfil.</p>
         </div>
 
-        <div role="tablist" aria-label="Métodos de preparo" id="method-tabs" class="mt-12 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] sm:flex-wrap" data-reveal>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="v60" aria-selected="true" aria-controls="method-panel"><i data-lucide="droplets" class="method-ico h-4 w-4"></i> Hario V60</button>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="prensa" aria-selected="false" tabindex="-1" aria-controls="method-panel"><i data-lucide="coffee" class="method-ico h-4 w-4"></i> Prensa Francesa</button>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="koar" aria-selected="false" tabindex="-1" aria-controls="method-panel"><i data-lucide="gem" class="method-ico h-4 w-4"></i> Koar</button>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="chemex" aria-selected="false" tabindex="-1" aria-controls="method-panel"><i data-lucide="glass-water" class="method-ico h-4 w-4"></i> Chemex</button>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="espresso" aria-selected="false" tabindex="-1" aria-controls="method-panel"><i data-lucide="flame" class="method-ico h-4 w-4"></i> Clássicos de Espresso</button>
-          <button role="tab" class="method-btn chip shrink-0 border-torra/15 bg-white/60" data-method="soda" aria-selected="false" tabindex="-1" aria-controls="method-panel"><i data-lucide="cup-soda" class="method-ico h-4 w-4"></i> Sodas Italianas</button>
-        </div>
+        <div class="mt-12 grid gap-8 lg:grid-cols-12 lg:items-start" data-reveal>
+          <div role="tablist" aria-label="Métodos de preparo" aria-orientation="vertical" id="method-tabs" class="flex flex-col pr-5 lg:col-span-4">
+            <button role="tab" class="method-btn" data-method="v60" aria-selected="true" aria-controls="method-panel"><span class="method-num">01</span><span class="flex-1 text-left">Hario V60</span><i data-lucide="droplets" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="prensa" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">02</span><span class="flex-1 text-left">Prensa Francesa</span><i data-lucide="coffee" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="koar" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">03</span><span class="flex-1 text-left">Koar</span><i data-lucide="gem" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="chemex" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">04</span><span class="flex-1 text-left">Chemex</span><i data-lucide="glass-water" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="espresso" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">05</span><span class="flex-1 text-left">Clássicos de Espresso</span><i data-lucide="flame" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="soda" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">06</span><span class="flex-1 text-left">Sodas Italianas</span><i data-lucide="cup-soda" class="method-ico h-5 w-5"></i></button>
+          </div>
 
-        <div id="method-panel" role="tabpanel" class="mt-8 grid overflow-hidden rounded-[2rem] bg-white/70 ring-1 ring-torra/5 lg:grid-cols-2" data-reveal>
+        <div id="method-panel" role="tabpanel" class="grid scroll-mt-28 overflow-hidden rounded-[2rem] bg-white/70 ring-1 ring-torra/5 lg:col-span-8 lg:grid-cols-2">
           <div class="method-art relative flex min-h-[360px] items-center justify-center overflow-hidden bg-gradient-to-br from-offwhite to-[#E2D6C2] p-10">
             <div class="absolute inset-6 rounded-[1.5rem] border border-torra/10" aria-hidden="true"></div>
             <div class="absolute left-8 top-8 eyebrow text-torra/50" id="method-station"></div>
@@ -458,13 +459,10 @@
                 <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="eye" class="h-3.5 w-3.5"></i> Impacto visual na ilha</dt>
                 <dd class="mt-2 text-torra/75" data-k="visual"></dd>
               </div>
-              <div>
-                <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="sparkles" class="h-3.5 w-3.5"></i> Notas sensoriais</dt>
-                <dd class="mt-3 flex flex-wrap gap-2" data-k="notes"></dd>
-              </div>
             </dl>
             <div class="mt-8 grid gap-3 border-t border-torra/10 pt-6" data-k="meters"></div>
           </div>
+        </div>
         </div>
       </div>
     </section>
@@ -652,6 +650,10 @@
             <i data-lucide="map-pin" class="mt-0.5 h-5 w-5 shrink-0 text-caramelo"></i>
             <span>R. Primeiro de Março, 1111, Loja 14<br>Pátria Nova, Novo Hamburgo/RS</span>
           </a>
+          <a href="https://www.ifood.com.br/delivery/novo-hamburgo-rs/pielini-coffee-patria-nova/e5ec5ae4-ccdf-4440-b9b8-b05fc9ac9f74?utm_medium=share" target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#EA1D2C] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#EA1D2C]/20 transition hover:bg-[#C8101E]">
+            <i data-lucide="shopping-bag" class="h-4 w-4"></i> Peça pelo iFood
+          </a>
+          <p class="mt-3 max-w-xs text-xs leading-relaxed text-torra/55">Esse lugar é a sua cara! Use o ícone de coração no app pra salvar a loja na sua área de Favoritos.</p>
         </div>
         <div class="md:col-span-3">
           <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-torra/45">Contato</p>

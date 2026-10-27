@@ -306,6 +306,14 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
   $$('[data-reveal]').forEach((el) => revealObserver.observe(el));
 
+  const chapterObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { $('.chapter-slide', entry.target).classList.add('is-in'); chapterObserver.unobserve(entry.target); }
+    });
+  }, { threshold: 0.3 });
+  // observa o contêiner (o rótulo em si começa fora da tela, à esquerda)
+  $$('.chapter-slide').forEach((el) => chapterObserver.observe(el.parentElement));
+
   let ticking = false;
   const onScroll = () => {
     const vh = window.innerHeight;
@@ -624,7 +632,6 @@
     q('name').textContent = m.name;
     q('profile').textContent = m.profile;
     q('visual').textContent = m.visual;
-    q('notes').innerHTML = m.notes.map((n) => `<span class="rounded-full bg-caramelo/15 px-3.5 py-1.5 text-sm font-medium text-caramelo-dark">${escapeHTML(n)}</span>`).join('');
     q('meters').innerHTML = Object.entries(m.meters).map(([label, v]) => `
       <div class="grid grid-cols-[72px_1fr] items-center gap-4 text-xs font-semibold uppercase tracking-[0.14em] text-torra/60">
         <span>${label}</span>
@@ -637,11 +644,15 @@
     [methodArt, methodInfo].forEach((n) => { n.classList.remove('swap-enter'); void n.offsetWidth; n.classList.add('swap-enter'); });
   };
   methodTabs.forEach((b, i) => {
-    b.addEventListener('click', () => setMethod(b.dataset.method));
+    b.addEventListener('click', () => {
+      setMethod(b.dataset.method);
+      // no celular o painel fica abaixo da lista: leva o leitor até ele
+      if (!desktop.matches) $('#method-panel').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+    });
     b.addEventListener('keydown', (e) => {
       const n = methodTabs.length;
-      if (e.key === 'ArrowRight') setMethod(methodTabs[(i + 1) % n].dataset.method, true);
-      if (e.key === 'ArrowLeft') setMethod(methodTabs[(i + n - 1) % n].dataset.method, true);
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); setMethod(methodTabs[(i + 1) % n].dataset.method, true); }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); setMethod(methodTabs[(i + n - 1) % n].dataset.method, true); }
     });
   });
   setMethod('v60');
