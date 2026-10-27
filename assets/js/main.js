@@ -162,7 +162,7 @@
       started = true;
       const order = [];
       for (const gap of [8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += gap) if (!order.includes(i)) order.push(i);
-      for (let k = 0; k < order.length; k += 8) { await Promise.all(order.slice(k, k + 8).map(load)); last = -1; draw(lastV); }
+      for (let k = 0; k < order.length; k += 8) { await Promise.all(order.slice(k, k + 8).map(load)); draw(lastV); }
     };
     const nearest = (i) => { for (let d = 0; d < FRAMES; d++) { if (images[i - d]) return images[i - d]; if (images[i + d]) return images[i + d]; } return null; };
 
@@ -175,82 +175,78 @@
       // a imagem fica fixa exatamente no centro vertical da tela
       stickyTop = Math.max(84, (vh - figure.offsetHeight) / 2 + 20);
       figure.style.top = `${stickyTop}px`;
-      last = -1; draw(lastV);
+      draw(lastV);
     };
 
+    // mistura dois quadros vizinhos: a torra muda de cor sem "saltos"
     const draw = (v) => {
       lastV = v;
-      const i = Math.round(v * (FRAMES - 1));
-      if (i === last) return;
-      const img = nearest(i);
-      if (!img) return;
-      if (images[i]) last = i;
+      const f = v * (FRAMES - 1);
+      const i0 = Math.floor(f);
+      const a = f - i0;
+      const imgA = nearest(i0);
+      const imgB = a > 0.01 ? nearest(Math.min(FRAMES - 1, i0 + 1)) : null;
+      if (!imgA) return;
       const cw = canvas.width, ch = canvas.height;
-      const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-      const w = img.naturalWidth * s, h = img.naturalHeight * s;
-      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      const paint = (img, alpha) => {
+        const s2 = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+        const w = img.naturalWidth * s2, h = img.naturalHeight * s2;
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      };
+      paint(imgA, 1);
+      if (imgB && imgB !== imgA) paint(imgB, a);
+      ctx.globalAlpha = 1;
     };
 
+    let target = 0;
+    let current = 0;
+    let running = false;
+    let shownStage = -1;
+    const render = () => {
+      draw(current);
+      bar.style.transform = `scaleX(${current})`;
+      tempEl.textContent = Math.round(25 + current * 185);
+      let stage = 0;
+      STAGES.forEach(([at], n) => { if (current >= at - 0.03) stage = n; });
+      if (stage !== shownStage) {
+        shownStage = stage;
+        stageEl.textContent = STAGES[stage][1];
+        stageEl.classList.remove('swap-enter'); void stageEl.offsetWidth; stageEl.classList.add('swap-enter');
+        stepEls.forEach((el, n) => { el.style.color = n === stage ? '#DDA971' : n < stage ? 'rgba(245,242,235,.75)' : ''; });
+      }
+    };
+    // o valor exibido "persegue" o da rolagem com suavidade (inércia leve)
+    const loop = () => {
+      current += (target - current) * 0.09;
+      if (Math.abs(target - current) < 0.0008) current = target;
+      render();
+      if (current !== target) requestAnimationFrame(loop); else running = false;
+    };
+
+    let progress = 0;
     const update = () => {
       const r = track.getBoundingClientRect();
       // 0 quando a imagem chega ao centro; 1 quando o trilho termina
-      const p = clamp((stickyTop - r.top) / Math.max(1, r.height - figure.offsetHeight), 0, 1);
-      // cada estágio fica parado um tempo (para leitura) e depois transita para o próximo
-      const k = Math.min(p * STAGES.length, STAGES.length - 0.0001);
+      progress = clamp((stickyTop - r.top) / Math.max(1, r.height - figure.offsetHeight), 0, 1);
+      // pausa curta em cada ponto de torra e transição contínua até o próximo
+      const k = Math.min(progress * (STAGES.length - 0.6), STAGES.length - 0.0001);
       const idx = Math.floor(k);
       const u = k - idx;
-      const v = idx < STAGES.length - 1
-        ? STAGES[idx][0] + (STAGES[idx + 1][0] - STAGES[idx][0]) * ease(clamp((u - 0.5) / 0.5, 0, 1))
+      target = idx < STAGES.length - 1
+        ? STAGES[idx][0] + (STAGES[idx + 1][0] - STAGES[idx][0]) * ease(clamp((u - 0.2) / 0.8, 0, 1))
         : 1;
-      draw(v);
-      bar.style.transform = `scaleX(${v})`;
-      tempEl.textContent = Math.round(25 + v * 185);
-      const shown = u > 0.75 && idx < STAGES.length - 1 ? idx + 1 : idx;
-      if (stageEl.textContent !== STAGES[shown][1]) {
-        stageEl.textContent = STAGES[shown][1];
-        stageEl.classList.remove('swap-enter'); void stageEl.offsetWidth; stageEl.classList.add('swap-enter');
-      }
-      stepEls.forEach((el, n) => {
-        el.style.color = n === shown ? '#DDA971' : n < shown ? 'rgba(245,242,235,.75)' : '';
-      });
+      if (prefersReducedMotion) { current = target; render(); return; }
+      if (!running) { running = true; requestAnimationFrame(loop); }
     };
 
-    load(0).then(() => { last = -1; draw(lastV); });
+    load(0).then(() => draw(lastV));
     new IntersectionObserver((e) => { if (e[0].isIntersecting) loadAll(); }, { rootMargin: '120% 0px' }).observe(track);
     window.addEventListener('resize', resize);
     resize();
-    return { update };
+    return { update, get progress() { return progress; } };
   })();
 
-  /* ===================================================================
-     0d. LETREIRO DE EVENTOS — uma palavra por vez, com leve zoom
-  =================================================================== */
-  const ticker = (() => {
-    const track = $('#ticker-track');
-    const box = $('#ticker');
-    const words = $$('.ticker-word', box);
-    const dots = $$('#ticker-dots [data-td]');
-    let current = -1;
-    const show = (idx) => {
-      if (idx === current) return;
-      words.forEach((w, n) => {
-        w.classList.remove('is-on', 'is-out');
-        if (n === idx) w.classList.add('is-on');
-        else if (n === current) w.classList.add('is-out');
-      });
-      dots.forEach((d, n) => { d.style.backgroundColor = n <= idx ? 'var(--caramelo)' : ''; });
-      current = idx;
-    };
-    const update = (vh) => {
-      const r = track.getBoundingClientRect();
-      if (r.top > vh) return;
-      const top = vh * 0.4;
-      const p = clamp((top - r.top) / Math.max(1, r.height - box.offsetHeight), 0, 0.9999);
-      show(Math.floor(p * words.length));
-    };
-    if (prefersReducedMotion) words.forEach((w, n) => { if (n) w.remove(); });
-    return { update };
-  })();
 
   /* ===================================================================
      1. HEADER — progresso, tema da navbar, menu mobile, link ativo
@@ -292,6 +288,7 @@
   parallaxInner.forEach(({ el }) => { el.style.transform = 'scale(1.15)'; });
 
   const scrub = $('#scrub-text');
+  const desktop = window.matchMedia('(min-width: 1024px)');
   const highlight = new Set(['detalhes.', 'café', 'presença', 'constante.']);
   const scrubWords = (() => {
     const words = scrub.textContent.trim().split(/\s+/);
@@ -331,7 +328,6 @@
 
     bean.update(vh);
     roast.update(vh);
-    ticker.update(vh);
 
     // O emblema da navbar só aparece quando o logo do Hero sai de cena
     const heroLogoRect = $('#hero-logo').getBoundingClientRect();
@@ -362,7 +358,9 @@
 
     // Texto que acende palavra por palavra conforme a rolagem
     const r = scrub.getBoundingClientRect();
-    const p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.3), 0, 1);
+    const p = desktop.matches
+      ? clamp(roast.progress * 1.6, 0, 1)
+      : clamp((vh * 0.85 - r.top) / (r.height + vh * 0.3), 0, 1);
     const lit = prefersReducedMotion ? scrubWords.length : Math.round(p * scrubWords.length);
     scrubWords.forEach((w, i) => w.classList.toggle('on', i < lit));
 
@@ -377,46 +375,10 @@
      3. WIDGET 1 — MOMENTOS DA FESTA
   =================================================================== */
   const moments = [
-    {
-      kicker: 'Momento 1 · Recepção',
-      title: 'O primeiro aroma da noite',
-      text: 'Enquanto os convidados chegam, a ilha já está em funcionamento. O perfume do café recém-moído recebe cada pessoa e o preparo ao vivo vira o primeiro ponto de encontro da festa — um gesto de hospitalidade que todo mundo percebe.',
-      methods: ['Hario V60', 'Chemex', 'Koar'],
-      note: 'Leve, floral e convidativo.',
-      tags: ['Mel', 'Frutas amarelas', 'Acidez delicada'],
-      when: 'Chegada dos convidados · primeiros 60 minutos',
-      rec: { station: 'Estação Filtrados', text: 'Métodos filtrados recebem bem quem chega: o preparo na Hario V60 e na Chemex é bonito de assistir e os cafés leves abrem o paladar sem pesar.' },
-    },
-    {
-      kicker: 'Momento 2 · Harmonização',
-      title: 'O par perfeito da mesa de doces',
-      text: 'Bem-casados, brigadeiros gourmet e o bolo pedem um café à altura. O preparo certo equilibra o açúcar, limpa o paladar entre uma mordida e outra e valoriza cada detalhe da confeitaria que você escolheu.',
-      methods: ['Prensa Francesa', 'Cappuccino', 'Caramel Macchiato'],
-      note: 'Aveludado, achocolatado e redondo.',
-      tags: ['Chocolate ao leite', 'Caramelo', 'Corpo sedoso'],
-      when: 'Abertura da mesa de doces e corte do bolo',
-      rec: { station: 'Estação Espressos', text: 'Cappuccino e Caramel Macchiato harmonizam com bem-casados, brigadeiros e o bolo — o leite vaporizado equilibra o açúcar da confeitaria.' },
-    },
-    {
-      kicker: 'Momento 3 · Fechamento',
-      title: 'O encerramento elegante do jantar',
-      text: 'Depois do jantar, um espresso bem extraído é o digestivo natural. A ilha se torna ponto de conversa: os convidados acompanham a extração, a crema dourada e a latte art feita na hora, sem precisar sair do clima da festa.',
-      methods: ['Espresso', 'Cappuccino', 'Mocaccino'],
-      note: 'Intenso, persistente e cremoso.',
-      tags: ['Cacau', 'Castanhas tostadas', 'Final longo'],
-      when: 'Logo após o jantar ou o buffet principal',
-      rec: { station: 'Estação Espressos', text: 'O espresso curto é o digestivo clássico do pós-jantar; para quem prefere algo mais suave, o Mocaccino fecha a refeição com doçura.' },
-    },
-    {
-      kicker: 'Momento 4 · Energia',
-      title: 'O combustível da pista de dança',
-      text: 'Quando a pista esquenta, a ilha entra no ritmo: cafés com energia para quem não quer parar e Sodas Italianas geladas e coloridas para refrescar. Cafeína e frescor para manter a festa viva até a última música.',
-      methods: ['Sodas Italianas', 'Mocaccino', 'Espresso'],
-      note: 'Refrescante, vibrante e energizante.',
-      tags: ['Frutas vermelhas', 'Cítricos', 'Gelado & efervescente'],
-      when: 'Abertura da pista até o fim da festa',
-      rec: { station: 'Estação Premium Plus', text: 'Sodas Italianas geladas refrescam a pista e os cafés da cafeteria mantêm a energia — com os copos personalizados do evento circulando pela festa.' },
-    },
+    { title: 'Boas-vindas', text: 'O aroma do café moído na hora recebe os convidados e a ilha vira o primeiro ponto de encontro.', rec: { station: 'Estação Filtrados', text: 'Hario V60 e Chemex' } },
+    { title: 'Mesa de Doces', text: 'O café equilibra o açúcar e valoriza cada doce da confeitaria.', rec: { station: 'Estação Espressos', text: 'Cappuccino e Caramel Macchiato' } },
+    { title: 'Pós-Jantar', text: 'Um espresso bem extraído fecha a refeição com elegância.', rec: { station: 'Estação Espressos', text: 'Espresso e Mocaccino' } },
+    { title: 'Pista de Dança', text: 'Bebidas geladas e cafés com energia mantêm a festa no ritmo.', rec: { station: 'Estação Premium Plus', text: 'Sodas Italianas e Mocaccino' } },
   ];
 
   const momentTabs = $$('.moment-tab');
@@ -433,19 +395,14 @@
     momentLine.style.width = `${(index / 3) * 75}%`;
 
     const q = (k) => $(`[data-m="${k}"]`, momentPanel);
-    q('kicker').textContent = m.kicker;
     q('title').textContent = m.title;
     q('text').textContent = m.text;
-    q('note').textContent = m.note;
-    q('when').textContent = m.when;
     q('rec-station').textContent = m.rec.station;
     q('rec-text').textContent = m.rec.text;
     q('rec-btn').dataset.station = m.rec.station;
-    q('methods').innerHTML = m.methods.map((x) => `<span class="chip border-creme/15 py-1.5 text-xs text-creme/80"><i data-lucide="coffee" class="h-3.5 w-3.5 text-caramelo-light"></i>${escapeHTML(x)}</span>`).join('');
-    q('tags').innerHTML = m.tags.map((x) => `<li class="rounded-full bg-creme/10 px-3 py-1 text-xs">${escapeHTML(x)}</li>`).join('');
     renderIcons();
 
-    ['moment-content', 'moment-note'].forEach((id) => {
+    ['moment-content'].forEach((id) => {
       const node = document.getElementById(id);
       node.classList.remove('swap-enter');
       void node.offsetWidth;

@@ -218,7 +218,7 @@
           <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
             O café como <em class="text-pielini">protagonista</em>
           </h2>
-          <div id="roast-track" class="relative mt-10 h-[260svh]">
+          <div id="roast-track" class="relative mt-10 h-[230svh]">
             <figure id="roast-figure" class="sticky mx-auto w-full max-w-[440px] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15 [clip-path:inset(0_round_999px_999px_1.5rem_1.5rem)]" style="top:15svh">
               <canvas id="roast-canvas" class="block aspect-[4/5] w-full bg-torra" role="img" aria-label="Grãos de café sendo torrados: do grão verde à torra completa, conforme a rolagem"></canvas>
               <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/95 via-torra/70 to-transparent p-6 pt-24 text-creme sm:p-7 sm:pt-28">
@@ -240,37 +240,10 @@
 
         <!-- Narrativa -->
         <div class="flex min-w-0 flex-col lg:col-span-7 lg:pt-16">
-          <p id="scrub-text" class="scrub-text font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.22]">
+          <p id="scrub-text" class="scrub-text font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.22] lg:sticky lg:top-[34vh]">
             Um evento inesquecível é construído nos detalhes. Seja para dar as boas-vindas aos convidados, harmonizar perfeitamente com a mesa de doces, acompanhar o jantar ou energizar a pista de dança, o café é uma presença constante.
           </p>
 
-          <!-- Letreiro de eventos, como as legendas de telejornal -->
-          <div id="ticker-track" class="relative mt-12 min-h-[150svh] flex-1">
-            <div id="ticker" class="sticky top-[40svh]">
-              <p class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Levamos a experiência para</p>
-              <div class="mt-4 flex overflow-hidden rounded-2xl shadow-xl shadow-torra/10 ring-1 ring-torra/10">
-                <div class="flex shrink-0 flex-col justify-center gap-1 bg-pielini px-4 py-3 text-creme sm:px-5">
-                  <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em]"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-[#FF5A4E]"></span> Ao vivo</span>
-                  <span class="font-display text-lg italic leading-none">Pielini</span>
-                </div>
-                <div class="relative h-[5.5rem] flex-1 overflow-hidden bg-white/95 sm:h-24" aria-live="polite">
-                  <span class="ticker-word" data-tw="0"><i data-lucide="heart" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Casamentos</span>
-                  <span class="ticker-word" data-tw="1"><i data-lucide="cake" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>15 Anos</span>
-                  <span class="ticker-word" data-tw="2"><i data-lucide="graduation-cap" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Formaturas</span>
-                  <span class="ticker-word" data-tw="3"><i data-lucide="users" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Convenções</span>
-                  <span class="ticker-word" data-tw="4"><i data-lucide="briefcase" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Corporativos</span>
-                </div>
-              </div>
-              <div class="mt-2 overflow-hidden rounded-xl bg-torra py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-creme/85" aria-hidden="true">
-                <div class="crawl flex w-max gap-6 whitespace-nowrap">
-                  <span>Casamentos <span class="text-caramelo">•</span> 15 Anos <span class="text-caramelo">•</span> Formaturas <span class="text-caramelo">•</span> Convenções <span class="text-caramelo">•</span> Corporativos <span class="text-caramelo">•</span></span><span>Casamentos <span class="text-caramelo">•</span> 15 Anos <span class="text-caramelo">•</span> Formaturas <span class="text-caramelo">•</span> Convenções <span class="text-caramelo">•</span> Corporativos <span class="text-caramelo">•</span></span>
-                </div>
-              </div>
-              <ol id="ticker-dots" class="mt-4 flex gap-2" aria-hidden="true">
-                <li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="0"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="1"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="2"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="3"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="4"></li>
-              </ol>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -281,7 +254,7 @@
             <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Linha do tempo do evento</span>
             <h3 class="mt-4 font-display text-4xl font-medium sm:text-5xl">O café em cada <em class="text-pielini">momento da festa</em></h3>
           </div>
-          <p class="max-w-sm text-sm text-torra/60">Toque em cada etapa para ver como a ilha atua e qual perfil sensorial acompanha aquele instante.</p>
+          <p class="max-w-sm text-sm text-torra/60">Toque em cada etapa e veja a estação que recomendamos para aquele momento.</p>
         </div>
 
         <div class="mt-12" data-reveal>
@@ -308,32 +281,17 @@
             </div>
           </div>
 
-          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="mt-10 overflow-hidden rounded-[2rem] bg-torra text-creme shadow-2xl shadow-torra/20">
-            <div class="grid md:grid-cols-5">
-              <div class="relative p-8 sm:p-12 md:col-span-3">
-                <div id="moment-content">
-                  <p class="eyebrow text-caramelo-light" data-m="kicker"></p>
-                  <h4 class="mt-4 font-display text-4xl font-medium leading-tight sm:text-5xl" data-m="title"></h4>
-                  <p class="mt-5 max-w-xl leading-relaxed text-creme/75" data-m="text"></p>
-                  <div class="mt-8 flex flex-wrap gap-2" data-m="methods"></div>
-                  <div class="mt-8 rounded-2xl border border-caramelo/30 bg-caramelo/10 p-5">
-                    <p class="eyebrow text-caramelo-light"><i data-lucide="star" class="h-3.5 w-3.5 fill-current"></i> Recomendação Pielini</p>
-                    <p class="mt-2 font-display text-2xl" data-m="rec-station"></p>
-                    <p class="mt-1 text-sm leading-relaxed text-creme/75" data-m="rec-text"></p>
-                    <button type="button" class="mt-4 inline-flex items-center gap-2 rounded-full bg-caramelo px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-torra transition hover:bg-caramelo-light" data-m="rec-btn">Quero esta estação <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></button>
-                  </div>
+          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="mx-auto mt-10 max-w-2xl rounded-[1.75rem] bg-torra p-7 text-creme shadow-xl shadow-torra/15 sm:p-9">
+            <div id="moment-content">
+              <h4 class="font-display text-3xl font-medium leading-tight sm:text-4xl" data-m="title"></h4>
+              <p class="mt-3 leading-relaxed text-creme/75" data-m="text"></p>
+              <div class="mt-6 flex flex-col gap-4 border-t border-creme/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="eyebrow text-caramelo-light"><i data-lucide="star" class="h-3.5 w-3.5 fill-current"></i> Recomendação Pielini</p>
+                  <p class="mt-1 font-display text-2xl" data-m="rec-station"></p>
+                  <p class="text-sm text-creme/60" data-m="rec-text"></p>
                 </div>
-              </div>
-              <div class="relative flex flex-col justify-between gap-8 border-t border-creme/10 bg-gradient-to-br from-pielini to-pielini-dark p-8 sm:p-12 md:col-span-2 md:border-l md:border-t-0">
-                <div id="moment-note">
-                  <p class="eyebrow text-creme/60"><i data-lucide="sparkles" class="h-3.5 w-3.5"></i> Nota sensorial</p>
-                  <p class="mt-4 font-display text-3xl italic leading-snug" data-m="note"></p>
-                  <ul class="mt-6 flex flex-wrap gap-2" data-m="tags"></ul>
-                </div>
-                <div class="flex items-center gap-3 text-sm text-creme/70">
-                  <i data-lucide="clock" class="h-4 w-4 text-caramelo-light"></i>
-                  <span data-m="when"></span>
-                </div>
+                <button type="button" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-torra transition hover:bg-caramelo-light" data-m="rec-btn">Quero esta estação <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></button>
               </div>
             </div>
           </article>

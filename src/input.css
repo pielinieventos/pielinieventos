@@ -195,23 +195,3 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .about-dialog::backdrop { background: rgba(30, 22, 16, .45); backdrop-filter: blur(6px); }
 .about-dialog[open] { animation: about-in .45s cubic-bezier(.2,.8,.2,1); }
 @keyframes about-in { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
-
-/* ------------------------------------------------------------------
-   Letreiro de eventos (estilo legenda de telejornal)
-------------------------------------------------------------------- */
-.ticker-word {
-  position: absolute; inset: 0; display: flex; align-items: center; gap: .75rem; padding: 0 1.25rem;
-  font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 4.2vw, 2.9rem); color: var(--torra);
-  opacity: 0; transform: translateY(100%); transform-origin: 1.25rem 50%;
-}
-.ticker-word.is-on { animation: tick-in 1s cubic-bezier(.2,.8,.2,1) forwards; }
-.ticker-word.is-out { animation: tick-out .55s ease forwards; }
-@keyframes tick-in {
-  0%   { opacity: 0; transform: translateY(85%) scale(.92); }
-  45%  { opacity: 1; transform: translateY(0) scale(1.16); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes tick-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-80%) scale(.96); } }
-.crawl { animation: crawl 22s linear infinite; }
-@keyframes crawl { to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .ticker-word:first-child { opacity: 1; transform: none; } }
