@@ -127,7 +127,9 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .scrub-text .w.on.hl { color: var(--pielini); }
 
 /* Timeline */
-.moment-tab[aria-selected="true"] .moment-dot { background: var(--caramelo); border-color: var(--caramelo); color: var(--torra); transform: scale(1.12); box-shadow: 0 0 0 8px rgba(200,138,75,.18); }
+.moment-tab .moment-dot { border-color: var(--mc); color: var(--mc); }
+.moment-tab:hover .moment-dot { transform: scale(1.06); }
+.moment-tab[aria-selected="true"] .moment-dot { background: var(--mc); border-color: var(--mc); color: var(--creme); transform: scale(1.14); box-shadow: 0 0 0 8px color-mix(in srgb, var(--mc) 18%, transparent); }
 .moment-tab[aria-selected="true"] .moment-label { color: var(--torra); }
 .moment-dot { transition: all .45s cubic-bezier(.2,.8,.2,1); }
 .swap-enter { animation: swap-in .6s cubic-bezier(.2,.8,.2,1) both; }

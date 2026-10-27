@@ -389,7 +389,10 @@
     { title: 'Pista de Dança', text: 'Bebidas geladas e cafés com energia mantêm a festa no ritmo.', rec: { station: 'Estação Premium Plus', text: 'Sodas Italianas e Mocaccino' } },
   ];
 
+  // degradê da linha do tempo: do marrom mais claro ao mais escuro
+  const MOMENT_COLORS = ['#9C6B42', '#7A4A28', '#4E2C16', '#1E1610'];
   const momentTabs = $$('.moment-tab');
+  momentTabs.forEach((t, i) => t.style.setProperty('--mc', MOMENT_COLORS[i]));
   const momentPanel = $('#moment-panel');
   const momentLine = $('#moment-line');
   const setMoment = (index, focus = false) => {
@@ -401,6 +404,8 @@
     if (focus) momentTabs[index].focus();
     momentPanel.setAttribute('aria-labelledby', momentTabs[index].id);
     momentLine.style.width = `${(index / 3) * 75}%`;
+    momentPanel.style.backgroundColor = MOMENT_COLORS[index];
+    $('#moment-line-fill').style.width = `${momentLine.parentElement.offsetWidth * 0.75}px`;
 
     const q = (k) => $(`[data-m="${k}"]`, momentPanel);
     q('title').textContent = m.title;

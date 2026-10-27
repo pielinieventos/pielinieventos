@@ -259,29 +259,29 @@
 
         <div class="mt-12" data-reveal>
           <div class="relative">
-            <div class="absolute left-[12.5%] right-[12.5%] top-6 h-px bg-torra/15" aria-hidden="true"></div>
-            <div id="moment-line" class="absolute left-[12.5%] top-6 h-px bg-caramelo transition-all duration-700" style="width:0" aria-hidden="true"></div>
+            <div class="absolute left-[12.5%] right-[12.5%] top-[23px] h-[3px] rounded-full bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610] opacity-25" aria-hidden="true"></div>
+            <div class="absolute left-[12.5%] top-[23px] h-[3px] overflow-hidden rounded-full transition-all duration-700" id="moment-line" style="width:0" aria-hidden="true"><div class="h-full w-[min(100vw,76rem)] max-w-none bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610]" id="moment-line-fill"></div></div>
             <div role="tablist" aria-label="Momentos da festa" class="relative grid grid-cols-4">
               <button role="tab" id="tab-m0" aria-controls="moment-panel" aria-selected="true" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="0">
-                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border border-torra/20 bg-creme text-torra/70"><i data-lucide="glass-water" class="h-5 w-5"></i></span>
+                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="glass-water" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">1. Boas-vindas</span>
               </button>
               <button role="tab" id="tab-m1" aria-controls="moment-panel" aria-selected="false" tabindex="-1" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="1">
-                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border border-torra/20 bg-creme text-torra/70"><i data-lucide="cake-slice" class="h-5 w-5"></i></span>
+                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="cake-slice" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">2. Mesa de Doces</span>
               </button>
               <button role="tab" id="tab-m2" aria-controls="moment-panel" aria-selected="false" tabindex="-1" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="2">
-                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border border-torra/20 bg-creme text-torra/70"><i data-lucide="utensils-crossed" class="h-5 w-5"></i></span>
+                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="utensils-crossed" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">3. Pós-Jantar</span>
               </button>
               <button role="tab" id="tab-m3" aria-controls="moment-panel" aria-selected="false" tabindex="-1" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="3">
-                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border border-torra/20 bg-creme text-torra/70"><i data-lucide="music" class="h-5 w-5"></i></span>
+                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="music" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">4. Pista de Dança</span>
               </button>
             </div>
           </div>
 
-          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="mx-auto mt-10 max-w-2xl rounded-[1.75rem] bg-torra p-7 text-creme shadow-xl shadow-torra/15 sm:p-9">
+          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="mx-auto mt-10 max-w-2xl rounded-[1.75rem] bg-torra p-7 text-creme shadow-xl shadow-torra/15 transition-colors duration-700 sm:p-9">
             <div id="moment-content">
               <h4 class="font-display text-3xl font-medium leading-tight sm:text-4xl" data-m="title"></h4>
               <p class="mt-3 leading-relaxed text-creme/75" data-m="text"></p>
@@ -291,7 +291,7 @@
                   <p class="mt-1 font-display text-2xl" data-m="rec-station"></p>
                   <p class="text-sm text-creme/60" data-m="rec-text"></p>
                 </div>
-                <button type="button" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-torra transition hover:bg-caramelo-light" data-m="rec-btn">Quero esta estação <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></button>
+                <button type="button" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-creme px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-torra transition hover:bg-white" data-m="rec-btn">Quero esta estação <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></button>
               </div>
             </div>
           </article>
