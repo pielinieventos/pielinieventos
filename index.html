@@ -621,12 +621,17 @@
   </footer>
 
   <!-- Quem somos nós? -->
-  <dialog id="about-dialog" aria-labelledby="about-title" class="about-dialog w-[min(92vw,640px)] rounded-[2rem] bg-creme p-0 text-torra shadow-2xl">
+  <dialog id="about-dialog" aria-labelledby="about-title" class="about-dialog w-[min(94vw,980px)] rounded-[2rem] bg-creme p-0 text-torra shadow-2xl">
+    <button type="button" data-close-about class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-torra/15 bg-creme/90 backdrop-blur transition hover:border-caramelo hover:text-caramelo-dark" aria-label="Fechar">
+      <i data-lucide="x" class="h-4 w-4"></i>
+    </button>
+    <div class="grid md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+    <figure class="relative h-[62vw] max-h-[420px] overflow-hidden bg-torra md:h-auto md:max-h-none">
+      <img src="assets/img/quem-somos.jpg" alt="Barista da Pielini Coffee preparando café filtrado ao vivo em uma ilha de evento, com uma convidada observando" class="absolute inset-0 h-full w-full object-cover object-[50%_25%]" loading="lazy" width="800" height="1202">
+      <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-torra/50 to-transparent md:hidden" aria-hidden="true"></div>
+    </figure>
     <div class="relative overflow-hidden p-8 sm:p-12">
       <svg class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 text-pielini/[0.07]" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-      <button type="button" data-close-about class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-torra/15 transition hover:border-caramelo hover:text-caramelo-dark" aria-label="Fechar">
-        <i data-lucide="x" class="h-4 w-4"></i>
-      </button>
       <svg class="h-16 w-16 text-pielini" aria-hidden="true"><use href="#pielini-emblema"/></svg>
       <p class="eyebrow mt-6 text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Quem somos nós?</p>
       <h2 id="about-title" class="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">Cafeteria &amp; <em class="text-pielini">Torrefação</em></h2>
@@ -637,6 +642,7 @@
         <a href="#degustacao" data-close-about class="btn-gold"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação</a>
         <a href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener" class="btn border border-torra/15 text-torra hover:border-caramelo hover:text-caramelo-dark"><i data-lucide="instagram" class="h-4 w-4"></i> @pielinicoffee</a>
       </div>
+    </div>
     </div>
   </dialog>
 
