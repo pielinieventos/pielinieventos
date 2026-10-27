@@ -137,8 +137,17 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 
 /* Experience level */
 .level-fill { transition: width .7s cubic-bezier(.2,.8,.2,1); }
-.station-card { transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s ease, background-color .4s ease, box-shadow .5s ease; }
-.station-card:hover, .station-card.is-active { transform: translateY(-6px); }
+/* Estações entram como páginas sendo folheadas (dobradiça na borda esquerda) */
+.station-row { perspective: 1600px; }
+.station-card {
+  --flip: 0deg; --lift: 0px;
+  transform-origin: left center;
+  transform: rotateY(var(--flip)) translateY(var(--lift));
+  backface-visibility: hidden;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s ease, background-color .4s ease, box-shadow .5s ease;
+}
+.station-card.is-flipping { transition: border-color .4s ease, background-color .4s ease, box-shadow .5s ease; }
+.station-card:hover, .station-card.is-active { --lift: -6px; }
 .station-card.is-active { border-color: var(--caramelo); box-shadow: 0 30px 60px -30px rgba(200,138,75,.45); }
 .station-card.is-chosen .choose-label-default { display: none; }
 .station-card:not(.is-chosen) .choose-label-chosen { display: none; }

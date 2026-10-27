@@ -314,6 +314,23 @@
   // observa o contêiner (o rótulo em si começa fora da tela, à esquerda)
   $$('.chapter-slide').forEach((el) => chapterObserver.observe(el.parentElement));
 
+  // Estações: cada card "vira a página" conforme a rolagem, uma depois da outra
+  const stationRow = $('#station-grid');
+  const flipCards = $$('.station-card', stationRow);
+  const flipStations = (vh) => {
+    if (prefersReducedMotion) return;
+    const r = stationRow.getBoundingClientRect();
+    if (r.top > vh * 1.2 || r.bottom < -vh * 0.2) return;
+    const p = clamp((vh * 0.98 - r.top) / (vh * 0.6), 0, 1);
+    flipCards.forEach((card, i) => {
+      const t = clamp((p - i * 0.16) / 0.42, 0, 1);
+      const e = 1 - Math.pow(1 - t, 3);
+      card.classList.toggle('is-flipping', t < 1);
+      card.style.setProperty('--flip', `${(-110 * (1 - e)).toFixed(1)}deg`);
+      card.style.opacity = (0.15 + 0.85 * e).toFixed(2);
+    });
+  };
+
   let ticking = false;
   const onScroll = () => {
     const vh = window.innerHeight;
@@ -335,6 +352,7 @@
     navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === activeId));
 
     bean.update(vh);
+    flipStations(vh);
     roast.update(vh);
 
     // O emblema da navbar só aparece quando o logo do Hero sai de cena
