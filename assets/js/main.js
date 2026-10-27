@@ -1,0 +1,642 @@
+/* =====================================================================
+   Pielini Coffee — Landing page scrollytelling
+   JavaScript vanilla, sem dependências além do Lucide (ícones).
+===================================================================== */
+(() => {
+  'use strict';
+
+  const WHATSAPP_NUMBER = '5551920046433';
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderIcons = () => window.lucide && window.lucide.createIcons();
+  const escapeHTML = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /** Estado compartilhado entre widgets (copo → mensagem do WhatsApp). */
+  const state = {
+    event: null,
+    station: null,
+    leadName: '',
+    cup: { name: '', subMode: 'date', date: '', sub: '', colorName: 'Verde Pielini' },
+  };
+
+  renderIcons();
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ===================================================================
+     0. MOTION DE ABERTURA
+  =================================================================== */
+  const intro = (() => {
+    const el = $('#intro');
+    const video = $('.intro-video', el);
+    const emblem = $('.intro-emblem', el);
+    const progress = $('.intro-progress', el);
+    const timers = [];
+    let finished = false;
+    let started = false;
+
+    const finishImmediately = () => {
+      el.remove();
+      document.body.classList.remove('is-locked', 'intro-active');
+      document.body.classList.add('hero-in');
+    };
+
+    const leave = () => {
+      if (finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      document.body.classList.add('hero-in');
+      el.classList.add('stage-emblem', 'is-leaving');
+
+      // O emblema "voa" até o logo da navbar (técnica FLIP)
+      const target = $('#nav-emblem').getBoundingClientRect();
+      const from = emblem.getBoundingClientRect();
+      const dx = target.left + target.width / 2 - (from.left + from.width / 2);
+      const dy = target.top + target.height / 2 - (from.top + from.height / 2);
+      const scale = target.width / from.width;
+      emblem.style.transition = 'transform 1.1s cubic-bezier(.7,0,.2,1), opacity .4s ease 1s';
+      emblem.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+
+      setTimeout(() => {
+        document.body.classList.remove('is-locked', 'intro-active');
+        emblem.style.opacity = '0';
+      }, 1100);
+      setTimeout(() => el.remove(), 1600);
+    };
+
+    const runTimeline = () => {
+      if (started) return;
+      started = true;
+      el.classList.add('stage-start');
+      progress.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 5200, easing: 'linear', fill: 'forwards' });
+      timers.push(setTimeout(() => video.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.45)' }], { duration: 1400, fill: 'forwards', easing: 'ease' }), 2000));
+      timers.push(setTimeout(() => el.classList.add('stage-emblem'), 2100));
+      timers.push(setTimeout(() => el.classList.add('stage-title'), 2700));
+      timers.push(setTimeout(leave, 5300));
+    };
+
+    const init = () => {
+      // Pula a intro com movimento reduzido ou quando a página abre direto numa âncora
+      if (prefersReducedMotion || (location.hash && location.hash !== '#inicio')) {
+        finishImmediately();
+        return;
+      }
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+
+      $('#intro-skip').addEventListener('click', leave);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') leave(); }, { once: true });
+
+      video.addEventListener('playing', runTimeline, { once: true });
+      video.addEventListener('ended', leave, { once: true });
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.catch === 'function') playAttempt.catch(runTimeline);
+      // Garantia: se o vídeo demorar a carregar, a narrativa segue mesmo assim
+      timers.push(setTimeout(runTimeline, 1500));
+      timers.push(setTimeout(leave, 9000));
+    };
+
+    return { init };
+  })();
+  intro.init();
+
+  /* ===================================================================
+     1. HEADER — progresso, tema da navbar, menu mobile, link ativo
+  =================================================================== */
+  const nav = $('#site-nav');
+  const progressBar = $('#scroll-progress');
+  const themedSections = $$('[data-nav-theme]');
+  const navLinks = $$('#site-nav .nav-link');
+  const waFloat = $('#wa-float');
+  const hero = $('#inicio');
+
+  const menuToggle = $('#menu-toggle');
+  const mobileMenu = $('#mobile-menu');
+  const setMenu = (open) => {
+    menuToggle.setAttribute('aria-expanded', String(open));
+    menuToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    mobileMenu.hidden = !open;
+    const [a, b] = $$('.menu-bar', menuToggle);
+    a.style.transform = open ? 'translateY(5px) rotate(45deg)' : '';
+    b.style.transform = open ? 'translateY(-5px) rotate(-45deg)' : '';
+  };
+  menuToggle.addEventListener('click', () => setMenu(mobileMenu.hidden));
+  $$('a', mobileMenu).forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  /* ===================================================================
+     2. SCROLLYTELLING — parallax, revelações, texto que "acende"
+  =================================================================== */
+  const parallaxEls = $$('[data-parallax]').map((el) => ({ el, speed: parseFloat(el.dataset.parallax), host: el.closest('section') || el.parentElement }));
+  const parallaxInner = $$('[data-parallax-inner]').map((el) => ({ el, speed: parseFloat(el.dataset.parallaxInner), host: el.parentElement }));
+  parallaxInner.forEach(({ el }) => { el.style.transform = 'scale(1.15)'; });
+
+  const scrub = $('#scrub-text');
+  const highlight = new Set(['detalhes.', 'café', 'presença', 'constante.']);
+  const scrubWords = (() => {
+    const words = scrub.textContent.trim().split(/\s+/);
+    scrub.innerHTML = words.map((w) => `<span class="w${highlight.has(w) ? ' hl' : ''}">${escapeHTML(w)}</span>`).join(' ');
+    return $$('.w', scrub);
+  })();
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  $$('[data-reveal]').forEach((el) => revealObserver.observe(el));
+
+  let ticking = false;
+  const onScroll = () => {
+    const vh = window.innerHeight;
+    const scrollY = window.scrollY;
+    const max = document.documentElement.scrollHeight - vh;
+    progressBar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+
+    // Tema da navbar conforme a seção sob ela
+    const probe = 40;
+    const current = themedSections.find((s) => { const r = s.getBoundingClientRect(); return r.top <= probe && r.bottom > probe; });
+    if (current) nav.dataset.theme = current.dataset.navTheme;
+
+    // Link ativo
+    let activeId = null;
+    navLinks.forEach((a) => {
+      const sec = $(a.getAttribute('href'));
+      if (sec) { const r = sec.getBoundingClientRect(); if (r.top <= vh * 0.4 && r.bottom > vh * 0.4) activeId = a.getAttribute('href'); }
+    });
+    navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === activeId));
+
+    // Botão flutuante surge depois do Hero
+    waFloat.dataset.show = String(hero.getBoundingClientRect().bottom < vh * 0.25);
+
+    if (!prefersReducedMotion) {
+      parallaxEls.forEach(({ el, speed, host }) => {
+        const r = host.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        const y = (vh / 2 - (r.top + r.height / 2)) * speed;
+        el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+      });
+      parallaxInner.forEach(({ el, speed, host }) => {
+        const r = host.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const y = (vh / 2 - (r.top + r.height / 2)) * speed;
+        el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scale(1.15)`;
+      });
+    }
+
+    // Texto que acende palavra por palavra conforme a rolagem
+    const r = scrub.getBoundingClientRect();
+    const p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.3), 0, 1);
+    const lit = prefersReducedMotion ? scrubWords.length : Math.round(p * scrubWords.length);
+    scrubWords.forEach((w, i) => w.classList.toggle('on', i < lit));
+
+    ticking = false;
+  };
+  const requestScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } };
+  window.addEventListener('scroll', requestScroll, { passive: true });
+  window.addEventListener('resize', requestScroll);
+  onScroll();
+
+  /* ===================================================================
+     3. WIDGET 1 — MOMENTOS DA FESTA
+  =================================================================== */
+  const moments = [
+    {
+      kicker: 'Momento 1 · Recepção',
+      title: 'O primeiro aroma da noite',
+      text: 'Enquanto os convidados chegam, a ilha já está em funcionamento. O perfume do café recém-moído recebe cada pessoa e o preparo ao vivo vira o primeiro ponto de encontro da festa — um gesto de hospitalidade que todo mundo percebe.',
+      methods: ['Hario V60', 'Chemex', 'Koar'],
+      note: 'Leve, floral e convidativo.',
+      tags: ['Mel', 'Frutas amarelas', 'Acidez delicada'],
+      when: 'Chegada dos convidados · primeiros 60 minutos',
+    },
+    {
+      kicker: 'Momento 2 · Harmonização',
+      title: 'O par perfeito da mesa de doces',
+      text: 'Bem-casados, brigadeiros gourmet e o bolo pedem um café à altura. O preparo certo equilibra o açúcar, limpa o paladar entre uma mordida e outra e valoriza cada detalhe da confeitaria que você escolheu.',
+      methods: ['Prensa Francesa', 'Cappuccino', 'Caramel Macchiato'],
+      note: 'Aveludado, achocolatado e redondo.',
+      tags: ['Chocolate ao leite', 'Caramelo', 'Corpo sedoso'],
+      when: 'Abertura da mesa de doces e corte do bolo',
+    },
+    {
+      kicker: 'Momento 3 · Fechamento',
+      title: 'O encerramento elegante do jantar',
+      text: 'Depois do jantar, um espresso bem extraído é o digestivo natural. A ilha se torna ponto de conversa: os convidados acompanham a extração, a crema dourada e a latte art feita na hora, sem precisar sair do clima da festa.',
+      methods: ['Espresso', 'Cappuccino', 'Mocaccino'],
+      note: 'Intenso, persistente e cremoso.',
+      tags: ['Cacau', 'Castanhas tostadas', 'Final longo'],
+      when: 'Logo após o jantar ou o buffet principal',
+    },
+    {
+      kicker: 'Momento 4 · Energia',
+      title: 'O combustível da pista de dança',
+      text: 'Quando a pista esquenta, a ilha entra no ritmo: cafés com energia para quem não quer parar e Sodas Italianas geladas e coloridas para refrescar. Cafeína e frescor para manter a festa viva até a última música.',
+      methods: ['Sodas Italianas', 'Mocaccino', 'Espresso'],
+      note: 'Refrescante, vibrante e energizante.',
+      tags: ['Frutas vermelhas', 'Cítricos', 'Gelado & efervescente'],
+      when: 'Abertura da pista até o fim da festa',
+    },
+  ];
+
+  const momentTabs = $$('.moment-tab');
+  const momentPanel = $('#moment-panel');
+  const momentLine = $('#moment-line');
+  const setMoment = (index, focus = false) => {
+    const m = moments[index];
+    momentTabs.forEach((t, i) => {
+      t.setAttribute('aria-selected', String(i === index));
+      t.tabIndex = i === index ? 0 : -1;
+    });
+    if (focus) momentTabs[index].focus();
+    momentPanel.setAttribute('aria-labelledby', momentTabs[index].id);
+    momentLine.style.width = `${(index / 3) * 75}%`;
+
+    const q = (k) => $(`[data-m="${k}"]`, momentPanel);
+    q('kicker').textContent = m.kicker;
+    q('title').textContent = m.title;
+    q('text').textContent = m.text;
+    q('note').textContent = m.note;
+    q('when').textContent = m.when;
+    q('methods').innerHTML = m.methods.map((x) => `<span class="chip border-creme/15 py-1.5 text-xs text-creme/80"><i data-lucide="coffee" class="h-3.5 w-3.5 text-caramelo-light"></i>${escapeHTML(x)}</span>`).join('');
+    q('tags').innerHTML = m.tags.map((x) => `<li class="rounded-full bg-creme/10 px-3 py-1 text-xs">${escapeHTML(x)}</li>`).join('');
+    renderIcons();
+
+    ['moment-content', 'moment-note'].forEach((id) => {
+      const node = document.getElementById(id);
+      node.classList.remove('swap-enter');
+      void node.offsetWidth;
+      node.classList.add('swap-enter');
+    });
+  };
+  momentTabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => setMoment(i));
+    tab.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') setMoment((i + 1) % 4, true);
+      if (e.key === 'ArrowLeft') setMoment((i + 3) % 4, true);
+    });
+  });
+  setMoment(0);
+
+  /* ===================================================================
+     4. MENU DE EXPERIÊNCIAS — barra de nível sensorial
+  =================================================================== */
+  const stationCards = $$('.station-card');
+  const levelFill = $('#level-fill');
+  const levelValue = $('#level-value');
+  const levelBar = $('#level-bar');
+  const levelTicks = $$('.level-tick');
+  let lockedStation = -1;
+  let shownLevel = 0;
+  let levelAnim = null;
+
+  const showLevel = (index) => {
+    const target = index < 0 ? 0 : (index + 1) * 25;
+    levelFill.style.width = `${target}%`;
+    levelBar.setAttribute('aria-valuenow', String(target));
+    levelTicks.forEach((t, i) => t.classList.toggle('is-on', i <= index));
+    stationCards.forEach((c, i) => c.classList.toggle('is-active', i === index));
+
+    cancelAnimationFrame(levelAnim);
+    const start = shownLevel;
+    const t0 = performance.now();
+    const step = (now) => {
+      const k = clamp((now - t0) / 600, 0, 1);
+      shownLevel = Math.round(start + (target - start) * (1 - Math.pow(1 - k, 3)));
+      levelValue.textContent = shownLevel;
+      if (k < 1) levelAnim = requestAnimationFrame(step);
+    };
+    levelAnim = requestAnimationFrame(step);
+  };
+
+  stationCards.forEach((card, i) => {
+    card.addEventListener('mouseenter', () => showLevel(i));
+    card.addEventListener('focusin', () => showLevel(i));
+    card.addEventListener('mouseleave', () => showLevel(lockedStation));
+    card.addEventListener('click', () => { lockedStation = i; showLevel(i); });
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === card) { e.preventDefault(); lockedStation = i; showLevel(i); }
+    });
+  });
+
+  $$('[data-choose]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.station-card');
+      lockedStation = stationCards.indexOf(card);
+      showLevel(lockedStation);
+      selectPill('station', btn.dataset.choose);
+      const booking = $('#degustacao');
+      booking.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      const group = $('#station-pills');
+      group.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 600, delay: 700, easing: 'ease-out' });
+    });
+  });
+
+  // Ao entrar na seção, a barra "acorda" de 0 até a estação em destaque
+  new IntersectionObserver((entries, obs) => {
+    if (entries[0].isIntersecting && lockedStation < 0) { showLevel(2); setTimeout(() => { if (lockedStation < 0) showLevel(-1); }, 1600); obs.disconnect(); }
+  }, { threshold: 0.35 }).observe($('#station-grid'));
+
+  /* ===================================================================
+     5a. WIDGET 2 — GUIA SENSORIAL DOS MÉTODOS
+  =================================================================== */
+  const C = { torra: '#1E1610', caramelo: '#C88A4B', creme: '#F5F2EB', pielini: '#2C5E4F', off: '#EAE3D5' };
+  const art = {
+    v60: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 40 L170 40 L118 118 L82 118 Z" fill="${C.creme}"/>
+      <path d="M52 52 L92 112 M76 52 L98 112 M100 52 L100 112 M124 52 L102 112 M148 52 L108 112" stroke-opacity=".25" stroke-width="1.6"/>
+      <ellipse cx="100" cy="40" rx="70" ry="7" fill="${C.creme}"/>
+      <ellipse cx="100" cy="43" rx="52" ry="4.5" fill="#5A3418" stroke="none"/>
+      <rect x="74" y="118" width="52" height="8" rx="2" fill="${C.off}"/>
+      <circle class="anim-drop" cx="100" cy="134" r="3" fill="#8A5428" stroke="none"/>
+      <path d="M48 140 L152 140 L144 214 C143 222 137 226 130 226 L70 226 C63 226 57 222 56 214 Z" fill="${C.off}"/>
+      <path d="M152 156 C176 156 178 196 148 198" />
+      <path d="M53 166 L147 166 L143 212 C142 218 137 220 131 220 L69 220 C63 220 58 218 57 212 Z" fill="#5A3418" stroke="none" opacity=".9"/>
+    </svg>`,
+    prensa: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="96" y="6" width="8" height="22" rx="3" fill="${C.torra}"/>
+      <path d="M58 28 L142 28 C146 28 148 30 148 34 L148 44 L52 44 L52 34 C52 30 54 28 58 28 Z" fill="${C.torra}"/>
+      <path d="M100 44 L100 92" />
+      <rect x="56" y="44" width="88" height="176" rx="8" fill="${C.creme}" fill-opacity=".55"/>
+      <path d="M58 92 L142 92" stroke-width="4" stroke="${C.caramelo}"/>
+      <rect x="58" y="96" width="84" height="122" rx="6" fill="#4A2A14" stroke="none"/>
+      <rect x="58" y="96" width="84" height="10" fill="#B07A45" stroke="none" opacity=".85"/>
+      <circle class="anim-bubble" cx="76" cy="200" r="3" fill="#B07A45" stroke="none"/>
+      <circle class="anim-bubble" style="animation-delay:.8s" cx="112" cy="190" r="2.5" fill="#B07A45" stroke="none"/>
+      <circle class="anim-bubble" style="animation-delay:1.5s" cx="128" cy="204" r="2" fill="#B07A45" stroke="none"/>
+      <path d="M50 52 L50 214 M150 52 L150 214" stroke="${C.caramelo}" stroke-width="3"/>
+      <path d="M150 70 C182 70 184 168 150 168" stroke-width="6" stroke="${C.torra}"/>
+      <rect x="46" y="214" width="108" height="12" rx="4" fill="${C.caramelo}"/>
+    </svg>`,
+    koar: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M36 30 L164 30 L130 100 L70 100 Z" fill="${C.pielini}"/>
+      <path d="M36 30 L70 100 M68 30 L85 100 M100 30 L100 100 M132 30 L115 100 M164 30 L130 100" stroke="${C.creme}" stroke-opacity=".35" stroke-width="1.6"/>
+      <ellipse cx="100" cy="30" rx="64" ry="7" fill="${C.pielini}"/>
+      <ellipse cx="100" cy="32" rx="50" ry="4" fill="#5A3418" stroke="none"/>
+      <path d="M58 100 L142 100 L142 110 L58 110 Z" fill="${C.torra}"/>
+      <circle class="anim-drop" cx="100" cy="118" r="3" fill="#8A5428" stroke="none"/>
+      <path d="M58 126 L142 126 L142 210 C142 220 134 226 124 226 L76 226 C66 226 58 220 58 210 Z" fill="${C.creme}" fill-opacity=".6"/>
+      <path d="M60 168 L140 168 L140 210 C140 218 133 223 124 223 L76 223 C67 223 60 218 60 210 Z" fill="#5A3418" stroke="none"/>
+      <path d="M68 136 L68 160" stroke="${C.creme}" stroke-width="4"/>
+    </svg>`,
+    chemex: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44 14 L156 14 L112 104 L112 120 L164 212 C168 220 162 228 154 228 L46 228 C38 228 32 220 36 212 L88 120 L88 104 Z" fill="${C.creme}" fill-opacity=".55"/>
+      <path d="M50 18 L150 18 L108 100 L92 100 Z" fill="#FBF9F4" stroke-opacity=".5"/>
+      <path d="M44 14 L60 14 L100 70" stroke-opacity=".35"/>
+      <path d="M58 176 L142 176 L160 210 C162 216 158 222 152 222 L48 222 C42 222 38 216 40 210 Z" fill="#5A3418" stroke="none"/>
+      <path d="M84 96 L116 96 L120 128 L80 128 Z" fill="#9B6A3C"/>
+      <path d="M100 128 L94 150 M100 128 L106 150" stroke="#3A2C21" stroke-width="2"/>
+      <circle cx="100" cy="128" r="4" fill="#3A2C21" stroke="none"/>
+      <circle class="anim-drop" cx="100" cy="112" r="2.5" fill="#8A5428" stroke="none"/>
+    </svg>`,
+    espresso: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <g opacity=".5" stroke="${C.caramelo}">
+        <path class="anim-bubble" d="M80 70 C70 56 90 46 80 30"/>
+        <path class="anim-bubble" style="animation-delay:.9s" d="M104 66 C94 52 114 42 104 26"/>
+        <path class="anim-bubble" style="animation-delay:1.6s" d="M126 70 C116 56 136 46 126 30"/>
+      </g>
+      <ellipse cx="100" cy="200" rx="86" ry="16" fill="${C.off}"/>
+      <ellipse cx="100" cy="196" rx="58" ry="8" fill="${C.creme}"/>
+      <path d="M42 104 L158 104 L150 170 C148 186 132 196 116 196 L84 196 C68 196 52 186 50 170 Z" fill="${C.creme}"/>
+      <path d="M156 118 C186 116 186 160 152 160" stroke-width="7"/>
+      <ellipse cx="100" cy="104" rx="58" ry="12" fill="#B07A45"/>
+      <path d="M100 98 C92 90 80 98 90 106 L100 113 L110 106 C120 98 108 90 100 98 Z" fill="${C.creme}" stroke="none"/>
+      <path d="M100 113 L100 100" stroke="${C.creme}" stroke-width="2"/>
+    </svg>`,
+    soda: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <defs><linearGradient id="soda-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E7C8" stop-opacity=".6"/><stop offset=".45" stop-color="#F2A0A0"/><stop offset="1" stop-color="#B8283E"/></linearGradient></defs>
+      <path d="M122 4 L108 70" stroke="${C.pielini}" stroke-width="7"/>
+      <path d="M54 46 L146 46 L134 220 C133 226 128 230 122 230 L78 230 C72 230 67 226 66 220 Z" fill="${C.creme}" fill-opacity=".35"/>
+      <path d="M58 76 L142 76 L134 218 C133 224 128 226 122 226 L78 226 C72 226 67 224 66 218 Z" fill="url(#soda-g)" stroke="none"/>
+      <rect x="72" y="84" width="26" height="24" rx="5" fill="#fff" fill-opacity=".5" transform="rotate(-12 85 96)"/>
+      <rect x="102" y="96" width="24" height="22" rx="5" fill="#fff" fill-opacity=".45" transform="rotate(14 114 107)"/>
+      <circle class="anim-bubble" cx="84" cy="200" r="2.5" fill="#fff" stroke="none"/>
+      <circle class="anim-bubble" style="animation-delay:.6s" cx="112" cy="190" r="2" fill="#fff" stroke="none"/>
+      <circle class="anim-bubble" style="animation-delay:1.2s" cx="98" cy="210" r="3" fill="#fff" stroke="none"/>
+      <circle class="anim-bubble" style="animation-delay:1.8s" cx="120" cy="206" r="2" fill="#fff" stroke="none"/>
+      <circle cx="146" cy="50" r="22" fill="#F4D35E"/>
+      <circle cx="146" cy="50" r="16" fill="#FBEA9A" stroke-width="1.5"/>
+      <path d="M146 34 L146 66 M130 50 L162 50 M135 39 L157 61 M157 39 L135 61" stroke-width="1.2" stroke-opacity=".5"/>
+    </svg>`,
+  };
+
+  const methods = {
+    v60: {
+      name: 'Hario V60', kicker: 'Filtrado · Cone japonês', station: 'Estações Básica, Filtrados, Espressos e Plus',
+      profile: 'Limpo, aromático e de acidez brilhante — revela a origem do grão com clareza.',
+      visual: 'O fio d’água em espiral sobre o cone é o gesto mais fotogênico da ilha: convidados param para assistir e filmar.',
+      notes: ['Floral', 'Frutas amarelas', 'Mel'], meters: { Corpo: 2, Acidez: 4, Doçura: 3 }, time: '3 min',
+    },
+    prensa: {
+      name: 'Prensa Francesa', kicker: 'Imersão · Clássico europeu', station: 'Estações Básica, Filtrados, Espressos e Plus',
+      profile: 'Encorpado, untuoso e reconfortante, com textura marcante na boca.',
+      visual: 'O êmbolo descendo lentamente pela jarra de vidro cria um momento de expectativa — ritual simples e elegante.',
+      notes: ['Chocolate', 'Castanhas', 'Caramelo'], meters: { Corpo: 5, Acidez: 2, Doçura: 3 }, time: '4 min',
+    },
+    koar: {
+      name: 'Koar', kicker: 'Filtrado · Design autoral', station: 'Estações Filtrados, Espressos e Plus',
+      profile: 'Equilibrado e doce, com extração uniforme e finalização limpa.',
+      visual: 'Desenho geométrico que vira peça de decoração na bancada — conversa com a estética do evento.',
+      notes: ['Rapadura', 'Frutas vermelhas', 'Cacau'], meters: { Corpo: 3, Acidez: 3, Doçura: 4 }, time: '3 min',
+    },
+    chemex: {
+      name: 'Chemex', kicker: 'Filtrado · Ícone do design', station: 'Estações Filtrados, Espressos e Plus',
+      profile: 'Ultra-limpo, delicado e translúcido, quase como um chá.',
+      visual: 'A jarra de vidro com colar de madeira é um ícone de design — sofisticação instantânea para a ilha.',
+      notes: ['Chá preto', 'Cítricos', 'Flor de laranjeira'], meters: { Corpo: 1, Acidez: 4, Doçura: 3 }, time: '4 min',
+    },
+    espresso: {
+      name: 'Clássicos de Espresso', kicker: 'Espresso, Cappuccino, Caramel Macchiato e Mocaccino', station: 'Estações Espressos e Plus',
+      profile: 'Intenso, cremoso e versátil — do espresso puro às bebidas com leite vaporizado.',
+      visual: 'Máquina profissional, vapor, crema dourada e latte art ao vivo: o coração movimentado da ilha.',
+      notes: ['Cacau', 'Caramelo', 'Avelã'], meters: { Corpo: 5, Acidez: 2, Doçura: 4 }, time: '1 min',
+    },
+    soda: {
+      name: 'Sodas Italianas', kicker: 'Refrescantes · Sem café', station: 'Exclusivo Estação Premium Plus',
+      profile: 'Refrescante, efervescente e colorida — perfeita para dias quentes e pista de dança.',
+      visual: 'Camadas de xarope, gelo e gás em copos transparentes: cor e brilho que iluminam a ilha.',
+      notes: ['Frutas vermelhas', 'Maçã verde', 'Limão siciliano'], meters: { Corpo: 1, Acidez: 4, Doçura: 5 }, time: '1 min',
+    },
+  };
+
+  const methodTabs = $$('.method-btn');
+  const methodInfo = $('#method-info');
+  const methodArt = $('#method-art');
+  const methodStation = $('#method-station');
+  const setMethod = (key, focus = false) => {
+    const m = methods[key];
+    methodTabs.forEach((b) => {
+      const on = b.dataset.method === key;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      if (on && focus) b.focus();
+      if (on) $('#method-panel').setAttribute('aria-label', m.name);
+    });
+    const q = (k) => $(`[data-k="${k}"]`, methodInfo);
+    q('kicker').textContent = m.kicker;
+    q('name').textContent = m.name;
+    q('profile').textContent = m.profile;
+    q('visual').textContent = m.visual;
+    q('notes').innerHTML = m.notes.map((n) => `<span class="rounded-full bg-caramelo/15 px-3.5 py-1.5 text-sm font-medium text-caramelo-dark">${escapeHTML(n)}</span>`).join('');
+    q('meters').innerHTML = Object.entries(m.meters).map(([label, v]) => `
+      <div class="grid grid-cols-[72px_1fr] items-center gap-4 text-xs font-semibold uppercase tracking-[0.14em] text-torra/60">
+        <span>${label}</span>
+        <span class="h-1.5 overflow-hidden rounded-full bg-torra/10"><span class="meter-fill block h-full rounded-full bg-pielini" style="width:0" data-w="${v * 20}"></span></span>
+      </div>`).join('') + `<p class="mt-1 flex items-center gap-2 text-xs text-torra/50"><i data-lucide="clock" class="h-3.5 w-3.5"></i> Preparo médio: ${m.time}</p>`;
+    methodStation.textContent = m.station;
+    methodArt.innerHTML = art[key];
+    renderIcons();
+    requestAnimationFrame(() => $$('.meter-fill', methodInfo).forEach((f) => { f.style.width = `${f.dataset.w}%`; }));
+    [methodArt, methodInfo].forEach((n) => { n.classList.remove('swap-enter'); void n.offsetWidth; n.classList.add('swap-enter'); });
+  };
+  methodTabs.forEach((b, i) => {
+    b.addEventListener('click', () => setMethod(b.dataset.method));
+    b.addEventListener('keydown', (e) => {
+      const n = methodTabs.length;
+      if (e.key === 'ArrowRight') setMethod(methodTabs[(i + 1) % n].dataset.method, true);
+      if (e.key === 'ArrowLeft') setMethod(methodTabs[(i + n - 1) % n].dataset.method, true);
+    });
+  });
+  setMethod('v60');
+
+  /* ===================================================================
+     5b. WIDGET 3 — SIMULADOR DE COPO EM TEMPO REAL
+  =================================================================== */
+  const cupName = $('#cup-name');
+  const cupDate = $('#cup-date');
+  const cupSub = $('#cup-sub');
+  const cupNameText = $('#cup-name-text');
+  const cupSubText = $('#cup-sub-text');
+  const cupBand = $('#cup-band');
+  const cupInk = $('#cup-ink');
+  const swatches = $$('.swatch');
+  const segBtns = $$('.seg-btn');
+  const SAMPLE_NAME = 'Ana & Lucas';
+  const SAMPLE_SUB = '12 · 03 · 2027';
+
+  const formatDate = (iso) => {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  };
+
+  const fitText = (node, base, maxWidth) => {
+    node.setAttribute('font-size', base);
+    node.removeAttribute('textLength');
+    node.removeAttribute('lengthAdjust');
+    try {
+      const w = node.getComputedTextLength();
+      if (w > maxWidth) node.setAttribute('font-size', Math.max(14, Math.floor(base * maxWidth / w)));
+    } catch (_) { /* SVG ainda não renderizado */ }
+  };
+
+  const cupSubtitle = () => (state.cup.subMode === 'date' ? formatDate(state.cup.date) : state.cup.sub.trim());
+
+  const renderCup = () => {
+    const name = state.cup.name.trim();
+    cupNameText.textContent = name || SAMPLE_NAME;
+    cupNameText.setAttribute('fill-opacity', name ? '1' : '.75');
+    fitText(cupNameText, 34, 150);
+    const sub = cupSubtitle();
+    cupSubText.textContent = sub ? (state.cup.subMode === 'date' ? sub.replace(/\//g, ' · ') : sub.toUpperCase()) : SAMPLE_SUB;
+    fitText(cupSubText, 11, 150);
+    renderMessage();
+  };
+
+  cupName.addEventListener('input', () => { state.cup.name = cupName.value; renderCup(); });
+  cupDate.addEventListener('input', () => { state.cup.date = cupDate.value; renderCup(); });
+  cupSub.addEventListener('input', () => { state.cup.sub = cupSub.value; renderCup(); });
+
+  segBtns.forEach((btn) => btn.addEventListener('click', () => {
+    state.cup.subMode = btn.dataset.subMode;
+    segBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    cupDate.hidden = state.cup.subMode !== 'date';
+    cupSub.hidden = state.cup.subMode !== 'text';
+    (state.cup.subMode === 'date' ? cupDate : cupSub).focus();
+    renderCup();
+  }));
+
+  const setSwatch = (sw, focus = false) => {
+    swatches.forEach((s) => { const on = s === sw; s.setAttribute('aria-checked', String(on)); s.tabIndex = on ? 0 : -1; });
+    if (focus) sw.focus();
+    cupBand.setAttribute('fill', sw.dataset.color);
+    cupInk.setAttribute('fill', sw.dataset.ink);
+    cupInk.style.color = sw.dataset.ink;
+    state.cup.colorName = sw.dataset.name;
+    $('#swatch-name').textContent = sw.dataset.name;
+    renderMessage();
+  };
+  swatches.forEach((sw, i) => {
+    sw.addEventListener('click', () => setSwatch(sw));
+    sw.addEventListener('keydown', (e) => {
+      const n = swatches.length;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); setSwatch(swatches[(i + 1) % n], true); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); setSwatch(swatches[(i + n - 1) % n], true); }
+    });
+  });
+
+  /* ===================================================================
+     6. WIDGET 4 — GERADOR DE MENSAGEM WHATSAPP
+  =================================================================== */
+  const preview = $('#wa-preview');
+  const cta = $('#wa-cta');
+  const groups = { event: $('#event-pills'), station: $('#station-pills') };
+
+  function selectPill(group, value) {
+    state[group] = value;
+    $$('.pill', groups[group]).forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.value === value)));
+    if (group === 'station') {
+      const idx = $$('.pill', groups.station).findIndex((p) => p.dataset.value === value);
+      stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === idx));
+    }
+    renderMessage();
+  }
+
+  Object.entries(groups).forEach(([group, root]) => {
+    $$('.pill', root).forEach((pill) => pill.addEventListener('click', () => {
+      const same = state[group] === pill.dataset.value;
+      selectPill(group, same ? null : pill.dataset.value);
+    }));
+  });
+
+  $('#lead-name').addEventListener('input', (e) => { state.leadName = e.target.value; renderMessage(); });
+
+  const buildMessage = () => {
+    const lines = [];
+    const lead = state.leadName.trim();
+    lines.push('Olá, Pielini Coffee! ☕');
+    lines.push(`${lead ? `Meu nome é ${lead} e gostaria` : 'Gostaria'} de agendar uma *Degustação Exclusiva* na cafeteria.`);
+    lines.push('');
+    lines.push(`• Evento: ${state.event || 'ainda vou definir'}`);
+    lines.push(`• Estação de interesse: ${state.station || 'quero ajuda para escolher'}`);
+    const cupNameValue = state.cup.name.trim();
+    const sub = cupSubtitle();
+    if (cupNameValue || sub) {
+      const parts = [cupNameValue ? `"${cupNameValue}"` : null, sub || null].filter(Boolean).join(' — ');
+      lines.push(`• Copo personalizado: ${parts} (cinta ${state.cup.colorName})`);
+    }
+    lines.push('');
+    lines.push('Podemos combinar um horário?');
+    return lines.join('\n');
+  };
+
+  function renderMessage() {
+    const msg = buildMessage();
+    preview.innerHTML = escapeHTML(msg).replace(/\*(.+?)\*/g, '<strong>$1</strong>');
+    cta.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  }
+
+  const now = new Date();
+  $('#wa-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  // Botão flutuante e links genéricos também levam a mensagem montada
+  waFloat.addEventListener('click', () => { waFloat.href = cta.href; });
+
+  renderCup();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderCup);
+})();
