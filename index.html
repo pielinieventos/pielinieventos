@@ -82,32 +82,31 @@
   </div>
 
   <header id="site-nav" data-theme="light" class="fixed inset-x-0 top-[3px] z-50 border-b backdrop-blur-xl">
-    <nav class="container-site flex h-[72px] items-center justify-between gap-4" aria-label="Principal">
-      <div class="flex min-w-0 items-center gap-3">
+    <nav class="container-site relative flex h-[72px] items-center justify-between gap-4" aria-label="Principal">
+      <div class="flex items-center gap-7">
         <a href="#inicio" aria-label="Pielini Coffee — início" class="shrink-0">
           <svg class="nav-emblem h-12 w-12" id="nav-emblem" aria-hidden="true"><use href="#pielini-emblema"/></svg>
         </a>
-        <span class="flex min-w-0 flex-col leading-none">
-          <a href="#inicio" class="font-display text-lg font-semibold tracking-wide sm:text-xl">Pielini Coffee</a>
-          <a href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener" class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold tracking-wide text-caramelo-dark transition hover:text-pielini" aria-label="Instagram @pielinicoffee (abre em nova aba)">
-            <i data-lucide="instagram" class="h-3.5 w-3.5"></i> @pielinicoffee
-          </a>
-        </span>
+        <ul class="hidden items-center gap-6 text-sm font-medium xl:flex">
+          <li><button type="button" class="nav-link" data-open-about>Quem somos nós?</button></li>
+          <li><a class="nav-link" href="#protagonista">O Café</a></li>
+          <li><a class="nav-link" href="#estacoes">Conhecer as Ilhas</a></li>
+        </ul>
       </div>
 
-      <ul class="hidden items-center gap-6 text-sm font-medium lg:flex xl:gap-8">
-        <li><button type="button" class="nav-link" data-open-about>Quem somos nós?</button></li>
-        <li><a class="nav-link" href="#protagonista">O Café</a></li>
-        <li><a class="nav-link" href="#estacoes">Conhecer as Ilhas</a></li>
-        <li><a class="nav-link" href="#metodos">Métodos</a></li>
-        <li><a class="nav-link" href="#copo">Seu Copo</a></li>
-      </ul>
+      <a href="https://instagram.com/pielinicoffee" target="_blank" rel="noopener" class="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold tracking-wide text-pielini transition hover:text-caramelo-dark" aria-label="Instagram @pielinicoffee (abre em nova aba)">
+        <i data-lucide="instagram" class="h-4 w-4"></i> @pielinicoffee
+      </a>
 
-      <div class="flex items-center gap-2">
-        <a href="#degustacao" class="btn-gold hidden px-5 py-2.5 sm:inline-flex">
+      <div class="flex items-center gap-6">
+        <ul class="hidden items-center gap-6 text-sm font-medium xl:flex">
+          <li><a class="nav-link" href="#metodos">Métodos</a></li>
+          <li><a class="nav-link" href="#copo">Seu Copo</a></li>
+        </ul>
+        <a href="#degustacao" class="btn-gold hidden px-5 py-2.5 lg:inline-flex">
           <i data-lucide="calendar-heart" class="h-4 w-4"></i> Agendar Degustação
         </a>
-        <button id="menu-toggle" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-current/20 lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menu">
+        <button id="menu-toggle" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-current/20 xl:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menu">
           <span class="relative block h-3 w-5">
             <span class="menu-bar absolute left-0 top-0 h-[1.5px] w-full bg-current transition"></span>
             <span class="menu-bar absolute bottom-0 left-0 h-[1.5px] w-full bg-current transition"></span>
@@ -116,7 +115,7 @@
       </div>
     </nav>
 
-    <div id="mobile-menu" hidden class="border-t border-current/10 lg:hidden">
+    <div id="mobile-menu" hidden class="border-t border-current/10 xl:hidden">
       <ul class="container-site flex flex-col gap-1 py-4 font-display text-2xl">
         <li><button type="button" class="block w-full py-2 text-left" data-open-about>Quem somos nós?</button></li>
         <li><a class="block py-2" href="#protagonista">O Café como Protagonista</a></li>
@@ -212,15 +211,15 @@
          3. O CAFÉ COMO PROTAGONISTA + LINHA DO TEMPO
     ========================================================== -->
     <section id="protagonista" data-nav-theme="light" class="relative py-24 sm:py-32">
-      <div class="container-site grid gap-14 lg:grid-cols-12 lg:gap-16">
-        <!-- Coluna fixa -->
+      <div class="container-site grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+        <!-- Torra: fica centralizada na tela enquanto os pontos de torra passam -->
         <div class="lg:col-span-5">
-          <div class="lg:sticky lg:top-28">
-            <span class="eyebrow text-pielini" data-reveal><span class="h-px w-8 bg-pielini"></span> Capítulo 01</span>
-            <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
-              O café como <em class="text-pielini">protagonista</em>
-            </h2>
-            <figure id="roast-figure" class="relative mt-10 overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15" data-reveal>
+          <span class="eyebrow text-pielini" data-reveal><span class="h-px w-8 bg-pielini"></span> Capítulo 01</span>
+          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl" data-reveal>
+            O café como <em class="text-pielini">protagonista</em>
+          </h2>
+          <div id="roast-track" class="relative mt-10 h-[260svh]">
+            <figure id="roast-figure" class="sticky mx-auto w-full max-w-[440px] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15 [clip-path:inset(0_round_999px_999px_1.5rem_1.5rem)]" style="top:15svh">
               <canvas id="roast-canvas" class="block aspect-[4/5] w-full bg-torra" role="img" aria-label="Grãos de café sendo torrados: do grão verde à torra completa, conforme a rolagem"></canvas>
               <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/95 via-torra/70 to-transparent p-6 pt-24 text-creme sm:p-7 sm:pt-28">
                 <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.25em]">
@@ -231,42 +230,45 @@
                 <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-creme/15" aria-hidden="true">
                   <div id="roast-bar" class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-[#9AA66B] via-caramelo to-[#5A3418]"></div>
                 </div>
-                <p class="mt-3 text-sm text-creme/70">Role a página e acompanhe a torra: do grão verde ao ponto ideal.</p>
+                <ol id="roast-steps" class="mt-3 grid grid-cols-6 gap-1 text-center text-[8.5px] font-semibold uppercase tracking-[0.08em] text-creme/40 sm:text-[9.5px]">
+                  <li data-rs="0">Verde</li><li data-rs="1">Secagem</li><li data-rs="2">Amarelo</li><li data-rs="3">Canela</li><li data-rs="4">Média</li><li data-rs="5">Pielini</li>
+                </ol>
               </figcaption>
             </figure>
           </div>
         </div>
 
         <!-- Narrativa -->
-        <div class="lg:col-span-7 lg:flex lg:min-h-[175vh] lg:flex-col lg:justify-between lg:pb-10 lg:pt-16">
+        <div class="flex min-w-0 flex-col lg:col-span-7 lg:pt-16">
           <p id="scrub-text" class="scrub-text font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-[1.22]">
             Um evento inesquecível é construído nos detalhes. Seja para dar as boas-vindas aos convidados, harmonizar perfeitamente com a mesa de doces, acompanhar o jantar ou energizar a pista de dança, o café é uma presença constante.
           </p>
 
-
-          <ul class="mt-10 flex flex-wrap gap-3" aria-label="Tipos de eventos atendidos">
-            <li data-reveal style="--rd:.0s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="heart" class="h-4 w-4"></i> Casamentos</span></li>
-            <li data-reveal style="--rd:.08s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="cake" class="h-4 w-4"></i> 15 Anos</span></li>
-            <li data-reveal style="--rd:.16s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="graduation-cap" class="h-4 w-4"></i> Formaturas</span></li>
-            <li data-reveal style="--rd:.24s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="users" class="h-4 w-4"></i> Convenções</span></li>
-            <li data-reveal style="--rd:.32s"><span class="chip border-pielini/25 bg-pielini/5 text-pielini"><i data-lucide="briefcase" class="h-4 w-4"></i> Corporativos</span></li>
-          </ul>
-
-          <div class="mt-16 grid grid-cols-3 gap-4 sm:gap-6" data-reveal>
-            <div class="rounded-2xl bg-white/60 p-5 ring-1 ring-torra/5">
-              <i data-lucide="eye" class="h-5 w-5 text-caramelo"></i>
-              <p class="mt-3 font-display text-xl sm:text-2xl">Estética</p>
-              <p class="mt-1 text-xs text-torra/60 sm:text-sm">Ilhas que viram cenário</p>
-            </div>
-            <div class="rounded-2xl bg-white/60 p-5 ring-1 ring-torra/5">
-              <i data-lucide="leaf" class="h-5 w-5 text-caramelo"></i>
-              <p class="mt-3 font-display text-xl sm:text-2xl">Frescor</p>
-              <p class="mt-1 text-xs text-torra/60 sm:text-sm">Torra recente, moagem na hora</p>
-            </div>
-            <div class="rounded-2xl bg-white/60 p-5 ring-1 ring-torra/5">
-              <i data-lucide="coffee" class="h-5 w-5 text-caramelo"></i>
-              <p class="mt-3 font-display text-xl sm:text-2xl">Sabor</p>
-              <p class="mt-1 text-xs text-torra/60 sm:text-sm">O verdadeiro café especial</p>
+          <!-- Letreiro de eventos, como as legendas de telejornal -->
+          <div id="ticker-track" class="relative mt-12 min-h-[150svh] flex-1">
+            <div id="ticker" class="sticky top-[40svh]">
+              <p class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Levamos a experiência para</p>
+              <div class="mt-4 flex overflow-hidden rounded-2xl shadow-xl shadow-torra/10 ring-1 ring-torra/10">
+                <div class="flex shrink-0 flex-col justify-center gap-1 bg-pielini px-4 py-3 text-creme sm:px-5">
+                  <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em]"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-[#FF5A4E]"></span> Ao vivo</span>
+                  <span class="font-display text-lg italic leading-none">Pielini</span>
+                </div>
+                <div class="relative h-[5.5rem] flex-1 overflow-hidden bg-white/95 sm:h-24" aria-live="polite">
+                  <span class="ticker-word" data-tw="0"><i data-lucide="heart" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Casamentos</span>
+                  <span class="ticker-word" data-tw="1"><i data-lucide="cake" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>15 Anos</span>
+                  <span class="ticker-word" data-tw="2"><i data-lucide="graduation-cap" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Formaturas</span>
+                  <span class="ticker-word" data-tw="3"><i data-lucide="users" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Convenções</span>
+                  <span class="ticker-word" data-tw="4"><i data-lucide="briefcase" class="h-7 w-7 shrink-0 text-caramelo sm:h-8 sm:w-8"></i>Corporativos</span>
+                </div>
+              </div>
+              <div class="mt-2 overflow-hidden rounded-xl bg-torra py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-creme/85" aria-hidden="true">
+                <div class="crawl flex w-max gap-6 whitespace-nowrap">
+                  <span>Casamentos <span class="text-caramelo">•</span> 15 Anos <span class="text-caramelo">•</span> Formaturas <span class="text-caramelo">•</span> Convenções <span class="text-caramelo">•</span> Corporativos <span class="text-caramelo">•</span></span><span>Casamentos <span class="text-caramelo">•</span> 15 Anos <span class="text-caramelo">•</span> Formaturas <span class="text-caramelo">•</span> Convenções <span class="text-caramelo">•</span> Corporativos <span class="text-caramelo">•</span></span>
+                </div>
+              </div>
+              <ol id="ticker-dots" class="mt-4 flex gap-2" aria-hidden="true">
+                <li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="0"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="1"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="2"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="3"></li><li class="h-1 flex-1 rounded-full bg-torra/10 transition-colors duration-500" data-td="4"></li>
+              </ol>
             </div>
           </div>
         </div>
@@ -314,6 +316,12 @@
                   <h4 class="mt-4 font-display text-4xl font-medium leading-tight sm:text-5xl" data-m="title"></h4>
                   <p class="mt-5 max-w-xl leading-relaxed text-creme/75" data-m="text"></p>
                   <div class="mt-8 flex flex-wrap gap-2" data-m="methods"></div>
+                  <div class="mt-8 rounded-2xl border border-caramelo/30 bg-caramelo/10 p-5">
+                    <p class="eyebrow text-caramelo-light"><i data-lucide="star" class="h-3.5 w-3.5 fill-current"></i> Recomendação Pielini</p>
+                    <p class="mt-2 font-display text-2xl" data-m="rec-station"></p>
+                    <p class="mt-1 text-sm leading-relaxed text-creme/75" data-m="rec-text"></p>
+                    <button type="button" class="mt-4 inline-flex items-center gap-2 rounded-full bg-caramelo px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-torra transition hover:bg-caramelo-light" data-m="rec-btn">Quero esta estação <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></button>
+                  </div>
                 </div>
               </div>
               <div class="relative flex flex-col justify-between gap-8 border-t border-creme/10 bg-gradient-to-br from-pielini to-pielini-dark p-8 sm:p-12 md:col-span-2 md:border-l md:border-t-0">
@@ -358,15 +366,15 @@
               <div id="level-fill" class="level-fill absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-pielini-light via-caramelo to-caramelo-light" style="width:0"></div>
             </div>
             <div class="mt-4 grid grid-cols-4 gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-torra/50 sm:text-[11px]">
-              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="0">Básica</span>
-              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="1">Filtrados</span>
-              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="2">Espressos</span>
-              <span class="level-tick rounded-full border border-torra/15 py-1.5 transition" data-tick="3">Premium</span>
+              <button type="button" class="level-tick rounded-full border border-torra/15 py-1.5 transition hover:border-caramelo hover:text-caramelo-dark" data-tick="0" aria-label="Ver nível da Estação Básica">Básica</button>
+              <button type="button" class="level-tick rounded-full border border-torra/15 py-1.5 transition hover:border-caramelo hover:text-caramelo-dark" data-tick="1" aria-label="Ver nível da Estação Filtrados">Filtrados</button>
+              <button type="button" class="level-tick rounded-full border border-torra/15 py-1.5 transition hover:border-caramelo hover:text-caramelo-dark" data-tick="2" aria-label="Ver nível da Estação Espressos">Espressos</button>
+              <button type="button" class="level-tick rounded-full border border-torra/15 py-1.5 transition hover:border-caramelo hover:text-caramelo-dark" data-tick="3" aria-label="Ver nível da Estação Premium">Premium</button>
             </div>
           </div>
         </div>
 
-        <div id="station-grid" class="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div id="station-grid" class="mx-auto mt-14 grid w-[90%] gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <!-- Estação Básica -->
           <article class="station-card group relative flex flex-col rounded-[1.75rem] border border-torra/10 bg-white/70 p-7" data-station="0" tabindex="0" data-reveal style="--rd:0s">
             <div class="flex items-center justify-between">
