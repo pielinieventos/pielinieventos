@@ -660,11 +660,17 @@
     { img: 'mesa-basica', pos: '62% 55%', alt: 'Barista servindo café no Hario V60, ao lado da prensa francesa e da balança', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
     { img: 'mesa-filtrados', pos: '45% 30%', alt: 'Mesa vista de cima com V60, Koar, Chemex, prensa francesa e chaleira', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
     { img: 'mesa-espressos', pos: '45% 88%', alt: 'Espresso, cappuccino com latte art e macchiato em frente à máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
-    { img: 'mesa-premium-plus', pos: '78% 32%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados de brinde' },
+    { img: 'mesa-premium-plus', pos: '50% 28%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados de brinde' },
   ];
   $$('.station-card').forEach((card, i) => {
     const front = document.createElement('div');
     front.className = 'card-front';
+    // fundo, borda e espaçamento ficam na face da frente: se ficassem no card,
+    // cortariam a foto ao meio durante a virada 3D
+    [...card.classList].filter((cl) => /^(bg-|from-|to-|border|p-\d)/.test(cl)).forEach((cl) => {
+      card.classList.remove(cl);
+      front.classList.add(cl);
+    });
     while (card.firstChild) front.appendChild(card.firstChild);
     card.appendChild(front);
     // o selo "A Queridinha" continua visível dos dois lados
@@ -684,11 +690,40 @@
       </div>`;
     card.appendChild(back);
     $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
-    // no celular (sem mouse) o card vira com um toque
+    // no celular (sem mouse) o card também vira com um toque
     card.addEventListener('click', (e) => {
       if (window.matchMedia('(hover: none)').matches && !e.target.closest('button, a')) card.classList.toggle('is-flipped');
     });
   });
+
+  // Celular: o carrossel começa na Estação Espressos e cada card vira sozinho
+  // quando fica centralizado — o cliente desliza e vê a foto de cada mesa
+  (() => {
+    const row = $('#station-grid');
+    const cards = $$('.station-card', row);
+    const isCarousel = () => row.scrollWidth > row.clientWidth + 4;
+    const timers = new Map();
+    const startAt = (card) => { row.scrollLeft = card.offsetLeft - (row.clientWidth - card.offsetWidth) / 2; };
+    if (isCarousel()) startAt(cards[2]);
+    window.addEventListener('load', () => { if (isCarousel()) startAt(cards[2]); }, { once: true });
+    const io = new IntersectionObserver((entries) => {
+      if (!isCarousel()) return;
+      entries.forEach((en) => {
+        const card = en.target;
+        clearTimeout(timers.get(card));
+        if (en.intersectionRatio >= 0.75) {
+          // pequena pausa: o cliente vê o preço e depois a mesa
+          timers.set(card, setTimeout(() => card.classList.add('is-flipped'), prefersReducedMotion ? 0 : 900));
+        } else if (en.intersectionRatio < 0.3) {
+          card.classList.remove('is-flipped');
+        }
+      });
+    }, { root: row, threshold: [0, 0.3, 0.75, 1] });
+    // só começa a virar quando a seção aparece na tela
+    new IntersectionObserver((entries, obs) => {
+      if (entries[0].isIntersecting) { cards.forEach((c) => io.observe(c)); obs.disconnect(); }
+    }, { threshold: 0.35 }).observe(row);
+  })();
 
   const methods = {
     v60: {
