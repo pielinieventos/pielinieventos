@@ -143,12 +143,13 @@
 
       <div id="hero-logo" class="hero-logo relative">
         <div class="absolute inset-[-12%] rounded-full bg-[radial-gradient(circle,rgba(200,138,75,.14),transparent_65%)]" aria-hidden="true"></div>
-        <svg class="relative h-[min(58vw,300px)] w-[min(58vw,300px)] text-pielini" role="img" aria-label="Pielini Coffee"><use href="#pielini-emblema"/></svg>
+        <svg class="relative h-[min(58vw,300px)] w-[min(58vw,300px)] text-torra" role="img" aria-label="Pielini Coffee"><use href="#pielini-emblema"/></svg>
       </div>
 
-      <span class="hero-fade d1 eyebrow mt-10 rounded-full border border-pielini/20 bg-white/70 px-4 py-2 text-pielini backdrop-blur">
-        Cafeteria &amp; Torrefação • Eventos Exclusivos
-      </span>
+      <p class="hero-fade d1 mt-10 flex flex-col items-center gap-1.5 rounded-[1.4rem] border border-torra/15 bg-white/70 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-torra backdrop-blur">
+        <span>Cafeteria &amp; Torrefação</span>
+        <span class="text-caramelo-dark">• Eventos Exclusivos •</span>
+      </p>
       <h1 class="hero-title mt-7 font-display leading-[0.95] text-torra">
         <span class="line"><span class="text-[clamp(2.6rem,8vw,5.6rem)] font-semibold tracking-[0.04em]">CAFÉS ESPECIAIS</span></span>
         <span class="line"><span class="text-[clamp(1.8rem,5vw,3.4rem)] font-normal italic text-caramelo-dark">para momentos especiais</span></span>
@@ -258,9 +259,9 @@
 
         <div class="mt-12" data-reveal>
           <div class="relative">
-            <div class="absolute left-[12.5%] right-[12.5%] top-[23px] h-[3px] rounded-full bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610] opacity-25" aria-hidden="true"></div>
-            <div class="absolute left-[12.5%] top-[23px] h-[3px] overflow-hidden rounded-full transition-all duration-700" id="moment-line" style="width:0" aria-hidden="true"><div class="h-full w-[min(100vw,76rem)] max-w-none bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610]" id="moment-line-fill"></div></div>
-            <div role="tablist" aria-label="Momentos da festa" class="relative grid grid-cols-4">
+            <div class="absolute left-[10%] right-[10%] top-[23px] h-[3px] rounded-full bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610] opacity-25" aria-hidden="true"></div>
+            <div class="absolute left-[10%] top-[23px] h-[3px] overflow-hidden rounded-full transition-all duration-700" id="moment-line" style="width:0" aria-hidden="true"><div class="h-full w-[min(100vw,76rem)] max-w-none bg-gradient-to-r from-[#9C6B42] via-[#5E3A20] to-[#1E1610]" id="moment-line-fill"></div></div>
+            <div role="tablist" aria-label="Momentos da festa" class="relative grid grid-cols-5">
               <button role="tab" id="tab-m0" aria-controls="moment-panel" aria-selected="true" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="0">
                 <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="glass-water" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">1. Boas-vindas</span>
@@ -277,11 +278,17 @@
                 <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="music" class="h-5 w-5"></i></span>
                 <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">4. Pista de Dança</span>
               </button>
+              <button role="tab" id="tab-m4" aria-controls="moment-panel" aria-selected="false" tabindex="-1" class="moment-tab group flex flex-col items-center gap-3 px-1 text-center" data-moment="4">
+                <span class="moment-dot flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white"><i data-lucide="briefcase" class="h-5 w-5"></i></span>
+                <span class="moment-label text-xs font-semibold text-torra/50 transition sm:text-sm">5. Empresarial</span>
+              </button>
             </div>
           </div>
 
-          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="mx-auto mt-10 max-w-2xl rounded-[1.75rem] bg-torra p-7 text-creme shadow-xl shadow-torra/15 transition-colors duration-700 sm:p-9">
-            <div id="moment-content">
+          <article id="moment-panel" role="tabpanel" aria-labelledby="tab-m0" class="relative isolate mx-auto mt-10 max-w-3xl overflow-hidden rounded-[1.75rem] bg-torra p-7 text-creme shadow-xl shadow-torra/15 transition-colors duration-700 sm:p-9 sm:pt-44">
+            <div class="moment-bg" aria-hidden="true"><img id="moment-photo" src="assets/img/momento-boas-vindas.jpg" alt="" decoding="async"></div>
+            <div class="moment-tint" aria-hidden="true"></div>
+            <div id="moment-content" class="relative">
               <h4 class="font-display text-3xl font-medium leading-tight sm:text-4xl" data-m="title"></h4>
               <p class="mt-3 leading-relaxed text-creme/75" data-m="text"></p>
               <div class="mt-6 flex flex-col gap-4 border-t border-creme/10 pt-5 sm:flex-row sm:items-center sm:justify-between">

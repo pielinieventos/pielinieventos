@@ -435,10 +435,20 @@
     { title: 'Mesa de Doces', text: 'O café equilibra o açúcar e valoriza cada doce da confeitaria.', rec: { station: 'Estação Espressos', text: 'Cappuccino e Caramel Macchiato' } },
     { title: 'Pós-Jantar', text: 'Um espresso bem extraído fecha a refeição com elegância.', rec: { station: 'Estação Espressos', text: 'Espresso e Mocaccino' } },
     { title: 'Pista de Dança', text: 'Bebidas geladas e cafés com energia mantêm a festa no ritmo.', rec: { station: 'Estação Premium Plus', text: 'Sodas Italianas e Mocaccino' } },
+    { title: 'Empresarial', text: 'Coffee break, convenções e recepção de clientes: café especial servido ao vivo valoriza a marca e mantém a equipe energizada.', rec: { station: 'Estação Espressos', text: 'Espresso, Cappuccino e filtrados' } },
   ];
+  // foto de fundo de cada momento (object-position = foco do recorte)
+  const MOMENT_PHOTOS = [
+    ['momento-boas-vindas', '30% 40%'],
+    ['momento-mesa-doces', '50% 82%'],
+    ['momento-pos-jantar', '40% 45%'],
+    ['momento-pista', '50% 30%'],
+    ['momento-empresarial', '45% 45%'],
+  ];
+  MOMENT_PHOTOS.forEach(([f]) => { const im = new Image(); im.src = `assets/img/${f}.jpg`; });
 
   // degradê da linha do tempo: do marrom mais claro ao mais escuro
-  const MOMENT_COLORS = ['#9C6B42', '#7A4A28', '#4E2C16', '#1E1610'];
+  const MOMENT_COLORS = ['#A0714A', '#86552F', '#6A401F', '#4A2B15', '#1E1610'];
   const momentTabs = $$('.moment-tab');
   momentTabs.forEach((t, i) => t.style.setProperty('--mc', MOMENT_COLORS[i]));
   const momentPanel = $('#moment-panel');
@@ -451,9 +461,16 @@
     });
     if (focus) momentTabs[index].focus();
     momentPanel.setAttribute('aria-labelledby', momentTabs[index].id);
-    momentLine.style.width = `${(index / 3) * 75}%`;
+    momentLine.style.width = `${(index / 4) * 80}%`;
     momentPanel.style.backgroundColor = MOMENT_COLORS[index];
-    $('#moment-line-fill').style.width = `${momentLine.parentElement.offsetWidth * 0.75}px`;
+    $('#moment-line-fill').style.width = `${momentLine.parentElement.offsetWidth * 0.8}px`;
+    momentPanel.style.setProperty('--mc', MOMENT_COLORS[index]);
+    const photo = $('#moment-photo');
+    const [file, pos] = MOMENT_PHOTOS[index];
+    photo.classList.remove('is-in'); void photo.offsetWidth;
+    photo.src = `assets/img/${file}.jpg`;
+    photo.style.objectPosition = pos;
+    photo.classList.add('is-in');
 
     const q = (k) => $(`[data-m="${k}"]`, momentPanel);
     q('title').textContent = m.title;
@@ -482,8 +499,8 @@
   momentTabs.forEach((tab, i) => {
     tab.addEventListener('click', () => setMoment(i));
     tab.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') setMoment((i + 1) % 4, true);
-      if (e.key === 'ArrowLeft') setMoment((i + 3) % 4, true);
+      if (e.key === 'ArrowRight') setMoment((i + 1) % moments.length, true);
+      if (e.key === 'ArrowLeft') setMoment((i + moments.length - 1) % moments.length, true);
     });
   });
   setMoment(0);

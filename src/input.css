@@ -298,3 +298,17 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
   .card-back { display: none; }
   .card-photo { display: block; width: calc(100% + 3.5rem); max-width: none; height: 190px; margin: -1.75rem -1.75rem 1.25rem; object-fit: cover; border-radius: 1.75rem 1.75rem 0 0; }
 }
+
+/* Linha do tempo: foto de fundo de cada momento, com o tom de marrom por cima */
+.moment-bg { position: absolute; inset: 0; z-index: -2; }
+.moment-bg img { height: 100%; width: 100%; object-fit: cover; }
+.moment-bg img.is-in { animation: moment-photo-in .9s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes moment-photo-in { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: none; } }
+.moment-tint {
+  position: absolute; inset: 0; z-index: -1; transition: background .7s ease;
+  --mc-deep: color-mix(in srgb, var(--mc, #1E1610) 55%, #1E1610);
+  background: linear-gradient(to top, var(--mc-deep) 0%, color-mix(in srgb, var(--mc-deep) 94%, transparent) 50%, color-mix(in srgb, var(--mc-deep) 35%, transparent) 78%, rgba(0,0,0,.05) 100%);
+}
+@media (max-width: 639px) {
+  #moment-panel { padding-top: 11rem; }
+}
