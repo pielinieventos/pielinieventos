@@ -43,6 +43,8 @@
     // +1 barista quando o café for a atração principal (sem outras atrações no evento)
     espressoGuestsLimit: 80,
     extraStaffFee: 200,      // valor cobrado por barista extra — ajuste aqui
+    giftPlan: 3,             // Premium Plus ganha a personalização dos copos de brinde
+    upsellFrom: 2,           // quem escolhe Espressos vê a oferta de upgrade para a Plus
     corporateMarkup: 0.15,   // eventos corporativos: +15%
     freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
     perKm: 1,                // R$ por km acima do limite
@@ -812,6 +814,7 @@
       `• Outras atrações no evento: ${attractionsLabel()}`,
     ];
     if (!isCustom() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
+    if (state.plan === PRICING.giftPlan) lines.push('• 🎁 Brinde Premium Plus: personalização dos copos grátis');
     if (withPrice && !isCustom()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
     return lines;
   };
@@ -828,6 +831,7 @@
     const q = quote();
     $('#sim-total').textContent = brl(q.total);
     $('#sim-hint').hidden = !!state.attractions;
+    renderOffer();
     $('#sim-lines').innerHTML = [
       lineRow(PRICING.plans[state.plan].name, brl(q.base)),
       state.corporate ? lineRow('Evento corporativo (+15%)', `+ ${brl(q.corp)}`) : '',
@@ -852,6 +856,45 @@
     stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === state.plan));
     renderSummary();
     renderMessage();
+  }
+
+  // Upgrade: quem está na Espressos vê quanto falta para a Plus (com brinde);
+  // quem já escolheu a Plus vê o brinde confirmado
+  function renderOffer() {
+    const box = $('#sim-offer');
+    if (state.plan === PRICING.giftPlan) {
+      box.innerHTML = `<div class="offer-gift mt-6 rounded-2xl border border-caramelo/40 bg-caramelo/10 p-5">
+        <p class="flex items-center gap-2 font-display text-2xl text-caramelo-light"><span aria-hidden="true">🎁</span> Presente Pielini</p>
+        <p class="mt-1 text-sm text-creme/80">Por escolher a <strong>Premium Plus</strong>, a <strong>personalização dos copos</strong> com a identidade do seu evento é por nossa conta.</p>
+        <p class="mt-2 flex items-baseline justify-between text-sm"><span class="text-creme/65">Personalização dos copos</span><span class="font-semibold text-caramelo-light">Grátis</span></p>
+      </div>`;
+    } else if (state.plan === PRICING.upsellFrom) {
+      const cur = quote();
+      const prev = state.plan;
+      state.plan = PRICING.giftPlan;
+      const up = quote();
+      state.plan = prev;
+      box.innerHTML = `<div class="offer-upsell mt-6 rounded-2xl bg-pielini p-5">
+        <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-caramelo-light">Upgrade especial</p>
+        <p class="mt-1 font-display text-2xl leading-snug">Por apenas <span class="text-caramelo-light">+ ${brl(up.total - cur.total)}</span>, leve a Premium Plus</p>
+        <ul class="mt-3 space-y-1.5 text-sm text-creme/85">
+          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> Sodas Italianas ou cafés gelados</li>
+          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> <strong>Personalização dos copos grátis</strong> 🎁</li>
+        </ul>
+        <button type="button" id="sim-upgrade" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-creme px-5 py-3 text-sm font-bold text-torra transition hover:bg-white">Quero o upgrade para a Premium Plus</button>
+      </div>`;
+      $('#sim-upgrade').addEventListener('click', () => {
+        setPlan(PRICING.giftPlan);
+        lockedStation = PRICING.giftPlan;
+        showLevel(PRICING.giftPlan);
+        const gift = $('.offer-gift');
+        if (gift && !prefersReducedMotion) gift.animate([{ transform: 'scale(.96)', opacity: 0 }, { transform: 'scale(1.03)', opacity: 1 }, { transform: 'scale(1)' }], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      });
+    } else {
+      box.innerHTML = '';
+    }
+    const badge = $('#cup-badge');
+    if (badge) badge.innerHTML = state.plan === PRICING.giftPlan ? '<span class="font-semibold text-caramelo-dark">🎁 Grátis na Premium Plus</span>' : 'Opcional · disponível em qualquer estação';
   }
 
   function setPlan(idx) {
@@ -969,6 +1012,7 @@
       ['Cidade', cityLabel()],
       ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
       ['Investimento estimado', isCustom() ? 'Proposta sob medida' : brl(quote().total)],
+      ...(state.plan === PRICING.giftPlan ? [['Brinde', '🎁 Personalização dos copos grátis']] : []),
       ['Data do evento', state.answers['q-date'] ? DATE_LABELS[state.answers['q-date'].value] : 'A informar'],
     ];
     $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');

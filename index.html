@@ -597,6 +597,7 @@
               <p class="mt-3 font-display text-6xl font-semibold leading-none" id="sim-total">R$ 0</p>
               <p id="sim-hint" class="mt-3 text-sm text-caramelo-light">Responda o item 5 para ver o valor final.</p>
               <ul id="sim-lines" class="mt-6 space-y-2.5 border-t border-creme/10 pt-5 text-sm"></ul>
+              <div id="sim-offer" aria-live="polite"></div>
               <p class="mt-5 text-xs leading-relaxed text-creme/55">Valor de referência para até 100 convidados. Personalização de copos e horas extras podem ser adicionadas. A proposta final é confirmada após a degustação.</p>
               <button type="button" id="sim-continue" class="btn-gold mt-7 w-full py-4"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Quero agendar uma degustação</button>
               <a id="sim-menu-link" href="#" target="_blank" rel="noopener" class="mt-4 flex items-center justify-center gap-2 text-sm text-creme/70 underline-offset-4 transition hover:text-caramelo-light hover:underline">Ainda estou pesquisando · receber o cardápio no WhatsApp</a>
@@ -711,7 +712,7 @@
             <div id="copo" class="mt-8 scroll-mt-28 border-t border-torra/10 pt-7">
               <div class="flex flex-wrap items-baseline justify-between gap-2">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Personalize o copo do seu evento</p>
-                <span class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
+                <span id="cup-badge" class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
               </div>
               <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
                 <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
