@@ -17,10 +17,31 @@
   /** Estado compartilhado entre widgets (copo → mensagem do WhatsApp). */
   const state = {
     event: null,
-    station: null,
+    corporate: false,
+    plan: 2,
+    guests: 80,
+    city: 'Novo Hamburgo',
+    km: 0,
+    answers: { 'q-date': null, 'q-budget': null, 'q-phase': null },
+    qualified: false,
     leadName: '',
     cup: { name: '', subMode: 'date', date: '', sub: '' },
   };
+
+  /* Tabela de preços (até 100 convidados) — edite aqui quando reajustar */
+  const PRICING = {
+    plans: [
+      { name: 'Estação Básica', price: 990 },
+      { name: 'Estação Filtrados', price: 1290 },
+      { name: 'Estação Espressos', price: 2190 },
+      { name: 'Estação Premium Plus', price: 2390 },
+    ],
+    maxGuests: 100,          // acima disso: proposta sob medida (2 baristas)
+    corporateMarkup: 0.15,   // eventos corporativos: +15%
+    freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
+    perKm: 1,                // R$ por km acima do limite
+  };
+  const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
 
   renderIcons();
   $('#year').textContent = new Date().getFullYear();
@@ -444,7 +465,7 @@
   $('[data-m="rec-btn"]', momentPanel).addEventListener('click', (e) => {
     const station = e.currentTarget.dataset.station;
     const idx = ['Estação Básica', 'Estação Filtrados', 'Estação Espressos', 'Estação Premium Plus'].indexOf(station);
-    selectPill('station', station);
+    setPlan(idx);
     lockedStation = idx;
     $('#level-bar').closest('.rounded-3xl').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
     setTimeout(() => showLevel(idx), prefersReducedMotion ? 0 : 450);
@@ -507,11 +528,9 @@
       const card = btn.closest('.station-card');
       lockedStation = stationCards.indexOf(card);
       showLevel(lockedStation);
-      selectPill('station', btn.dataset.choose);
-      const booking = $('#degustacao');
-      booking.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-      const group = $('#station-pills');
-      group.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.03)' }, { transform: 'scale(1)' }], { duration: 600, delay: 700, easing: 'ease-out' });
+      setPlan(lockedStation);
+      $('#investimento').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      $('#sim-plans').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 600, delay: 700, easing: 'ease-out' });
     });
   });
 
@@ -741,62 +760,184 @@
   }));
 
   /* ===================================================================
-     6. WIDGET 4 — GERADOR DE MENSAGEM WHATSAPP
+     6. FUNIL — simulador de investimento, filtro e mensagem do WhatsApp
   =================================================================== */
+  const DATE_LABELS = {
+    'Sim, nos próximos 12 meses': 'definida, nos próximos 12 meses',
+    'Sim, daqui a mais de 12 meses': 'definida, daqui a mais de 12 meses',
+    'Ainda não': 'ainda não definida',
+  };
+  const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   const preview = $('#wa-preview');
   const cta = $('#wa-cta');
-  const groups = { event: $('#event-pills'), station: $('#station-pills') };
+  const simEvent = $('#sim-event');
+  const simPlans = $$('.sim-plan');
+  const guestsInput = $('#sim-guests');
+  const citySelect = $('#sim-city');
+  const kmWrap = $('#sim-km-wrap');
+  const kmInput = $('#sim-km');
+  const filterBox = $('#sim-filter');
+  const passBox = $('#sim-pass');
+  const failBox = $('#sim-fail');
+  const checkBtn = $('#sim-check');
+  const bookingLock = $('#booking-lock');
+  const bookingCard = $('#booking-card');
 
-  function selectPill(group, value) {
-    state[group] = value;
-    $$('.pill', groups[group]).forEach((p) => p.setAttribute('aria-pressed', String(p.dataset.value === value)));
-    if (group === 'station') {
-      const idx = $$('.pill', groups.station).findIndex((p) => p.dataset.value === value);
-      stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === idx));
-    }
+  const quote = () => {
+    const base = PRICING.plans[state.plan].price;
+    const corp = state.corporate ? Math.round((base * PRICING.corporateMarkup) / 10) * 10 : 0;
+    const extraKm = Math.max(0, Math.round(state.km) - PRICING.freeKm);
+    const travel = extraKm * PRICING.perKm;
+    return { base, corp, extraKm, travel, total: base + corp + travel };
+  };
+  const isCustom = () => state.guests > PRICING.maxGuests;
+  const guestsLabel = () => (state.guests >= 250 ? '250 ou mais' : String(state.guests));
+  const cityLabel = () => (state.km > PRICING.freeKm ? `${state.city} (~${Math.round(state.km)} km)` : state.city);
+
+  const summaryLines = (withPrice) => {
+    const lines = [
+      `• Evento: ${state.event || 'ainda vou definir'}`,
+      `• Estação: ${PRICING.plans[state.plan].name}`,
+      `• Convidados: ${guestsLabel()}`,
+      `• Cidade: ${cityLabel()}`,
+    ];
+    if (withPrice && !isCustom()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
+    return lines;
+  };
+
+  const lineRow = (label, value, strong = false) => `<li class="flex items-baseline justify-between gap-4"><span class="text-creme/65">${label}</span><span class="${strong ? 'font-semibold text-creme' : 'text-creme/90'}">${value}</span></li>`;
+
+  function renderSim() {
+    const custom = isCustom();
+    $('#sim-guests-out').textContent = guestsLabel();
+    $('#sim-standard').hidden = custom;
+    $('#sim-custom').hidden = !custom;
+    if (custom) { filterBox.hidden = true; passBox.hidden = true; failBox.hidden = true; }
+
+    const q = quote();
+    $('#sim-total').textContent = brl(q.total);
+    $('#sim-lines').innerHTML = [
+      lineRow(PRICING.plans[state.plan].name, brl(q.base)),
+      state.corporate ? lineRow('Evento corporativo (+15%)', `+ ${brl(q.corp)}`) : '',
+      lineRow('Deslocamento', q.travel ? `+ ${brl(q.travel)} <span class="text-creme/50">(${q.extraKm} km além de 10 km)</span>` : 'incluso'),
+      lineRow('Barista', '1 incluso'),
+      lineRow('Insumos, bancada e equipamentos', 'inclusos'),
+    ].join('');
+    $('#sim-custom-lines').innerHTML = [
+      lineRow('Estação', PRICING.plans[state.plan].name),
+      lineRow('Convidados', guestsLabel()),
+      lineRow('Cidade', cityLabel()),
+      lineRow('Baristas', '2'),
+    ].join('');
+
+    $('#sim-custom-cta').href = waLink(['Olá, Pielini Coffee! ☕', 'Gostaria de uma *proposta personalizada* para um evento com mais de 100 convidados.', '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
+    const menuMsg = ['Olá, Pielini Coffee! ☕', 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines(true)].join('\n');
+    $('#sim-menu-link').href = waLink(menuMsg);
+    $('#sim-menu-cta').href = waLink(menuMsg);
+
+    simPlans.forEach((b, i) => b.setAttribute('aria-pressed', String(i === state.plan)));
+    stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === state.plan));
+    renderSummary();
     renderMessage();
   }
 
-  Object.entries(groups).forEach(([group, root]) => {
-    $$('.pill', root).forEach((pill) => pill.addEventListener('click', () => {
-      const same = state[group] === pill.dataset.value;
-      selectPill(group, same ? null : pill.dataset.value);
+  function setPlan(idx) {
+    if (idx < 0) return;
+    state.plan = idx;
+    renderSim();
+  }
+
+  // 1. tipo de evento (corporativo aplica o acréscimo)
+  $$('.pill', simEvent).forEach((pill) => pill.addEventListener('click', () => {
+    const same = state.event === pill.dataset.value;
+    state.event = same ? null : pill.dataset.value;
+    state.corporate = !same && pill.dataset.corp === '1';
+    $$('.pill', simEvent).forEach((p) => p.setAttribute('aria-pressed', String(p === pill && !same)));
+    renderSim();
+  }));
+  // 2. estação
+  simPlans.forEach((b, i) => b.addEventListener('click', () => { setPlan(i); lockedStation = i; showLevel(i); }));
+  // 3. convidados
+  guestsInput.addEventListener('input', () => { state.guests = Number(guestsInput.value); renderSim(); });
+  // 4. cidade / km
+  citySelect.addEventListener('change', () => {
+    const other = citySelect.value === 'other';
+    kmWrap.hidden = !other;
+    state.city = other ? 'Outra cidade' : citySelect.options[citySelect.selectedIndex].text;
+    state.km = other ? Number(kmInput.value) || 0 : Number(citySelect.value);
+    if (other) kmInput.focus();
+    renderSim();
+  });
+  kmInput.addEventListener('input', () => { state.km = clamp(Number(kmInput.value) || 0, 0, 500); renderSim(); });
+
+  // Filtro de qualificação
+  $('#sim-continue').addEventListener('click', () => {
+    filterBox.hidden = false;
+    filterBox.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+  });
+  Object.keys(state.answers).forEach((id) => {
+    $$('.qpill', $(`#${id}`)).forEach((b) => b.addEventListener('click', () => {
+      state.answers[id] = { value: b.dataset.value, ok: b.dataset.ok === '1' };
+      $$('.qpill', $(`#${id}`)).forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      checkBtn.disabled = Object.values(state.answers).some((a) => !a);
     }));
   });
+  checkBtn.addEventListener('click', () => {
+    state.qualified = Object.values(state.answers).every((a) => a && a.ok);
+    passBox.hidden = !state.qualified;
+    failBox.hidden = state.qualified;
+    bookingLock.hidden = state.qualified;
+    bookingCard.inert = !state.qualified;
+    (state.qualified ? passBox : failBox).scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+    renderSummary();
+    renderMessage();
+  });
+
+  // Resumo da simulação no bloco de agendamento
+  function renderSummary() {
+    const items = [
+      ['Evento', state.event || 'A definir'],
+      ['Estação', PRICING.plans[state.plan].name],
+      ['Convidados', guestsLabel()],
+      ['Cidade', cityLabel()],
+      ['Investimento estimado', isCustom() ? 'Proposta sob medida' : brl(quote().total)],
+      ['Data do evento', state.answers['q-date'] ? DATE_LABELS[state.answers['q-date'].value] : 'A informar'],
+    ];
+    $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');
+  }
 
   $('#lead-name').addEventListener('input', (e) => { state.leadName = e.target.value; renderMessage(); });
 
   const buildMessage = () => {
-    const lines = [];
     const lead = state.leadName.trim();
-    lines.push('Olá, Pielini Coffee! ☕');
-    lines.push(`${lead ? `Meu nome é ${lead} e gostaria` : 'Gostaria'} de agendar uma *Degustação Exclusiva* na cafeteria.`);
-    lines.push('');
-    lines.push(`• Evento: ${state.event || 'ainda vou definir'}`);
-    lines.push(`• Estação de interesse: ${state.station || 'quero ajuda para escolher'}`);
+    const lines = ['Olá, Pielini Coffee! ☕', `${lead ? `Meu nome é ${lead} e gostaria` : 'Gostaria'} de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines(true)];
+    const date = state.answers['q-date'];
+    const phase = state.answers['q-phase'];
+    if (date) lines.push(`• Data do evento: ${DATE_LABELS[date.value] || date.value}`);
+    if (phase) lines.push(`• Planejamento: ${phase.value}`);
     const cupNameValue = state.cup.name.trim();
     const sub = cupSubtitle();
     if (cupNameValue || sub) {
       const parts = [cupNameValue ? `"${cupNameValue}"` : null, sub || null].filter(Boolean).join(' — ');
       lines.push(`• Copo personalizado: ${parts}`);
     }
-    lines.push('');
-    lines.push('Podemos combinar um horário?');
+    lines.push('', 'Podemos combinar um horário?');
     return lines.join('\n');
   };
 
   function renderMessage() {
     const msg = buildMessage();
     preview.innerHTML = escapeHTML(msg).replace(/\*(.+?)\*/g, '<strong>$1</strong>');
-    cta.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    cta.href = waLink(msg);
   }
 
   const now = new Date();
   $('#wa-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-  // Botão flutuante e links genéricos também levam a mensagem montada
-  waFloat.addEventListener('click', () => { waFloat.href = cta.href; });
+  // Botão flutuante: contato geral, sem pular o funil
+  waFloat.href = waLink('Olá, Pielini Coffee! ☕ Vim pelo site e tenho uma dúvida.');
 
+  renderSim();
   renderCup();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderCup);
 })();
