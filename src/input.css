@@ -273,11 +273,14 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .card-front, .card-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: transform .75s cubic-bezier(.2,.8,.2,1); }
 .card-front { position: relative; display: flex; flex: 1; flex-direction: column; }
 .card-back {
-  position: absolute; inset: 0; display: flex; flex-direction: column; padding: 1.25rem;
+  position: absolute; inset: 0; overflow: hidden;
   border-radius: inherit; background: var(--torra); color: var(--creme); transform: rotateY(180deg);
   box-shadow: 0 30px 60px -30px rgba(30,22,16,.6);
 }
-.card-back-scene { overflow: hidden; border-radius: 1.1rem; flex: 1 1 auto; min-height: 170px; max-height: 340px; background: #EFE6D8; display: flex; align-items: flex-end; }
+.card-back-img { position: absolute; inset: 0 0 auto 0; height: 64%; width: 100%; object-fit: cover; transform: scale(1.06); transform-origin: 50% 70%; transition: transform 1.4s cubic-bezier(.2,.8,.2,1); }
+.card-back-shade { position: absolute; inset: 0; background: linear-gradient(to top, var(--torra) 0%, var(--torra) 36%, rgba(30,22,16,.55) 44%, rgba(30,22,16,0) 56%); }
+.card-back-content { position: absolute; inset-inline: 0; bottom: 0; padding: 1.3rem 1.4rem 1.4rem; }
+.station-card:hover .card-back-img, .station-card.is-flipped .card-back-img { transform: scale(1); }
 @media (hover: hover) {
   .station-card:hover .card-front { transform: rotateY(-180deg); }
   .station-card:hover .card-back { transform: rotateY(0deg); }

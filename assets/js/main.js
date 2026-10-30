@@ -655,45 +655,13 @@
 
   };
 
-  // Máquina de espresso (usada nas mesas ilustradas das estações)
-  art.machine = `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="30" y="36" width="140" height="150" rx="14" fill="#D9D3CA"/>
-      <rect x="30" y="36" width="140" height="34" rx="12" fill="${C.torra}"/>
-      <rect x="44" y="20" width="26" height="16" rx="4" fill="${C.creme}"/><rect x="78" y="22" width="22" height="14" rx="4" fill="${C.creme}"/>
-      <circle cx="146" cy="53" r="9" fill="${C.creme}"/><path d="M146 47 L146 53 L150 56" stroke-width="1.8"/>
-      <rect x="62" y="70" width="76" height="22" rx="6" fill="#B9B1A5"/>
-      <path d="M58 104 L142 104" stroke-width="6"/><path d="M142 104 L178 98" stroke-width="7"/>
-      <rect x="84" y="92" width="32" height="18" rx="4" fill="#8E867B"/>
-      <path class="anim-drop" d="M96 112 L96 122 M104 112 L104 122" stroke="#6E3F1C" stroke-width="2.4"/>
-      <path d="M86 128 L114 128 L111 150 C110.5 154 108 156 104 156 L96 156 C92 156 89.5 154 89 150 Z" fill="${C.creme}"/>
-      <path d="M44 72 L44 128 C44 134 40 136 36 136" stroke-width="3"/>
-      <rect x="22" y="178" width="156" height="14" rx="5" fill="#8E867B"/>
-      <path d="M40 170 L160 170" stroke-dasharray="4 6" stroke-opacity=".5"/>
-    </svg>`;
-
-  // Mesa ilustrada de cada estação (verso do card) — troque por fotos reais quando quiser
+  // Foto da mesa de cada estação (verso do card). object-position = foco do recorte
   const STATION_TABLES = [
-    { items: ['v60', 'prensa'], tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
-    { items: ['v60', 'prensa', 'koar', 'chemex'], tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
-    { items: ['machine', 'espresso', 'chemex'], tools: 'Máquina de espresso · vaporizador · filtrados' },
-    { items: ['machine', 'espresso', 'soda', 'v60'], tools: 'Espresso · filtrados · sodas italianas ou gelados' },
+    { img: 'mesa-basica', pos: '62% 55%', alt: 'Barista servindo café no Hario V60, ao lado da prensa francesa e da balança', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
+    { img: 'mesa-filtrados', pos: '45% 30%', alt: 'Mesa vista de cima com V60, Koar, Chemex, prensa francesa e chaleira', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
+    { img: 'mesa-espressos', pos: '45% 88%', alt: 'Espresso, cappuccino com latte art e macchiato em frente à máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
+    { img: 'mesa-premium-plus', pos: '78% 32%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados de brinde' },
   ];
-  const tableScene = (items) => {
-    const n = items.length;
-    const h = n > 3 ? 112 : n > 2 ? 128 : 150;
-    const w = (h * 200) / 240;
-    const gap = (400 - n * w) / (n + 1);
-    const pieces = items.map((key, i) => art[key].replace('<svg ', `<svg x="${(gap + i * (w + gap)).toFixed(1)}" y="${(214 - h).toFixed(1)}" width="${w.toFixed(1)}" height="${h}" `)).join('');
-    return `<svg viewBox="0 0 400 290" class="h-full w-full" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
-      <defs><linearGradient id="tbl-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A5A36"/><stop offset="1" stop-color="#5E3A20"/></linearGradient></defs>
-      <rect width="400" height="290" fill="#EFE6D8"/>
-      <circle cx="320" cy="60" r="90" fill="#fff" opacity=".35"/>
-      <rect y="206" width="400" height="20" fill="#A87449"/>
-      <rect y="226" width="400" height="64" fill="url(#tbl-wood)"/>
-      <path d="M0 240 C120 236 260 246 400 238 M0 262 C140 258 250 268 400 260" stroke="#4A2C16" stroke-opacity=".35" fill="none"/>
-      ${pieces}
-    </svg>`;
-  };
   $$('.station-card').forEach((card, i) => {
     const front = document.createElement('div');
     front.className = 'card-front';
@@ -706,12 +674,14 @@
     const name = $('h3', front).textContent.trim();
     const back = document.createElement('div');
     back.className = 'card-back';
-    back.innerHTML = `<div class="card-back-scene">${tableScene(t.items)}</div>
-      <p class="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
-      <p class="mt-1 font-display text-2xl leading-tight">${name}</p>
-      <p class="mt-2 text-sm leading-relaxed text-creme/70">${t.tools}</p>
-      <button type="button" class="card-back-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
-      <p class="mt-3 text-center text-[10px] uppercase tracking-[0.18em] text-creme/40">Imagem ilustrativa</p>`;
+    back.innerHTML = `<img src="assets/img/${t.img}.jpg" alt="${t.alt}" class="card-back-img" style="object-position:${t.pos}" loading="lazy" decoding="async">
+      <div class="card-back-shade" aria-hidden="true"></div>
+      <div class="card-back-content">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
+        <p class="mt-1 whitespace-nowrap font-display text-[1.45rem] leading-tight">${name}</p>
+        <p class="mt-2 text-sm leading-relaxed text-creme/75">${t.tools}</p>
+        <button type="button" class="card-back-btn mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
+      </div>`;
     card.appendChild(back);
     $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
     // no celular (sem mouse) o card vira com um toque
