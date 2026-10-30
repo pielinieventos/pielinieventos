@@ -252,3 +252,14 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .qpill[aria-pressed="true"] { background: var(--caramelo); border-color: var(--caramelo); color: var(--torra); font-weight: 600; }
 #booking-lock[hidden] { display: none; }
 #sim-km-wrap[hidden] { display: none; }
+
+/* Campo obrigatório não respondido */
+.field-error { border-radius: 1.25rem; outline: 2px solid #D93B3B; outline-offset: 8px; }
+.field-error .sim-legend, .field-error legend, .field-error > label { color: #D93B3B; }
+.field-error .pill, .field-error .qpill, .field-error select { border-color: #D93B3B; }
+.field-error-msg { margin-top: .6rem; display: flex; align-items: center; gap: .4rem; font-size: .8rem; font-weight: 600; color: #D93B3B; }
+.field-error-msg::before { content: "!"; display: inline-flex; height: 1.1rem; width: 1.1rem; align-items: center; justify-content: center; border-radius: 999px; background: #D93B3B; color: #fff; font-size: .7rem; }
+#sim-result .field-error legend, #sim-result .field-error-msg { color: #FF8A80; }
+#sim-result .field-error { outline-color: #FF8A80; }
+#sim-result .field-error .qpill { border-color: #FF8A80; }
+#sim-result .field-error-msg::before { background: #FF8A80; color: var(--torra); }

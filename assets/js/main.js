@@ -865,6 +865,7 @@
     const same = state.event === pill.dataset.value;
     state.event = same ? null : pill.dataset.value;
     state.corporate = !same && pill.dataset.corp === '1';
+    if (!same) clearError($('#sim-event-field'));
     $$('.pill', simEvent).forEach((p) => p.setAttribute('aria-pressed', String(p === pill && !same)));
     renderSim();
   }));
@@ -881,23 +882,62 @@
     if (other) kmInput.focus();
     renderSim();
   });
-  kmInput.addEventListener('input', () => { state.km = clamp(Number(kmInput.value) || 0, 0, 500); renderSim(); });
+  kmInput.addEventListener('input', () => {
+    if (Number(kmInput.value) > 0) clearError(citySelect.closest('div.mt-8'));
+    state.km = clamp(Number(kmInput.value) || 0, 0, 500);
+    renderSim();
+  });
+
+  /* Validação: campo não respondido fica vermelho e a página volta até ele */
+  const markError = (field, msg) => {
+    field.classList.add('field-error');
+    if (!$('.field-error-msg', field)) field.insertAdjacentHTML('beforeend', `<p class="field-error-msg" role="alert">${msg}</p>`);
+  };
+  function clearError(field) {
+    if (!field) return;
+    field.classList.remove('field-error');
+    const m = $('.field-error-msg', field);
+    if (m) m.remove();
+  }
+  const requireFields = (checks) => {
+    const missing = checks.filter(([ok]) => !ok());
+    missing.forEach(([, field, msg]) => markError(field, msg));
+    if (!missing.length) return true;
+    const first = missing[0][1];
+    first.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+    first.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 450, delay: prefersReducedMotion ? 0 : 400 });
+    const focusable = $('button, input, select', first);
+    if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), prefersReducedMotion ? 0 : 700);
+    return false;
+  };
+  const SIM_CHECKS = () => [
+    [() => !!state.event, $('#sim-event-field'), 'Escolha o tipo de evento.'],
+    [() => citySelect.value !== 'other' || Number(kmInput.value) > 0, citySelect.closest('div.mt-8'), 'Informe a distância aproximada até a cafeteria.'],
+    [() => isCustom() || !!state.attractions, $('#sim-attractions-field'), 'Responda se o evento terá outras atrações.'],
+  ];
+  const FILTER_CHECKS = () => Object.keys(state.answers).map((id) => [() => !!state.answers[id], $(`#${id}`).closest('fieldset'), 'Escolha uma opção.']);
+  // Links do funil para o WhatsApp só abrem com tudo respondido
+  ['#sim-menu-link', '#sim-menu-cta', '#sim-custom-cta'].forEach((sel) => $(sel).addEventListener('click', (e) => {
+    if (!requireFields(SIM_CHECKS())) e.preventDefault();
+  }));
+  cta.addEventListener('click', (e) => {
+    if (!state.qualified || !requireFields([...SIM_CHECKS(), ...FILTER_CHECKS()])) {
+      e.preventDefault();
+      if (!state.qualified) $('#investimento').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    }
+  });
 
   // 5. outras atrações (define se a ilha precisa de atendimento ampliado)
   $$('.pill', $('#sim-attractions')).forEach((pill) => pill.addEventListener('click', () => {
     state.attractions = pill.dataset.value;
+    clearError($('#sim-attractions-field'));
     $$('.pill', $('#sim-attractions')).forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
     renderSim();
   }));
 
   // Filtro de qualificação (exige a resposta do passo 5, que altera o valor)
   $('#sim-continue').addEventListener('click', () => {
-    if (!state.attractions) {
-      const field = $('#sim-attractions-field');
-      field.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-      field.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 400, delay: 350 });
-      return;
-    }
+    if (!requireFields(SIM_CHECKS())) return;
     filterBox.hidden = false;
     filterBox.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
   });
@@ -905,10 +945,11 @@
     $$('.qpill', $(`#${id}`)).forEach((b) => b.addEventListener('click', () => {
       state.answers[id] = { value: b.dataset.value, ok: b.dataset.ok === '1' };
       $$('.qpill', $(`#${id}`)).forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
-      checkBtn.disabled = Object.values(state.answers).some((a) => !a);
+      clearError($(`#${id}`).closest('fieldset'));
     }));
   });
   checkBtn.addEventListener('click', () => {
+    if (!requireFields(FILTER_CHECKS())) return;
     state.qualified = Object.values(state.answers).every((a) => a && a.ok);
     passBox.hidden = !state.qualified;
     failBox.hidden = state.qualified;
