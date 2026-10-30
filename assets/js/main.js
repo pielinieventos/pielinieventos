@@ -440,7 +440,7 @@
   // foto de fundo de cada momento (object-position = foco do recorte)
   const MOMENT_PHOTOS = [
     ['momento-boas-vindas', '30% 40%'],
-    ['momento-mesa-doces', '50% 82%'],
+    ['momento-mesa-doces', '62% 58%'],
     ['momento-pos-jantar', '40% 45%'],
     ['momento-pista', '50% 30%'],
     ['momento-empresarial', '45% 45%'],
