@@ -677,7 +677,7 @@
     { img: 'mesa-basica', pos: '62% 55%', alt: 'Barista servindo café no Hario V60, ao lado da prensa francesa e da balança', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
     { img: 'mesa-filtrados', pos: '45% 30%', alt: 'Mesa vista de cima com V60, Koar, Chemex, prensa francesa e chaleira', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
     { img: 'mesa-espressos', pos: '45% 88%', alt: 'Espresso, cappuccino com latte art e macchiato em frente à máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
-    { img: 'mesa-premium-plus', pos: '50% 28%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados de brinde' },
+    { img: 'mesa-premium-plus', pos: '50% 28%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados' },
   ];
   $$('.station-card').forEach((card, i) => {
     const front = document.createElement('div');
@@ -701,7 +701,7 @@
       <div class="card-back-shade" aria-hidden="true"></div>
       <div class="card-back-content">
         <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
-        <p class="mt-1 whitespace-nowrap font-display text-[1.45rem] leading-tight">${name}</p>
+        <p class="card-back-title mt-1 font-display leading-tight">${name}</p>
         <p class="mt-2 text-sm leading-relaxed text-creme/75">${t.tools}</p>
         <button type="button" class="card-back-btn mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
       </div>`;
@@ -896,6 +896,10 @@
   const attractionsLabel = () => ({ sim: 'Sim', nao: 'Não, o café será a atração principal' }[state.attractions] || 'a informar');
   const cityLabel = () => (state.km > PRICING.freeKm ? `${state.city} (~${Math.round(state.km)} km)` : state.city);
 
+  const greeting = () => {
+    const lead = state.leadName.trim();
+    return lead ? `Olá, Pielini Coffee! ☕ Meu nome é ${lead}.` : 'Olá, Pielini Coffee! ☕';
+  };
   const summaryLines = (withPrice) => {
     const lines = [
       `• Evento: ${state.event || 'ainda vou definir'}`,
@@ -965,8 +969,8 @@
       lineRow('Outras atrações', attractionsLabel()),
     ].join('');
 
-    $('#sim-custom-cta').href = waLink(['Olá, Pielini Coffee! ☕', copy.intro, '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
-    const menuMsg = ['Olá, Pielini Coffee! ☕', 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines(true)].join('\n');
+    $('#sim-custom-cta').href = waLink([greeting(), copy.intro, '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
+    const menuMsg = [greeting(), 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines(true)].join('\n');
     $('#sim-menu-link').href = waLink(menuMsg);
     $('#sim-menu-cta').href = waLink(menuMsg);
 
@@ -1084,6 +1088,7 @@
     return false;
   };
   const SIM_CHECKS = () => [
+    [() => state.leadName.trim().length >= 2, $('#sim-name-field'), 'Informe seu nome para podermos falar com você.'],
     [() => !!state.event, $('#sim-event-field'), 'Escolha o tipo de evento.'],
     [() => state.noDate || !!state.eventDate, $('#sim-date-field'), 'Informe a data do evento ou marque “Ainda não tenho data definida”.'],
     [() => citySelect.value !== 'other' || Number(kmInput.value) > 0, citySelect.closest('div.mt-8'), 'Informe a distância aproximada até a cafeteria.'],
@@ -1160,6 +1165,7 @@
   // Resumo da simulação no bloco de agendamento
   function renderSummary() {
     const items = [
+      ['Nome', state.leadName.trim() || 'A informar'],
       ['Evento', state.event || 'A definir'],
       ['Estação', PRICING.plans[state.plan].name],
       ['Convidados', guestsLabel()],
@@ -1172,11 +1178,14 @@
     $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');
   }
 
-  $('#lead-name').addEventListener('input', (e) => { state.leadName = e.target.value; renderMessage(); });
+  $('#lead-name').addEventListener('input', (e) => {
+    state.leadName = e.target.value;
+    if (state.leadName.trim().length >= 2) clearError($('#sim-name-field'));
+    renderSim();
+  });
 
   const buildMessage = () => {
-    const lead = state.leadName.trim();
-    const lines = ['Olá, Pielini Coffee! ☕', `${lead ? `Meu nome é ${lead} e gostaria` : 'Gostaria'} de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines(true)];
+    const lines = [greeting(), `Gostaria de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines(true)];
     const phase = state.answers['q-phase'];
     if (phase) lines.push(`• Planejamento: ${phase.value}`);
     const cupNameValue = state.cup.name.trim();

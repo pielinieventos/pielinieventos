@@ -274,16 +274,19 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .card-front { position: relative; display: flex; flex: 1; flex-direction: column; border-radius: inherit; }
 .station-card.is-active .card-front { border-color: var(--caramelo); }
 .card-back {
-  position: absolute; inset: 0; overflow: hidden;
+  position: absolute; inset: 0; overflow: hidden; display: flex; flex-direction: column;
   border-radius: inherit; background: var(--torra); color: var(--creme); transform: rotateY(180deg);
   box-shadow: 0 30px 60px -30px rgba(30,22,16,.6);
 }
+/* a foto ocupa só o espaço que sobra: o texto e o botão nunca são cortados */
 .card-back-img {
-  position: absolute; inset: 0 0 auto 0; height: 68%; width: 100%; object-fit: cover; backface-visibility: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  position: relative; flex: 1 1 0; min-height: 0; width: 100%; object-fit: cover; backface-visibility: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
 }
 .card-back-shade { display: none; }
-.card-back-content { position: absolute; inset-inline: 0; bottom: 0; padding: 1.3rem 1.4rem 1.4rem; }
+.card-back-content { position: relative; flex: none; margin-top: -1.5rem; padding: 0 1.25rem 1.25rem; }
+.card-back-title { font-size: clamp(1.15rem, 1.5vw, 1.45rem); }
+.card-back-btn { white-space: nowrap; }
 @media (hover: hover) {
   .station-card:hover .card-front { transform: rotateY(-180deg); }
   .station-card:hover .card-back { transform: rotateY(0deg); }

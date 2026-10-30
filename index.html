@@ -496,6 +496,54 @@
 
 
     <!-- =========================================================
+         5b. COPO PERSONALIZADO — aberto a todos
+    ========================================================== -->
+    <section id="copo" data-nav-theme="light" class="relative scroll-mt-20 py-20 sm:py-28">
+      <div class="container-site grid items-center gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4" data-reveal>
+          <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Seu evento no copo</span>
+          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Personalize o <em class="text-pielini">seu copo</em></h2>
+          <p class="mt-6 text-torra/70">Digite o nome do casal, da formanda ou da empresa e a data do evento. A prévia muda na hora — e a personalização vai junto na sua mensagem de agendamento.</p>
+          <p class="mt-5 inline-flex items-center gap-2 rounded-full bg-caramelo/15 px-4 py-2 text-sm font-semibold text-caramelo-dark">🎁 Grátis na Estação Premium Plus</p>
+        </div>
+        <div class="lg:col-span-8" data-reveal style="--rd:.1s">
+        <div class="rounded-[2rem] bg-white/90 p-5 shadow-xl shadow-torra/5 ring-1 ring-torra/5 sm:p-7">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Prévia ao vivo</p>
+            <span id="cup-badge" class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
+          </div>
+          <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
+            <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
+            <svg id="cup-svg" viewBox="0 0 1080 710" class="absolute inset-0 h-full w-full" style="mix-blend-mode:multiply" role="img" aria-labelledby="cup-title">
+              <title id="cup-title">Três copos brancos de café: à esquerda com o emblema da Pielini, ao centro com a personalização do seu evento e à direita com o logotipo Pielini Coffee</title>
+              <g fill="#1E1610" style="color:#1E1610" opacity=".9">
+                <svg x="150" y="311" width="100" height="100" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+                <text id="cup-name-text" x="541" y="364" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="34" letter-spacing="5">ANA &amp; LUCAS</text>
+                <text id="cup-sub-text" x="541" y="401" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="13" letter-spacing="4" fill-opacity=".7">12 · 03 · 2027</text>
+                <svg x="802" y="318" width="178" height="86" viewBox="0 0 376 181" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
+              </g>
+            </svg>
+          </div>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label for="cup-name" class="sr-only">Nome ou iniciais do evento</label>
+              <input id="cup-name" type="text" maxlength="24" autocomplete="off" placeholder="Nome no copo (ex.: Ana &amp; Lucas)" class="w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+            </div>
+            <div class="flex items-stretch gap-2">
+              <div class="inline-flex shrink-0 rounded-2xl border border-torra/15 bg-white p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
+                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="date" aria-pressed="true">Data</button>
+                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="text" aria-pressed="false">Texto</button>
+              </div>
+              <input id="cup-date" type="date" aria-label="Data do evento" class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+              <input id="cup-sub" type="text" maxlength="26" aria-label="Subtítulo do copo" placeholder="Turma 2026" hidden class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          5c. INVESTIMENTO — simulador de orçamento + filtro de qualificação
     ========================================================== -->
     <section id="investimento" data-nav-theme="light" class="relative py-24 sm:py-32">
@@ -503,14 +551,19 @@
         <div class="max-w-2xl" data-reveal>
           <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 04 · Seu investimento</span>
           <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Simule o <em class="text-pielini">investimento</em></h2>
-          <p class="mt-6 text-torra/70">Escolha o tipo de evento, a estação, o número de convidados e a cidade. O valor aparece na hora e, se fizer sentido para você, liberamos o agendamento da degustação.</p>
+          <p class="mt-6 text-torra/70">Informe seu nome e escolha o tipo de evento, a estação, o número de convidados e a cidade. O valor aparece na hora e, se fizer sentido para você, liberamos o agendamento da degustação.</p>
         </div>
 
         <div class="mt-12 grid gap-6 lg:grid-cols-12 lg:items-start" data-reveal>
           <!-- Escolhas -->
           <div class="rounded-[2rem] bg-white/90 p-6 shadow-xl shadow-torra/5 ring-1 ring-torra/5 sm:p-9 lg:col-span-7">
+            <div id="sim-name-field" class="mb-8 scroll-mt-28">
+              <label for="lead-name" class="sim-legend"><span>1</span> Seu nome</label>
+              <input id="lead-name" type="text" maxlength="40" autocomplete="name" placeholder="Como podemos te chamar?" class="mt-3 w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+            </div>
+
             <fieldset id="sim-event-field" class="scroll-mt-28">
-              <legend class="sim-legend"><span>1</span> Tipo de evento</legend>
+              <legend class="sim-legend"><span>2</span> Tipo de evento</legend>
               <div class="mt-3 flex flex-wrap gap-2" id="sim-event">
                   <button type="button" class="pill" aria-pressed="false" data-value="Casamento" data-corp="0"><i data-lucide="check" class="pill-check"></i>Casamento</button>
                   <button type="button" class="pill" aria-pressed="false" data-value="15 Anos" data-corp="0"><i data-lucide="check" class="pill-check"></i>15 Anos</button>
@@ -521,7 +574,7 @@
             </fieldset>
 
             <fieldset class="mt-8 scroll-mt-28" id="sim-date-field">
-              <legend class="sim-legend"><span>2</span> Data do evento</legend>
+              <legend class="sim-legend"><span>3</span> Data do evento</legend>
               <div class="mt-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                 <input id="sim-date" type="date" aria-label="Data do evento" class="w-full rounded-2xl border border-torra/15 bg-white px-4 py-3.5 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
                 <label class="flex cursor-pointer items-center gap-2.5 rounded-2xl border border-torra/15 bg-white px-4 py-3.5 text-sm">
@@ -532,7 +585,7 @@
             </fieldset>
 
             <fieldset class="mt-8">
-              <legend class="sim-legend"><span>3</span> Estação</legend>
+              <legend class="sim-legend"><span>4</span> Estação</legend>
               <div class="mt-3 grid gap-3 sm:grid-cols-2" id="sim-plans">
                   <button type="button" class="sim-plan" data-plan="0" aria-pressed="false">
                     <span class="block font-display text-xl leading-tight">Estação Básica</span>
@@ -559,7 +612,7 @@
 
             <div class="mt-8">
               <div class="flex items-baseline justify-between gap-3">
-                <label for="sim-guests" class="sim-legend"><span>4</span> Número de convidados</label>
+                <label for="sim-guests" class="sim-legend"><span>5</span> Número de convidados</label>
                 <output id="sim-guests-out" for="sim-guests" class="font-display text-3xl font-semibold text-torra">80</output>
               </div>
               <input id="sim-guests" type="range" min="20" max="250" step="10" value="80" class="sim-range mt-4 w-full" aria-describedby="sim-guests-help">
@@ -567,7 +620,7 @@
             </div>
 
             <div class="mt-8">
-              <label for="sim-city" class="sim-legend"><span>5</span> Cidade do evento</label>
+              <label for="sim-city" class="sim-legend"><span>6</span> Cidade do evento</label>
               <div class="mt-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
                 <select id="sim-city" class="w-full rounded-2xl border border-torra/15 bg-white px-4 py-3.5 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
                   <option value="0">Novo Hamburgo</option>
@@ -598,7 +651,7 @@
             </div>
 
             <fieldset class="mt-8 scroll-mt-28" id="sim-attractions-field">
-              <legend class="sim-legend"><span>6</span> O evento terá outras atrações?</legend>
+              <legend class="sim-legend"><span>7</span> O evento terá outras atrações?</legend>
               <p class="mt-2 text-xs text-torra/50">Open bar, bar de drinks, food truck, estação de doces, chopp… Isso nos ajuda a dimensionar o atendimento da ilha.</p>
               <div class="mt-3 flex flex-wrap gap-2" id="sim-attractions">
                 <button type="button" class="pill" aria-pressed="false" data-value="sim"><i data-lucide="check" class="pill-check"></i>Sim, terá outras atrações</button>
@@ -612,12 +665,12 @@
             <div id="sim-standard">
               <p class="eyebrow text-caramelo-light">Investimento estimado</p>
               <p class="mt-3 font-display text-6xl font-semibold leading-none" id="sim-total">R$ 0</p>
-              <p id="sim-hint" class="mt-3 text-sm text-caramelo-light">Responda o item 6 para ver o valor final.</p>
+              <p id="sim-hint" class="mt-3 text-sm text-caramelo-light">Responda o item 7 para ver o valor final.</p>
               <ul id="sim-lines" class="mt-6 space-y-2.5 border-t border-creme/10 pt-5 text-sm"></ul>
               <div id="sim-offer" aria-live="polite"></div>
               <p class="mt-5 text-xs leading-relaxed text-creme/55">Valor de referência para até 100 convidados. Personalização de copos e horas extras podem ser adicionadas. A proposta final é confirmada após a degustação.</p>
               <button type="button" id="sim-continue" class="btn-gold mt-7 w-full py-4"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Quero agendar uma degustação</button>
-              <p class="sim-gate-hint mt-3 text-center text-xs text-caramelo-light">Responda os itens 1 a 6 para continuar.</p>
+              <p class="sim-gate-hint mt-3 text-center text-xs text-caramelo-light">Responda os itens 1 a 7 para continuar.</p>
               <a id="sim-menu-link" href="#" target="_blank" rel="noopener" class="mt-4 flex items-center justify-center gap-2 text-sm text-creme/70 underline-offset-4 transition hover:text-caramelo-light hover:underline">Ainda estou pesquisando · receber o cardápio no WhatsApp</a>
             </div>
 
@@ -719,44 +772,6 @@
               <dl id="sim-summary" class="mt-3 grid grid-cols-2 gap-3 text-sm"></dl>
             </div>
 
-            <!-- Copos para personalizar (Estação Premium Plus) -->
-            <div id="copo" class="mt-8 scroll-mt-28 border-t border-torra/10 pt-7">
-              <div class="flex flex-wrap items-baseline justify-between gap-2">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Personalize o copo do seu evento</p>
-                <span id="cup-badge" class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
-              </div>
-              <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
-                <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
-                <svg id="cup-svg" viewBox="0 0 1080 710" class="absolute inset-0 h-full w-full" style="mix-blend-mode:multiply" role="img" aria-labelledby="cup-title">
-                  <title id="cup-title">Três copos brancos de café: à esquerda com o emblema da Pielini, ao centro com a personalização do seu evento e à direita com o logotipo Pielini Coffee</title>
-                  <g fill="#1E1610" style="color:#1E1610" opacity=".9">
-                    <svg x="150" y="311" width="100" height="100" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-                    <text id="cup-name-text" x="541" y="364" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="34" letter-spacing="5">ANA &amp; LUCAS</text>
-                    <text id="cup-sub-text" x="541" y="401" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="13" letter-spacing="4" fill-opacity=".7">12 · 03 · 2027</text>
-                    <svg x="802" y="318" width="178" height="86" viewBox="0 0 376 181" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
-                  </g>
-                </svg>
-              </div>
-              <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label for="cup-name" class="sr-only">Nome ou iniciais do evento</label>
-                  <input id="cup-name" type="text" maxlength="24" autocomplete="off" placeholder="Nome no copo (ex.: Ana &amp; Lucas)" class="w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-                </div>
-                <div class="flex items-stretch gap-2">
-                  <div class="inline-flex shrink-0 rounded-2xl border border-torra/15 bg-white p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
-                    <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="date" aria-pressed="true">Data</button>
-                    <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="text" aria-pressed="false">Texto</button>
-                  </div>
-                  <input id="cup-date" type="date" aria-label="Data do evento" class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-                  <input id="cup-sub" type="text" maxlength="26" aria-label="Subtítulo do copo" placeholder="Turma 2026" hidden class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-7">
-              <label for="lead-name" class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Seu nome <span class="normal-case tracking-normal text-torra/40">(opcional)</span></label>
-              <input id="lead-name" type="text" maxlength="40" autocomplete="given-name" placeholder="Como podemos te chamar?" class="mt-3 w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-            </div>
 
             <div class="mt-8 rounded-2xl bg-[#ECE5DD] p-4 sm:p-5">
               <p class="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-torra/50"><i data-lucide="eye" class="h-3.5 w-3.5"></i> Prévia da mensagem</p>
