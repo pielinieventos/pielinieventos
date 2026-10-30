@@ -90,7 +90,7 @@
         <ul class="hidden items-center gap-6 text-sm font-medium xl:flex">
           <li><button type="button" class="nav-link" data-open-about>Quem somos nós?</button></li>
           <li><a class="nav-link" href="#protagonista">O Café</a></li>
-          <li><a class="nav-link" href="#estacoes">Conhecer as Ilhas</a></li>
+          <li><a class="nav-link" href="#metodos">Métodos</a></li>
         </ul>
       </div>
 
@@ -100,8 +100,8 @@
 
       <div class="flex items-center gap-6">
         <ul class="hidden items-center gap-6 text-sm font-medium xl:flex">
-          <li><a class="nav-link" href="#metodos">Métodos</a></li>
           <li><a class="nav-link" href="#copo">Seu Copo</a></li>
+          <li><a class="nav-link" href="#estacoes">Conhecer as Ilhas</a></li>
         </ul>
         <a href="#investimento" class="btn-gold hidden px-5 py-2.5 lg:inline-flex">
           <i data-lucide="calculator" class="h-4 w-4"></i> Planos e valores
@@ -119,9 +119,9 @@
       <ul class="container-site flex flex-col gap-1 py-4 font-display text-2xl">
         <li><button type="button" class="block w-full py-2 text-left" data-open-about>Quem somos nós?</button></li>
         <li><a class="block py-2" href="#protagonista">O Café como Protagonista</a></li>
-        <li><a class="block py-2" href="#estacoes">Conhecer as Ilhas</a></li>
         <li><a class="block py-2" href="#metodos">Métodos de Preparo</a></li>
         <li><a class="block py-2" href="#copo">Copo Personalizado</a></li>
+        <li><a class="block py-2" href="#estacoes">Conhecer as Ilhas</a></li>
         <li class="pt-3"><a class="btn-gold w-full font-sans text-sm" href="#investimento"><i data-lucide="calculator" class="h-4 w-4"></i> Planos e valores</a></li>
       </ul>
     </div>
@@ -306,6 +306,102 @@
     </section>
 
     <!-- =========================================================
+         5a. EXPLORADOR DE MÉTODOS
+    ========================================================== -->
+    <section id="metodos" data-nav-theme="light" class="relative py-24 sm:py-32">
+      <div class="container-site">
+        <div class="max-w-2xl" data-reveal>
+          <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 02 · Guia sensorial</span>
+          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Explore os <em class="text-pielini">métodos</em></h2>
+          <p class="mt-6 text-torra/70">Cada método conta uma história diferente na xícara — e no visual da ilha. Escolha um preparo e descubra seu perfil.</p>
+        </div>
+
+        <div class="mt-12 grid gap-8 lg:grid-cols-12 lg:items-start" data-reveal>
+          <div role="tablist" aria-label="Métodos de preparo" aria-orientation="vertical" id="method-tabs" class="flex flex-col pr-5 lg:col-span-4">
+            <button role="tab" class="method-btn" data-method="v60" aria-selected="true" aria-controls="method-panel"><span class="method-num">01</span><span class="flex-1 text-left">Hario V60</span><i data-lucide="droplets" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="prensa" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">02</span><span class="flex-1 text-left">Prensa Francesa</span><i data-lucide="coffee" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="koar" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">03</span><span class="flex-1 text-left">Koar</span><i data-lucide="gem" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="chemex" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">04</span><span class="flex-1 text-left">Chemex</span><i data-lucide="glass-water" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="espresso" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">05</span><span class="flex-1 text-left">Clássicos de Espresso</span><i data-lucide="flame" class="method-ico h-5 w-5"></i></button>
+            <button role="tab" class="method-btn" data-method="soda" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">06</span><span class="flex-1 text-left">Sodas Italianas</span><i data-lucide="cup-soda" class="method-ico h-5 w-5"></i></button>
+          </div>
+
+        <div id="method-panel" role="tabpanel" class="grid scroll-mt-28 overflow-hidden rounded-[2rem] bg-white/70 ring-1 ring-torra/5 lg:col-span-8 lg:grid-cols-2">
+          <div class="method-art relative flex min-h-[360px] items-center justify-center overflow-hidden bg-gradient-to-br from-offwhite to-[#E2D6C2] p-10">
+            <div class="absolute inset-6 rounded-[1.5rem] border border-torra/10" aria-hidden="true"></div>
+            <div class="absolute inset-x-10 top-14 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50" id="method-station"></div>
+            <div id="method-art" class="relative w-[62%] max-w-[300px]"></div>
+          </div>
+          <div class="p-8 sm:p-12" id="method-info">
+            <p class="eyebrow text-caramelo-dark" data-k="kicker"></p>
+            <h3 class="mt-3 font-display text-4xl font-medium sm:text-5xl" data-k="name"></h3>
+            <dl class="mt-8 space-y-6">
+              <div>
+                <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="coffee" class="h-3.5 w-3.5"></i> Perfil da bebida</dt>
+                <dd class="mt-2 text-lg" data-k="profile"></dd>
+              </div>
+              <div>
+                <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="eye" class="h-3.5 w-3.5"></i> Impacto visual na ilha</dt>
+                <dd class="mt-2 text-torra/75" data-k="visual"></dd>
+              </div>
+            </dl>
+            <div class="mt-8 grid gap-3 border-t border-torra/10 pt-6" data-k="meters"></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         5b. COPO PERSONALIZADO — aberto a todos
+    ========================================================== -->
+    <section id="copo" data-nav-theme="light" class="relative scroll-mt-20 py-20 sm:py-28">
+      <div class="container-site grid items-center gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4" data-reveal>
+          <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Seu evento no copo</span>
+          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Personalize o <em class="text-pielini">seu copo</em></h2>
+          <p class="mt-6 text-torra/70">Digite o nome do casal, da formanda ou da empresa e a data do evento. A prévia muda na hora — e a personalização vai junto na sua mensagem de agendamento.</p>
+          <p class="mt-5 inline-flex items-center gap-2 rounded-full bg-caramelo/15 px-4 py-2 text-sm font-semibold text-caramelo-dark">🎁 Grátis na Estação Premium Plus</p>
+        </div>
+        <div class="lg:col-span-8" data-reveal style="--rd:.1s">
+        <div class="rounded-[2rem] bg-white/90 p-5 shadow-xl shadow-torra/5 ring-1 ring-torra/5 sm:p-7">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Prévia ao vivo</p>
+            <span id="cup-badge" class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
+          </div>
+          <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
+            <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
+            <svg id="cup-svg" viewBox="0 0 1080 710" class="absolute inset-0 h-full w-full" style="mix-blend-mode:multiply" role="img" aria-labelledby="cup-title">
+              <title id="cup-title">Três copos brancos de café: à esquerda com o emblema da Pielini, ao centro com a personalização do seu evento e à direita com o logotipo Pielini Coffee</title>
+              <g fill="#1E1610" style="color:#1E1610" opacity=".9">
+                <svg x="150" y="311" width="100" height="100" aria-hidden="true"><use href="#pielini-emblema"/></svg>
+                <text id="cup-name-text" x="541" y="364" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="34" letter-spacing="5">ANA &amp; LUCAS</text>
+                <text id="cup-sub-text" x="541" y="401" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="13" letter-spacing="4" fill-opacity=".7">12 · 03 · 2027</text>
+                <svg x="802" y="318" width="178" height="86" viewBox="0 0 376 181" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
+              </g>
+            </svg>
+          </div>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label for="cup-name" class="sr-only">Nome ou iniciais do evento</label>
+              <input id="cup-name" type="text" maxlength="24" autocomplete="off" placeholder="Nome no copo (ex.: Ana &amp; Lucas)" class="w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+            </div>
+            <div class="flex items-stretch gap-2">
+              <div class="inline-flex shrink-0 rounded-2xl border border-torra/15 bg-white p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
+                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="date" aria-pressed="true">Data</button>
+                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="text" aria-pressed="false">Texto</button>
+              </div>
+              <input id="cup-date" type="date" aria-label="Data do evento" class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+              <input id="cup-sub" type="text" maxlength="26" aria-label="Subtítulo do copo" placeholder="Turma 2026" hidden class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          4. MENU DE EXPERIÊNCIAS — AS 4 ILHAS
     ========================================================== -->
     <section id="estacoes" data-nav-theme="light" class="relative overflow-hidden py-24 text-torra sm:py-32">
@@ -315,7 +411,7 @@
       <div class="container-site relative">
         <div class="grid gap-10 lg:grid-cols-2 lg:items-end">
           <div data-reveal>
-            <span class="chapter-slide eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
+            <span class="chapter-slide eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 03 · Menu de experiências</span>
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Menu de <em class="text-caramelo-dark">Experiências</em></h2>
             <p class="mt-6 max-w-lg text-torra/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Valores de referência para até 100 convidados, com atendimento, bancada e todos os insumos inclusos.</p>
           </div>
@@ -443,102 +539,6 @@
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Transporte (até 10 km)</li>
           </ul>
           <p class="mt-4 text-sm text-torra/55">Personalização de copos e horas extras podem ser contratadas em qualquer estação. Acima de 100 convidados, montamos uma proposta sob medida.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         5a. EXPLORADOR DE MÉTODOS
-    ========================================================== -->
-    <section id="metodos" data-nav-theme="light" class="relative py-24 sm:py-32">
-      <div class="container-site">
-        <div class="max-w-2xl" data-reveal>
-          <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 03 · Guia sensorial</span>
-          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Explore os <em class="text-pielini">métodos</em></h2>
-          <p class="mt-6 text-torra/70">Cada método conta uma história diferente na xícara — e no visual da ilha. Escolha um preparo e descubra seu perfil.</p>
-        </div>
-
-        <div class="mt-12 grid gap-8 lg:grid-cols-12 lg:items-start" data-reveal>
-          <div role="tablist" aria-label="Métodos de preparo" aria-orientation="vertical" id="method-tabs" class="flex flex-col pr-5 lg:col-span-4">
-            <button role="tab" class="method-btn" data-method="v60" aria-selected="true" aria-controls="method-panel"><span class="method-num">01</span><span class="flex-1 text-left">Hario V60</span><i data-lucide="droplets" class="method-ico h-5 w-5"></i></button>
-            <button role="tab" class="method-btn" data-method="prensa" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">02</span><span class="flex-1 text-left">Prensa Francesa</span><i data-lucide="coffee" class="method-ico h-5 w-5"></i></button>
-            <button role="tab" class="method-btn" data-method="koar" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">03</span><span class="flex-1 text-left">Koar</span><i data-lucide="gem" class="method-ico h-5 w-5"></i></button>
-            <button role="tab" class="method-btn" data-method="chemex" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">04</span><span class="flex-1 text-left">Chemex</span><i data-lucide="glass-water" class="method-ico h-5 w-5"></i></button>
-            <button role="tab" class="method-btn" data-method="espresso" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">05</span><span class="flex-1 text-left">Clássicos de Espresso</span><i data-lucide="flame" class="method-ico h-5 w-5"></i></button>
-            <button role="tab" class="method-btn" data-method="soda" aria-selected="false" tabindex="-1" aria-controls="method-panel"><span class="method-num">06</span><span class="flex-1 text-left">Sodas Italianas</span><i data-lucide="cup-soda" class="method-ico h-5 w-5"></i></button>
-          </div>
-
-        <div id="method-panel" role="tabpanel" class="grid scroll-mt-28 overflow-hidden rounded-[2rem] bg-white/70 ring-1 ring-torra/5 lg:col-span-8 lg:grid-cols-2">
-          <div class="method-art relative flex min-h-[360px] items-center justify-center overflow-hidden bg-gradient-to-br from-offwhite to-[#E2D6C2] p-10">
-            <div class="absolute inset-6 rounded-[1.5rem] border border-torra/10" aria-hidden="true"></div>
-            <div class="absolute inset-x-10 top-14 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50" id="method-station"></div>
-            <div id="method-art" class="relative w-[62%] max-w-[300px]"></div>
-          </div>
-          <div class="p-8 sm:p-12" id="method-info">
-            <p class="eyebrow text-caramelo-dark" data-k="kicker"></p>
-            <h3 class="mt-3 font-display text-4xl font-medium sm:text-5xl" data-k="name"></h3>
-            <dl class="mt-8 space-y-6">
-              <div>
-                <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="coffee" class="h-3.5 w-3.5"></i> Perfil da bebida</dt>
-                <dd class="mt-2 text-lg" data-k="profile"></dd>
-              </div>
-              <div>
-                <dt class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/50"><i data-lucide="eye" class="h-3.5 w-3.5"></i> Impacto visual na ilha</dt>
-                <dd class="mt-2 text-torra/75" data-k="visual"></dd>
-              </div>
-            </dl>
-            <div class="mt-8 grid gap-3 border-t border-torra/10 pt-6" data-k="meters"></div>
-          </div>
-        </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- =========================================================
-         5b. COPO PERSONALIZADO — aberto a todos
-    ========================================================== -->
-    <section id="copo" data-nav-theme="light" class="relative scroll-mt-20 py-20 sm:py-28">
-      <div class="container-site grid items-center gap-10 lg:grid-cols-12">
-        <div class="lg:col-span-4" data-reveal>
-          <span class="eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Seu evento no copo</span>
-          <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Personalize o <em class="text-pielini">seu copo</em></h2>
-          <p class="mt-6 text-torra/70">Digite o nome do casal, da formanda ou da empresa e a data do evento. A prévia muda na hora — e a personalização vai junto na sua mensagem de agendamento.</p>
-          <p class="mt-5 inline-flex items-center gap-2 rounded-full bg-caramelo/15 px-4 py-2 text-sm font-semibold text-caramelo-dark">🎁 Grátis na Estação Premium Plus</p>
-        </div>
-        <div class="lg:col-span-8" data-reveal style="--rd:.1s">
-        <div class="rounded-[2rem] bg-white/90 p-5 shadow-xl shadow-torra/5 ring-1 ring-torra/5 sm:p-7">
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/60">Prévia ao vivo</p>
-            <span id="cup-badge" class="text-[11px] text-torra/45">Opcional · disponível em qualquer estação</span>
-          </div>
-          <div class="relative mt-3 overflow-hidden rounded-2xl ring-1 ring-torra/5">
-            <img src="assets/img/copos-pielini.jpg" alt="" class="block w-full" width="1080" height="710" loading="lazy">
-            <svg id="cup-svg" viewBox="0 0 1080 710" class="absolute inset-0 h-full w-full" style="mix-blend-mode:multiply" role="img" aria-labelledby="cup-title">
-              <title id="cup-title">Três copos brancos de café: à esquerda com o emblema da Pielini, ao centro com a personalização do seu evento e à direita com o logotipo Pielini Coffee</title>
-              <g fill="#1E1610" style="color:#1E1610" opacity=".9">
-                <svg x="150" y="311" width="100" height="100" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-                <text id="cup-name-text" x="541" y="364" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="300" font-size="34" letter-spacing="5">ANA &amp; LUCAS</text>
-                <text id="cup-sub-text" x="541" y="401" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="13" letter-spacing="4" fill-opacity=".7">12 · 03 · 2027</text>
-                <svg x="802" y="318" width="178" height="86" viewBox="0 0 376 181" aria-hidden="true"><use href="#pielini-logotipo"/></svg>
-              </g>
-            </svg>
-          </div>
-          <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            <div>
-              <label for="cup-name" class="sr-only">Nome ou iniciais do evento</label>
-              <input id="cup-name" type="text" maxlength="24" autocomplete="off" placeholder="Nome no copo (ex.: Ana &amp; Lucas)" class="w-full rounded-2xl border border-torra/15 bg-white px-5 py-3.5 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-            </div>
-            <div class="flex items-stretch gap-2">
-              <div class="inline-flex shrink-0 rounded-2xl border border-torra/15 bg-white p-1 text-xs font-semibold" role="group" aria-label="Tipo de complemento">
-                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="date" aria-pressed="true">Data</button>
-                <button type="button" class="seg-btn rounded-xl px-3 transition" data-sub-mode="text" aria-pressed="false">Texto</button>
-              </div>
-              <input id="cup-date" type="date" aria-label="Data do evento" class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-              <input id="cup-sub" type="text" maxlength="26" aria-label="Subtítulo do copo" placeholder="Turma 2026" hidden class="min-w-0 flex-1 rounded-2xl border border-torra/15 bg-white px-4 py-3 outline-none transition placeholder:text-torra/35 focus:border-pielini focus:ring-4 focus:ring-pielini/10">
-            </div>
-          </div>
-        </div>
         </div>
       </div>
     </section>
