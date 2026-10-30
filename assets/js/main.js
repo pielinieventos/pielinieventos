@@ -21,6 +21,7 @@
     plan: 2,
     guests: 80,
     city: 'Novo Hamburgo',
+    attractions: null,     // 'sim' | 'nao'
     km: 0,
     answers: { 'q-date': null, 'q-budget': null, 'q-phase': null },
     qualified: false,
@@ -36,7 +37,12 @@
       { name: 'Estação Espressos', price: 2190 },
       { name: 'Estação Premium Plus', price: 2390 },
     ],
-    maxGuests: 100,          // acima disso: proposta sob medida (2 baristas)
+    maxGuests: 100,          // acima disso: proposta sob medida pelo WhatsApp
+    // Equipe extra (o cliente vê só "atendimento ampliado", nunca a quantidade de baristas):
+    // +1 barista nas estações com espresso acima de 80 convidados
+    // +1 barista quando o café for a atração principal (sem outras atrações no evento)
+    espressoGuestsLimit: 80,
+    extraStaffFee: 200,      // valor cobrado por barista extra — ajuste aqui
     corporateMarkup: 0.15,   // eventos corporativos: +15%
     freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
     perKm: 1,                // R$ por km acima do limite
@@ -788,10 +794,13 @@
     const corp = state.corporate ? Math.round((base * PRICING.corporateMarkup) / 10) * 10 : 0;
     const extraKm = Math.max(0, Math.round(state.km) - PRICING.freeKm);
     const travel = extraKm * PRICING.perKm;
-    return { base, corp, extraKm, travel, total: base + corp + travel };
+    const extraStaff = (state.plan >= 2 && state.guests > PRICING.espressoGuestsLimit ? 1 : 0) + (state.attractions === 'nao' ? 1 : 0);
+    const staff = extraStaff * PRICING.extraStaffFee;
+    return { base, corp, extraKm, travel, extraStaff, staff, total: base + corp + travel + staff };
   };
   const isCustom = () => state.guests > PRICING.maxGuests;
   const guestsLabel = () => (state.guests >= 250 ? '250 ou mais' : String(state.guests));
+  const attractionsLabel = () => ({ sim: 'Sim', nao: 'Não, o café será a atração principal' }[state.attractions] || 'a informar');
   const cityLabel = () => (state.km > PRICING.freeKm ? `${state.city} (~${Math.round(state.km)} km)` : state.city);
 
   const summaryLines = (withPrice) => {
@@ -800,7 +809,9 @@
       `• Estação: ${PRICING.plans[state.plan].name}`,
       `• Convidados: ${guestsLabel()}`,
       `• Cidade: ${cityLabel()}`,
+      `• Outras atrações no evento: ${attractionsLabel()}`,
     ];
+    if (!isCustom() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
     if (withPrice && !isCustom()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
     return lines;
   };
@@ -816,18 +827,20 @@
 
     const q = quote();
     $('#sim-total').textContent = brl(q.total);
+    $('#sim-hint').hidden = !!state.attractions;
     $('#sim-lines').innerHTML = [
       lineRow(PRICING.plans[state.plan].name, brl(q.base)),
       state.corporate ? lineRow('Evento corporativo (+15%)', `+ ${brl(q.corp)}`) : '',
       lineRow('Deslocamento', q.travel ? `+ ${brl(q.travel)} <span class="text-creme/50">(${q.extraKm} km além de 10 km)</span>` : 'incluso'),
-      lineRow('Barista', '1 incluso'),
+      q.staff ? lineRow('Atendimento ampliado', `+ ${brl(q.staff)}`) : '',
+      lineRow('Atendimento de barista', 'incluso'),
       lineRow('Insumos, bancada e equipamentos', 'inclusos'),
     ].join('');
     $('#sim-custom-lines').innerHTML = [
       lineRow('Estação', PRICING.plans[state.plan].name),
       lineRow('Convidados', guestsLabel()),
       lineRow('Cidade', cityLabel()),
-      lineRow('Baristas', '2'),
+      lineRow('Outras atrações', attractionsLabel()),
     ].join('');
 
     $('#sim-custom-cta').href = waLink(['Olá, Pielini Coffee! ☕', 'Gostaria de uma *proposta personalizada* para um evento com mais de 100 convidados.', '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
@@ -870,8 +883,21 @@
   });
   kmInput.addEventListener('input', () => { state.km = clamp(Number(kmInput.value) || 0, 0, 500); renderSim(); });
 
-  // Filtro de qualificação
+  // 5. outras atrações (define se a ilha precisa de atendimento ampliado)
+  $$('.pill', $('#sim-attractions')).forEach((pill) => pill.addEventListener('click', () => {
+    state.attractions = pill.dataset.value;
+    $$('.pill', $('#sim-attractions')).forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
+    renderSim();
+  }));
+
+  // Filtro de qualificação (exige a resposta do passo 5, que altera o valor)
   $('#sim-continue').addEventListener('click', () => {
+    if (!state.attractions) {
+      const field = $('#sim-attractions-field');
+      field.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+      field.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 400, delay: 350 });
+      return;
+    }
     filterBox.hidden = false;
     filterBox.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
   });
@@ -900,6 +926,7 @@
       ['Estação', PRICING.plans[state.plan].name],
       ['Convidados', guestsLabel()],
       ['Cidade', cityLabel()],
+      ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
       ['Investimento estimado', isCustom() ? 'Proposta sob medida' : brl(quote().total)],
       ['Data do evento', state.answers['q-date'] ? DATE_LABELS[state.answers['q-date'].value] : 'A informar'],
     ];

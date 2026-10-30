@@ -311,7 +311,7 @@
           <div data-reveal>
             <span class="chapter-slide eyebrow text-caramelo-dark"><span class="h-px w-8 bg-caramelo"></span> Capítulo 02</span>
             <h2 class="mt-5 font-display text-5xl font-medium leading-[1] sm:text-6xl">Menu de <em class="text-caramelo-dark">Experiências</em></h2>
-            <p class="mt-6 max-w-lg text-torra/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Valores de referência para até 100 convidados, com barista, bancada e todos os insumos inclusos.</p>
+            <p class="mt-6 max-w-lg text-torra/70">Quatro ilhas de café, cada uma um degrau acima na jornada sensorial. Valores de referência para até 100 convidados, com atendimento, bancada e todos os insumos inclusos.</p>
           </div>
 
           <!-- Barra de nível de experiência -->
@@ -424,7 +424,7 @@
         <div class="mx-auto mt-10 lg:w-[90%]" data-reveal>
           <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-torra/55">Incluso em todas as estações</p>
           <ul class="mt-4 flex flex-wrap gap-2 text-sm text-torra/80">
-            <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>1 barista (até 100 convidados)</li>
+            <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Atendimento de barista</li>
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Café especial de torra própria</li>
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Moedor, balança e equipamentos</li>
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Bancada</li>
@@ -436,7 +436,7 @@
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Presente dos noivos</li>
             <li class="flex items-center gap-2 rounded-full border border-torra/10 bg-white/70 px-3.5 py-1.5"><i data-lucide="check" class="h-3.5 w-3.5 text-pielini"></i>Transporte (até 10 km)</li>
           </ul>
-          <p class="mt-4 text-sm text-torra/55">Personalização de copos e horas extras podem ser contratadas em qualquer estação. Acima de 100 convidados, a ilha conta com 2 baristas e proposta sob medida.</p>
+          <p class="mt-4 text-sm text-torra/55">Personalização de copos e horas extras podem ser contratadas em qualquer estação. Acima de 100 convidados, montamos uma proposta sob medida.</p>
         </div>
       </div>
     </section>
@@ -546,7 +546,7 @@
                 <output id="sim-guests-out" for="sim-guests" class="font-display text-3xl font-semibold text-torra">80</output>
               </div>
               <input id="sim-guests" type="range" min="20" max="250" step="10" value="80" class="sim-range mt-4 w-full" aria-describedby="sim-guests-help">
-              <div class="mt-1 flex justify-between text-[11px] font-semibold text-torra/45" id="sim-guests-help"><span>20</span><span>100 · 1 barista</span><span>250+ · 2 baristas</span></div>
+              <div class="mt-1 flex justify-between text-[11px] font-semibold text-torra/45" id="sim-guests-help"><span>20</span><span>100</span><span>250+</span></div>
             </div>
 
             <div class="mt-8">
@@ -579,6 +579,15 @@
               </div>
               <p class="mt-2 text-xs text-torra/50">Até 10 km da cafeteria o deslocamento é incluso. Acima disso, R$ 1 por km. Distâncias aproximadas.</p>
             </div>
+
+            <fieldset class="mt-8 scroll-mt-28" id="sim-attractions-field">
+              <legend class="sim-legend"><span>5</span> O evento terá outras atrações?</legend>
+              <p class="mt-2 text-xs text-torra/50">Open bar, bar de drinks, food truck, estação de doces, chopp… Isso nos ajuda a dimensionar o atendimento da ilha.</p>
+              <div class="mt-3 flex flex-wrap gap-2" id="sim-attractions">
+                <button type="button" class="pill" aria-pressed="false" data-value="sim"><i data-lucide="check" class="pill-check"></i>Sim, terá outras atrações</button>
+                <button type="button" class="pill" aria-pressed="false" data-value="nao"><i data-lucide="check" class="pill-check"></i>Não, o café será a atração principal</button>
+              </div>
+            </fieldset>
           </div>
 
           <!-- Resultado + filtro -->
@@ -586,6 +595,7 @@
             <div id="sim-standard">
               <p class="eyebrow text-caramelo-light">Investimento estimado</p>
               <p class="mt-3 font-display text-6xl font-semibold leading-none" id="sim-total">R$ 0</p>
+              <p id="sim-hint" class="mt-3 text-sm text-caramelo-light">Responda o item 5 para ver o valor final.</p>
               <ul id="sim-lines" class="mt-6 space-y-2.5 border-t border-creme/10 pt-5 text-sm"></ul>
               <p class="mt-5 text-xs leading-relaxed text-creme/55">Valor de referência para até 100 convidados. Personalização de copos e horas extras podem ser adicionadas. A proposta final é confirmada após a degustação.</p>
               <button type="button" id="sim-continue" class="btn-gold mt-7 w-full py-4"><i data-lucide="calendar-heart" class="h-4 w-4"></i> Quero agendar uma degustação</button>
@@ -595,7 +605,7 @@
             <div id="sim-custom" hidden>
               <p class="eyebrow text-caramelo-light">Mais de 100 convidados</p>
               <p class="mt-3 font-display text-5xl font-semibold leading-none">Proposta sob medida</p>
-              <p class="mt-5 leading-relaxed text-creme/75">Para eventos maiores, a ilha conta com 2 baristas e montamos o orçamento de acordo com o seu evento. Envie os dados e respondemos pelo WhatsApp.</p>
+              <p class="mt-5 leading-relaxed text-creme/75">Para eventos maiores, dimensionamos a ilha e montamos o orçamento de acordo com o seu evento. Envie os dados e respondemos pelo WhatsApp.</p>
               <ul id="sim-custom-lines" class="mt-6 space-y-2.5 border-t border-creme/10 pt-5 text-sm"></ul>
               <a id="sim-custom-cta" href="#" target="_blank" rel="noopener" class="btn-gold mt-7 w-full py-4"><svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23z"/></svg> Solicitar proposta personalizada</a>
             </div>
