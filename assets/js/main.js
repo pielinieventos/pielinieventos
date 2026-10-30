@@ -23,7 +23,9 @@
     city: 'Novo Hamburgo',
     attractions: null,     // 'sim' | 'nao'
     km: 0,
-    answers: { 'q-date': null, 'q-budget': null, 'q-phase': null },
+    eventDate: '',         // AAAA-MM-DD
+    noDate: false,         // "Ainda não tenho data definida"
+    answers: { 'q-budget': null, 'q-phase': null },
     qualified: false,
     leadName: '',
     cup: { name: '', subMode: 'date', date: '', sub: '' },
@@ -45,7 +47,6 @@
     extraStaffFee: 200,      // valor cobrado por barista extra — ajuste aqui
     giftPlan: 3,             // Premium Plus ganha a personalização dos copos de brinde
     upsellFrom: 2,           // quem escolhe Espressos vê a oferta de upgrade para a Plus
-    corporateMarkup: 0.15,   // eventos corporativos: +15%
     freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
     perKm: 1,                // R$ por km acima do limite
   };
@@ -599,36 +600,125 @@
       <circle cx="100" cy="128" r="4" fill="#3A2C21" stroke="none"/>
       <circle class="anim-drop" cx="100" cy="112" r="2.5" fill="#8A5428" stroke="none"/>
     </svg>`,
-    espresso: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <g opacity=".5" stroke="${C.caramelo}">
-        <path class="anim-bubble" d="M80 70 C70 56 90 46 80 30"/>
-        <path class="anim-bubble" style="animation-delay:.9s" d="M104 66 C94 52 114 42 104 26"/>
-        <path class="anim-bubble" style="animation-delay:1.6s" d="M126 70 C116 56 136 46 126 30"/>
+    espresso: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <defs><radialGradient id="crema-g" cx=".45" cy=".4" r=".65"><stop offset="0" stop-color="#C98A4D"/><stop offset=".7" stop-color="#9A5E2C"/><stop offset="1" stop-color="#6E3F1C"/></radialGradient></defs>
+      <g stroke="${C.caramelo}" stroke-opacity=".55" stroke-width="2">
+        <path class="anim-bubble" d="M84 82 C76 70 92 62 84 48"/>
+        <path class="anim-bubble" style="animation-delay:.8s" d="M102 80 C94 66 110 58 102 42"/>
+        <path class="anim-bubble" style="animation-delay:1.5s" d="M120 82 C112 70 128 62 120 48"/>
       </g>
-      <ellipse cx="100" cy="200" rx="86" ry="16" fill="${C.off}"/>
-      <ellipse cx="100" cy="196" rx="58" ry="8" fill="${C.creme}"/>
-      <path d="M42 104 L158 104 L150 170 C148 186 132 196 116 196 L84 196 C68 196 52 186 50 170 Z" fill="${C.creme}"/>
-      <path d="M156 118 C186 116 186 160 152 160" stroke-width="7"/>
-      <ellipse cx="100" cy="104" rx="58" ry="12" fill="#B07A45"/>
-      <path d="M100 98 C92 90 80 98 90 106 L100 113 L110 106 C120 98 108 90 100 98 Z" fill="${C.creme}" stroke="none"/>
-      <path d="M100 113 L100 100" stroke="${C.creme}" stroke-width="2"/>
+      <ellipse cx="100" cy="200" rx="84" ry="15" fill="${C.off}"/>
+      <ellipse cx="100" cy="197" rx="56" ry="8" fill="#E2D6C2" stroke="none"/>
+      <path d="M150 196 L184 186" stroke-width="3.5"/><ellipse cx="188" cy="185" rx="6" ry="3.5" fill="${C.off}"/>
+      <path d="M150 126 C178 124 182 164 146 168" stroke-width="7"/>
+      <path d="M48 112 C48 160 66 194 100 194 C134 194 152 160 152 112" fill="${C.creme}"/>
+      <path d="M58 132 C60 160 72 182 92 188" stroke="#fff" stroke-width="3" stroke-opacity=".8"/>
+      <ellipse cx="100" cy="112" rx="52" ry="14" fill="${C.creme}"/>
+      <ellipse cx="100" cy="113" rx="46" ry="11" fill="url(#crema-g)" stroke="none"/>
+      <ellipse cx="101" cy="113" rx="27" ry="7.5" fill="#EFDFC9" stroke="none" opacity=".9"/>
+      <g stroke-linecap="round"><path d="M78 104.0 Q90.0 112 78 120.0" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M85 104.9 Q96.2 112 85 119.1" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M92 105.8 Q102.4 112 92 118.2" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M99 106.7 Q108.6 112 99 117.3" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M106 107.6 Q114.8 112 106 116.4" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M113 108.5 Q121.0 112 113 115.5" stroke="#F7EEE2" stroke-width="2.6" fill="none"/><path d="M74 112.5 L124 112.5" stroke="#F7EEE2" stroke-width="1.6"/></g>
+      <g fill="#5A3418" stroke="none"><ellipse cx="34" cy="214" rx="7" ry="4.5" transform="rotate(-20 34 214)"/><ellipse cx="48" cy="220" rx="7" ry="4.5" transform="rotate(15 48 220)"/></g>
+      <path d="M29 216 Q34 213 39 212 M43 221 Q48 219 53 219" stroke="#C88A4B" stroke-width="1.2"/>
     </svg>`,
-    soda: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <defs><linearGradient id="soda-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E7C8" stop-opacity=".6"/><stop offset=".45" stop-color="#F2A0A0"/><stop offset="1" stop-color="#B8283E"/></linearGradient></defs>
-      <path d="M122 4 L108 70" stroke="${C.pielini}" stroke-width="7"/>
-      <path d="M54 46 L146 46 L134 220 C133 226 128 230 122 230 L78 230 C72 230 67 226 66 220 Z" fill="${C.creme}" fill-opacity=".35"/>
-      <path d="M58 76 L142 76 L134 218 C133 224 128 226 122 226 L78 226 C72 226 67 224 66 218 Z" fill="url(#soda-g)" stroke="none"/>
-      <rect x="72" y="84" width="26" height="24" rx="5" fill="#fff" fill-opacity=".5" transform="rotate(-12 85 96)"/>
-      <rect x="102" y="96" width="24" height="22" rx="5" fill="#fff" fill-opacity=".45" transform="rotate(14 114 107)"/>
-      <circle class="anim-bubble" cx="84" cy="200" r="2.5" fill="#fff" stroke="none"/>
-      <circle class="anim-bubble" style="animation-delay:.6s" cx="112" cy="190" r="2" fill="#fff" stroke="none"/>
-      <circle class="anim-bubble" style="animation-delay:1.2s" cx="98" cy="210" r="3" fill="#fff" stroke="none"/>
-      <circle class="anim-bubble" style="animation-delay:1.8s" cx="120" cy="206" r="2" fill="#fff" stroke="none"/>
-      <circle cx="146" cy="50" r="22" fill="#F4D35E"/>
-      <circle cx="146" cy="50" r="16" fill="#FBEA9A" stroke-width="1.5"/>
-      <path d="M146 34 L146 66 M130 50 L162 50 M135 39 L157 61 M157 39 L135 61" stroke-width="1.2" stroke-opacity=".5"/>
+    soda: `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <defs>
+        <linearGradient id="soda-liq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBE3D9" stop-opacity=".7"/><stop offset=".38" stop-color="#F29A9A"/><stop offset=".72" stop-color="#D9475A"/><stop offset="1" stop-color="#A31F35"/></linearGradient>
+        <linearGradient id="soda-glass" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".25" stop-color="#fff" stop-opacity=".1"/><stop offset=".8" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity=".45"/></linearGradient>
+        <clipPath id="soda-clip"><path d="M62 70 L138 70 L130 212 C129.5 219 125 222 118 222 L82 222 C75 222 70.5 219 70 212 Z"/></clipPath>
+      </defs>
+      <ellipse cx="100" cy="226" rx="52" ry="7" fill="${C.torra}" opacity=".08" stroke="none"/>
+      <path d="M112 8 L96 132" stroke="${C.pielini}" stroke-width="8"/>
+      <path d="M112 8 L96 132" stroke="#fff" stroke-width="8" stroke-dasharray="6 9" opacity=".85"/>
+      <g clip-path="url(#soda-clip)" stroke="none">
+        <rect x="56" y="86" width="90" height="140" fill="url(#soda-liq)"/>
+        <rect x="70" y="90" width="26" height="24" rx="5" fill="#fff" fill-opacity=".55" transform="rotate(-14 83 102)"/>
+        <rect x="100" y="98" width="24" height="22" rx="5" fill="#fff" fill-opacity=".5" transform="rotate(12 112 109)"/>
+        <rect x="80" y="122" width="22" height="20" rx="5" fill="#fff" fill-opacity=".35" transform="rotate(8 91 132)"/>
+        <circle cx="96" cy="160" r="6" fill="#7A1528" opacity=".55"/><circle cx="110" cy="176" r="5" fill="#7A1528" opacity=".5"/>
+        <circle class="anim-bubble" cx="84" cy="206" r="2.4" fill="#fff"/>
+        <circle class="anim-bubble" style="animation-delay:.6s" cx="114" cy="196" r="2" fill="#fff"/>
+        <circle class="anim-bubble" style="animation-delay:1.2s" cx="98" cy="214" r="2.8" fill="#fff"/>
+        <circle class="anim-bubble" style="animation-delay:1.8s" cx="122" cy="210" r="1.8" fill="#fff"/>
+      </g>
+      <path d="M62 70 L138 70 L130 212 C129.5 219 125 222 118 222 L82 222 C75 222 70.5 219 70 212 Z" fill="url(#soda-glass)"/>
+      <path d="M70 86 L76 200" stroke="#fff" stroke-width="3" stroke-opacity=".75"/>
+      <ellipse cx="100" cy="70" rx="38" ry="6" fill="${C.creme}" fill-opacity=".35"/>
+      <g transform="rotate(18 140 70)">
+        <circle cx="140" cy="70" r="20" fill="#F2D35B"/>
+        <circle cx="140" cy="70" r="15" fill="#FBEA9A" stroke-width="1.4"/>
+        <path d="M140 55 L140 85 M125 70 L155 70 M129 59 L151 81 M151 59 L129 81" stroke-width="1" stroke-opacity=".45"/>
+      </g>
+      <path d="M58 66 C50 52 58 42 70 46 C70 58 66 62 58 66 Z" fill="#4F8A5B" stroke-width="1.6"/>
+      <path d="M70 46 C62 54 60 60 58 66" stroke-width="1.2"/>
+      <circle cx="132" cy="150" r="2" fill="#fff" stroke="none" opacity=".8"/><circle cx="66" cy="176" r="1.6" fill="#fff" stroke="none" opacity=".7"/>
     </svg>`,
+
   };
+
+  // Máquina de espresso (usada nas mesas ilustradas das estações)
+  art.machine = `<svg viewBox="0 0 200 240" fill="none" stroke="${C.torra}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="30" y="36" width="140" height="150" rx="14" fill="#D9D3CA"/>
+      <rect x="30" y="36" width="140" height="34" rx="12" fill="${C.torra}"/>
+      <rect x="44" y="20" width="26" height="16" rx="4" fill="${C.creme}"/><rect x="78" y="22" width="22" height="14" rx="4" fill="${C.creme}"/>
+      <circle cx="146" cy="53" r="9" fill="${C.creme}"/><path d="M146 47 L146 53 L150 56" stroke-width="1.8"/>
+      <rect x="62" y="70" width="76" height="22" rx="6" fill="#B9B1A5"/>
+      <path d="M58 104 L142 104" stroke-width="6"/><path d="M142 104 L178 98" stroke-width="7"/>
+      <rect x="84" y="92" width="32" height="18" rx="4" fill="#8E867B"/>
+      <path class="anim-drop" d="M96 112 L96 122 M104 112 L104 122" stroke="#6E3F1C" stroke-width="2.4"/>
+      <path d="M86 128 L114 128 L111 150 C110.5 154 108 156 104 156 L96 156 C92 156 89.5 154 89 150 Z" fill="${C.creme}"/>
+      <path d="M44 72 L44 128 C44 134 40 136 36 136" stroke-width="3"/>
+      <rect x="22" y="178" width="156" height="14" rx="5" fill="#8E867B"/>
+      <path d="M40 170 L160 170" stroke-dasharray="4 6" stroke-opacity=".5"/>
+    </svg>`;
+
+  // Mesa ilustrada de cada estação (verso do card) — troque por fotos reais quando quiser
+  const STATION_TABLES = [
+    { items: ['v60', 'prensa'], tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
+    { items: ['v60', 'prensa', 'koar', 'chemex'], tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
+    { items: ['machine', 'espresso', 'chemex'], tools: 'Máquina de espresso · vaporizador · filtrados' },
+    { items: ['machine', 'espresso', 'soda', 'v60'], tools: 'Espresso · filtrados · sodas italianas ou gelados' },
+  ];
+  const tableScene = (items) => {
+    const n = items.length;
+    const h = n > 3 ? 112 : n > 2 ? 128 : 150;
+    const w = (h * 200) / 240;
+    const gap = (400 - n * w) / (n + 1);
+    const pieces = items.map((key, i) => art[key].replace('<svg ', `<svg x="${(gap + i * (w + gap)).toFixed(1)}" y="${(214 - h).toFixed(1)}" width="${w.toFixed(1)}" height="${h}" `)).join('');
+    return `<svg viewBox="0 0 400 290" class="h-full w-full" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <defs><linearGradient id="tbl-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A5A36"/><stop offset="1" stop-color="#5E3A20"/></linearGradient></defs>
+      <rect width="400" height="290" fill="#EFE6D8"/>
+      <circle cx="320" cy="60" r="90" fill="#fff" opacity=".35"/>
+      <rect y="206" width="400" height="20" fill="#A87449"/>
+      <rect y="226" width="400" height="64" fill="url(#tbl-wood)"/>
+      <path d="M0 240 C120 236 260 246 400 238 M0 262 C140 258 250 268 400 260" stroke="#4A2C16" stroke-opacity=".35" fill="none"/>
+      ${pieces}
+    </svg>`;
+  };
+  $$('.station-card').forEach((card, i) => {
+    const front = document.createElement('div');
+    front.className = 'card-front';
+    while (card.firstChild) front.appendChild(card.firstChild);
+    card.appendChild(front);
+    // o selo "A Queridinha" continua visível dos dois lados
+    const badge = $('span.absolute', front);
+    if (badge && badge.textContent.includes('Queridinha')) card.appendChild(badge);
+    const t = STATION_TABLES[i];
+    const name = $('h3', front).textContent.trim();
+    const back = document.createElement('div');
+    back.className = 'card-back';
+    back.innerHTML = `<div class="card-back-scene">${tableScene(t.items)}</div>
+      <p class="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
+      <p class="mt-1 font-display text-2xl leading-tight">${name}</p>
+      <p class="mt-2 text-sm leading-relaxed text-creme/70">${t.tools}</p>
+      <button type="button" class="card-back-btn mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
+      <p class="mt-3 text-center text-[10px] uppercase tracking-[0.18em] text-creme/40">Imagem ilustrativa</p>`;
+    card.appendChild(back);
+    $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
+    // no celular (sem mouse) o card vira com um toque
+    card.addEventListener('click', (e) => {
+      if (window.matchMedia('(hover: none)').matches && !e.target.closest('button, a')) card.classList.toggle('is-flipped');
+    });
+  });
 
   const methods = {
     v60: {
@@ -770,11 +860,6 @@
   /* ===================================================================
      6. FUNIL — simulador de investimento, filtro e mensagem do WhatsApp
   =================================================================== */
-  const DATE_LABELS = {
-    'Sim, nos próximos 12 meses': 'definida, nos próximos 12 meses',
-    'Sim, daqui a mais de 12 meses': 'definida, daqui a mais de 12 meses',
-    'Ainda não': 'ainda não definida',
-  };
   const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   const preview = $('#wa-preview');
   const cta = $('#wa-cta');
@@ -793,14 +878,16 @@
 
   const quote = () => {
     const base = PRICING.plans[state.plan].price;
-    const corp = state.corporate ? Math.round((base * PRICING.corporateMarkup) / 10) * 10 : 0;
     const extraKm = Math.max(0, Math.round(state.km) - PRICING.freeKm);
     const travel = extraKm * PRICING.perKm;
     const extraStaff = (state.plan >= 2 && state.guests > PRICING.espressoGuestsLimit ? 1 : 0) + (state.attractions === 'nao' ? 1 : 0);
     const staff = extraStaff * PRICING.extraStaffFee;
-    return { base, corp, extraKm, travel, extraStaff, staff, total: base + corp + travel + staff };
+    return { base, extraKm, travel, extraStaff, staff, total: base + travel + staff };
   };
   const isCustom = () => state.guests > PRICING.maxGuests;
+  // Corporativo e mais de 100 convidados: orçamento à parte, sem mostrar valores
+  const isQuoteOnly = () => isCustom() || state.corporate;
+  const dateLabel = () => (state.noDate ? 'ainda não definida' : state.eventDate ? formatDate(state.eventDate) : 'a informar');
   const guestsLabel = () => (state.guests >= 250 ? '250 ou mais' : String(state.guests));
   const attractionsLabel = () => ({ sim: 'Sim', nao: 'Não, o café será a atração principal' }[state.attractions] || 'a informar');
   const cityLabel = () => (state.km > PRICING.freeKm ? `${state.city} (~${Math.round(state.km)} km)` : state.city);
@@ -808,21 +895,47 @@
   const summaryLines = (withPrice) => {
     const lines = [
       `• Evento: ${state.event || 'ainda vou definir'}`,
+      `• Data do evento: ${dateLabel()}`,
       `• Estação: ${PRICING.plans[state.plan].name}`,
       `• Convidados: ${guestsLabel()}`,
       `• Cidade: ${cityLabel()}`,
       `• Outras atrações no evento: ${attractionsLabel()}`,
     ];
-    if (!isCustom() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
+    if (!isQuoteOnly() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
     if (state.plan === PRICING.giftPlan) lines.push('• 🎁 Brinde Premium Plus: personalização dos copos grátis');
-    if (withPrice && !isCustom()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
+    if (withPrice && !isQuoteOnly()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
     return lines;
   };
 
   const lineRow = (label, value, strong = false) => `<li class="flex items-baseline justify-between gap-4"><span class="text-creme/65">${label}</span><span class="${strong ? 'font-semibold text-creme' : 'text-creme/90'}">${value}</span></li>`;
 
+  const CUSTOM_COPY = {
+    corporate: {
+      eyebrow: 'Evento corporativo',
+      title: 'Orçamento corporativo',
+      text: 'Eventos corporativos têm um orçamento próprio, montado de acordo com o formato, o público e a duração do seu evento. Envie os dados e respondemos pelo WhatsApp com a proposta.',
+      label: 'Solicitar orçamento corporativo',
+      intro: 'Gostaria de um *orçamento corporativo* para o meu evento.',
+    },
+    large: {
+      eyebrow: 'Mais de 100 convidados',
+      title: 'Proposta sob medida',
+      text: 'Para eventos maiores, dimensionamos a ilha e montamos o orçamento de acordo com o seu evento. Envie os dados e respondemos pelo WhatsApp.',
+      label: 'Solicitar proposta personalizada',
+      intro: 'Gostaria de uma *proposta personalizada* para um evento com mais de 100 convidados.',
+    },
+  };
+  // guarda o texto de preço de cada estação no simulador (some no corporativo)
+  simPlans.forEach((b) => { const pr = b.lastElementChild; pr.dataset.price = pr.textContent; });
+
   function renderSim() {
-    const custom = isCustom();
+    const custom = isQuoteOnly();
+    const copy = CUSTOM_COPY[state.corporate ? 'corporate' : 'large'];
+    $('#sim-custom-eyebrow').textContent = copy.eyebrow;
+    $('#sim-custom-title').textContent = copy.title;
+    $('#sim-custom-text').textContent = copy.text;
+    $('#sim-custom-label').textContent = copy.label;
+    simPlans.forEach((b) => { const pr = b.lastElementChild; pr.textContent = state.corporate ? 'valor sob consulta' : pr.dataset.price; });
     $('#sim-guests-out').textContent = guestsLabel();
     $('#sim-standard').hidden = custom;
     $('#sim-custom').hidden = !custom;
@@ -834,20 +947,21 @@
     renderOffer();
     $('#sim-lines').innerHTML = [
       lineRow(PRICING.plans[state.plan].name, brl(q.base)),
-      state.corporate ? lineRow('Evento corporativo (+15%)', `+ ${brl(q.corp)}`) : '',
       lineRow('Deslocamento', q.travel ? `+ ${brl(q.travel)} <span class="text-creme/50">(${q.extraKm} km além de 10 km)</span>` : 'incluso'),
       q.staff ? lineRow('Atendimento ampliado', `+ ${brl(q.staff)}`) : '',
       lineRow('Atendimento de barista', 'incluso'),
       lineRow('Insumos, bancada e equipamentos', 'inclusos'),
     ].join('');
     $('#sim-custom-lines').innerHTML = [
+      lineRow('Evento', state.event || 'a definir'),
+      lineRow('Data', dateLabel()),
       lineRow('Estação', PRICING.plans[state.plan].name),
       lineRow('Convidados', guestsLabel()),
       lineRow('Cidade', cityLabel()),
       lineRow('Outras atrações', attractionsLabel()),
     ].join('');
 
-    $('#sim-custom-cta').href = waLink(['Olá, Pielini Coffee! ☕', 'Gostaria de uma *proposta personalizada* para um evento com mais de 100 convidados.', '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
+    $('#sim-custom-cta').href = waLink(['Olá, Pielini Coffee! ☕', copy.intro, '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
     const menuMsg = ['Olá, Pielini Coffee! ☕', 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines(true)].join('\n');
     $('#sim-menu-link').href = waLink(menuMsg);
     $('#sim-menu-cta').href = waLink(menuMsg);
@@ -967,6 +1081,7 @@
   };
   const SIM_CHECKS = () => [
     [() => !!state.event, $('#sim-event-field'), 'Escolha o tipo de evento.'],
+    [() => state.noDate || !!state.eventDate, $('#sim-date-field'), 'Informe a data do evento ou marque “Ainda não tenho data definida”.'],
     [() => citySelect.value !== 'other' || Number(kmInput.value) > 0, citySelect.closest('div.mt-8'), 'Informe a distância aproximada até a cafeteria.'],
     [() => !!state.attractions, $('#sim-attractions-field'), 'Responda se o evento terá outras atrações.'],
   ];
@@ -982,7 +1097,30 @@
     }
   });
 
-  // 5. outras atrações (define se a ilha precisa de atendimento ampliado)
+  // 2. data do evento (ou "ainda não tenho data")
+  const dateInput = $('#sim-date');
+  const noDateInput = $('#sim-nodate');
+  const today = new Date();
+  dateInput.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  dateInput.addEventListener('input', () => {
+    state.eventDate = dateInput.value;
+    if (dateInput.value) {
+      state.noDate = false;
+      noDateInput.checked = false;
+      clearError($('#sim-date-field'));
+      // aproveita a data no copo personalizado, se ainda estiver vazio
+      if (!state.cup.date) { state.cup.date = dateInput.value; cupDate.value = dateInput.value; renderCup(); }
+    }
+    renderSim();
+  });
+  noDateInput.addEventListener('change', () => {
+    state.noDate = noDateInput.checked;
+    dateInput.disabled = noDateInput.checked;
+    if (noDateInput.checked) { state.eventDate = ''; dateInput.value = ''; clearError($('#sim-date-field')); }
+    renderSim();
+  });
+
+  // 6. outras atrações (define se a ilha precisa de atendimento ampliado)
   $$('.pill', $('#sim-attractions')).forEach((pill) => pill.addEventListener('click', () => {
     state.attractions = pill.dataset.value;
     clearError($('#sim-attractions-field'));
@@ -1005,7 +1143,7 @@
   });
   checkBtn.addEventListener('click', () => {
     if (!requireFields(FILTER_CHECKS())) return;
-    state.qualified = Object.values(state.answers).every((a) => a && a.ok);
+    state.qualified = !state.noDate && Object.values(state.answers).every((a) => a && a.ok);
     passBox.hidden = !state.qualified;
     failBox.hidden = state.qualified;
     bookingLock.hidden = state.qualified;
@@ -1023,9 +1161,9 @@
       ['Convidados', guestsLabel()],
       ['Cidade', cityLabel()],
       ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
-      ['Investimento estimado', isCustom() ? 'Proposta sob medida' : brl(quote().total)],
+      ['Investimento estimado', isQuoteOnly() ? 'Sob consulta' : brl(quote().total)],
       ...(state.plan === PRICING.giftPlan ? [['Brinde', '🎁 Personalização dos copos grátis']] : []),
-      ['Data do evento', state.answers['q-date'] ? DATE_LABELS[state.answers['q-date'].value] : 'A informar'],
+      ['Data do evento', dateLabel()],
     ];
     $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');
   }
@@ -1035,13 +1173,11 @@
   const buildMessage = () => {
     const lead = state.leadName.trim();
     const lines = ['Olá, Pielini Coffee! ☕', `${lead ? `Meu nome é ${lead} e gostaria` : 'Gostaria'} de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines(true)];
-    const date = state.answers['q-date'];
     const phase = state.answers['q-phase'];
-    if (date) lines.push(`• Data do evento: ${DATE_LABELS[date.value] || date.value}`);
     if (phase) lines.push(`• Planejamento: ${phase.value}`);
     const cupNameValue = state.cup.name.trim();
     const sub = cupSubtitle();
-    if (cupNameValue || sub) {
+    if (cupNameValue) {
       const parts = [cupNameValue ? `"${cupNameValue}"` : null, sub || null].filter(Boolean).join(' — ');
       lines.push(`• Copo personalizado: ${parts}`);
     }
