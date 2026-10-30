@@ -690,39 +690,21 @@
       </div>`;
     card.appendChild(back);
     $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
-    // no celular (sem mouse) o card também vira com um toque
-    card.addEventListener('click', (e) => {
-      if (window.matchMedia('(hover: none)').matches && !e.target.closest('button, a')) card.classList.toggle('is-flipped');
-    });
+    // celular: a foto da mesa aparece no topo da frente do card (sem virar)
+    front.insertAdjacentHTML('afterbegin', `<img src="assets/img/${t.img}.jpg" alt="" class="card-photo" style="object-position:${t.pos}" loading="lazy" decoding="async">`);
+    // o selo "A Queridinha" fica por cima de tudo, inclusive da foto no verso
+    if (badge && badge.textContent.includes('Queridinha')) { card.appendChild(badge); badge.classList.add('card-badge'); }
   });
 
-  // Celular: o carrossel começa na Estação Espressos e cada card vira sozinho
-  // quando fica centralizado — o cliente desliza e vê a foto de cada mesa
+  // Celular: o carrossel começa centralizado na Estação Espressos
   (() => {
     const row = $('#station-grid');
-    const cards = $$('.station-card', row);
-    const isCarousel = () => row.scrollWidth > row.clientWidth + 4;
-    const timers = new Map();
-    const startAt = (card) => { row.scrollLeft = card.offsetLeft - (row.clientWidth - card.offsetWidth) / 2; };
-    if (isCarousel()) startAt(cards[2]);
-    window.addEventListener('load', () => { if (isCarousel()) startAt(cards[2]); }, { once: true });
-    const io = new IntersectionObserver((entries) => {
-      if (!isCarousel()) return;
-      entries.forEach((en) => {
-        const card = en.target;
-        clearTimeout(timers.get(card));
-        if (en.intersectionRatio >= 0.75) {
-          // pequena pausa: o cliente vê o preço e depois a mesa
-          timers.set(card, setTimeout(() => card.classList.add('is-flipped'), prefersReducedMotion ? 0 : 900));
-        } else if (en.intersectionRatio < 0.3) {
-          card.classList.remove('is-flipped');
-        }
-      });
-    }, { root: row, threshold: [0, 0.3, 0.75, 1] });
-    // só começa a virar quando a seção aparece na tela
-    new IntersectionObserver((entries, obs) => {
-      if (entries[0].isIntersecting) { cards.forEach((c) => io.observe(c)); obs.disconnect(); }
-    }, { threshold: 0.35 }).observe(row);
+    const target = $$('.station-card', row)[2];
+    const center = () => {
+      if (row.scrollWidth > row.clientWidth + 4) row.scrollLeft = target.offsetLeft - (row.clientWidth - target.offsetWidth) / 2;
+    };
+    center();
+    window.addEventListener('load', center, { once: true });
   })();
 
   const methods = {

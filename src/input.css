@@ -290,3 +290,11 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 }
 .station-card.is-flipped .card-front { transform: rotateY(-180deg); }
 .station-card.is-flipped .card-back { transform: rotateY(0deg); }
+
+/* Celular/toque: foto da mesa no topo do card, sem virar */
+.card-photo { display: none; }
+.card-badge { z-index: 30; transform: translate(-50%, 0) translateZ(40px); }
+@media (hover: none) {
+  .card-back { display: none; }
+  .card-photo { display: block; width: calc(100% + 3.5rem); max-width: none; height: 190px; margin: -1.75rem -1.75rem 1.25rem; object-fit: cover; border-radius: 1.75rem 1.75rem 0 0; }
+}
