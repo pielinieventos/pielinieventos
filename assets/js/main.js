@@ -856,6 +856,18 @@
     stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === state.plan));
     renderSummary();
     renderMessage();
+    updateGates();
+  }
+
+  // Botões que levam ao WhatsApp ficam travados até o simulador estar completo
+  function updateGates() {
+    const ready = SIM_CHECKS().every(([ok]) => ok());
+    ['#sim-custom-cta', '#sim-menu-link', '#sim-continue'].forEach((sel) => {
+      const el = $(sel);
+      el.classList.toggle('is-locked', !ready);
+      el.setAttribute('aria-disabled', String(!ready));
+    });
+    $$('.sim-gate-hint').forEach((h) => { h.hidden = ready; });
   }
 
   // Upgrade: quem está na Espressos vê quanto falta para a Plus (com brinde);
@@ -956,7 +968,7 @@
   const SIM_CHECKS = () => [
     [() => !!state.event, $('#sim-event-field'), 'Escolha o tipo de evento.'],
     [() => citySelect.value !== 'other' || Number(kmInput.value) > 0, citySelect.closest('div.mt-8'), 'Informe a distância aproximada até a cafeteria.'],
-    [() => isCustom() || !!state.attractions, $('#sim-attractions-field'), 'Responda se o evento terá outras atrações.'],
+    [() => !!state.attractions, $('#sim-attractions-field'), 'Responda se o evento terá outras atrações.'],
   ];
   const FILTER_CHECKS = () => Object.keys(state.answers).map((id) => [() => !!state.answers[id], $(`#${id}`).closest('fieldset'), 'Escolha uma opção.']);
   // Links do funil para o WhatsApp só abrem com tudo respondido

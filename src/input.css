@@ -263,3 +263,5 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 #sim-result .field-error { outline-color: #FF8A80; }
 #sim-result .field-error .qpill { border-color: #FF8A80; }
 #sim-result .field-error-msg::before { background: #FF8A80; color: var(--torra); }
+.is-locked { opacity: .45; filter: grayscale(.4); cursor: not-allowed; }
+.is-locked:hover { opacity: .55; }
