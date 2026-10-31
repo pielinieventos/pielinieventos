@@ -487,14 +487,34 @@
       node.classList.add('swap-enter');
     });
   };
-  // leva ao "Nível de Experiência Sensorial" já com a estação recomendada marcada
+  // Rolagem suave e um pouco mais lenta que a padrão (ease-in-out)
+  const slowScrollTo = (el, duration = 1500) => {
+    const navH = 84;
+    const startY = window.scrollY;
+    const endY = el.getBoundingClientRect().top + startY - navH;
+    if (prefersReducedMotion) { window.scrollTo(0, endY); return; }
+    const root = document.documentElement;
+    const prevBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const t0 = performance.now();
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / duration);
+      window.scrollTo(0, startY + (endY - startY) * ease(k));
+      if (k < 1) requestAnimationFrame(step);
+      else root.style.scrollBehavior = prevBehavior;
+    };
+    requestAnimationFrame(step);
+  };
+
+  // leva a "Explore os métodos"; a estação recomendada já fica marcada no simulador
   $('[data-m="rec-btn"]', momentPanel).addEventListener('click', (e) => {
     const station = e.currentTarget.dataset.station;
     const idx = ['Estação Básica', 'Estação Filtrados', 'Estação Espressos', 'Estação Premium Plus'].indexOf(station);
     setPlan(idx);
     lockedStation = idx;
-    $('#level-bar').closest('.rounded-3xl').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-    setTimeout(() => showLevel(idx), prefersReducedMotion ? 0 : 450);
+    showLevel(idx);
+    slowScrollTo($('#metodos'));
   });
   momentTabs.forEach((tab, i) => {
     tab.addEventListener('click', () => setMoment(i));
