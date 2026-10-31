@@ -918,7 +918,7 @@
 
   const greeting = () => {
     const lead = state.leadName.trim();
-    return lead ? `Olá, Pielini Coffee! ☕ Meu nome é ${lead}.` : 'Olá, Pielini Coffee! ☕';
+    return lead ? `Olá, Juan! ☕ Meu nome é ${lead}.` : 'Olá, Juan! ☕';
   };
   const summaryLines = (withPrice) => {
     const lines = [
@@ -1228,7 +1228,7 @@
   $('#wa-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   // Botão flutuante: contato geral, sem pular o funil
-  waFloat.href = waLink('Olá, Pielini Coffee! ☕ Vim pelo site e tenho uma dúvida.');
+  waFloat.href = waLink('Olá, Juan! ☕ Vim pelo site da Pielini Coffee e tenho uma dúvida.');
 
   renderSim();
   renderCup();
