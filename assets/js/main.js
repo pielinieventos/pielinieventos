@@ -240,6 +240,8 @@
       draw(current);
       bar.style.transform = `scaleX(${current})`;
       tempEl.textContent = Math.round(25 + current * 185);
+      // a dica "Role para torrar" sai quando o grão chega no amarelo
+      cue.classList.toggle('is-gone', current >= STAGES[2][0] - 0.03);
       let stage = 0;
       STAGES.forEach(([at], n) => { if (current >= at - 0.03) stage = n; });
       if (stage !== shownStage) {
@@ -262,7 +264,6 @@
       const r = track.getBoundingClientRect();
       // 0 quando a imagem chega ao centro; 1 quando o trilho termina
       progress = clamp((stickyTop - r.top) / Math.max(1, r.height - sticky.offsetHeight), 0, 1);
-      cue.classList.toggle('is-gone', progress > 0.04);
       // pausa curta em cada ponto de torra e transição contínua até o próximo
       const k = Math.min(progress * (STAGES.length - 0.6), STAGES.length - 0.0001);
       const idx = Math.floor(k);
@@ -637,7 +638,6 @@
   fillMethod(0);
   function pickMethod(i) {
     if (i === mCur) return;
-    if (!desktop.matches) setTimeout(() => $('#mName').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' }), 250);
     const old = prodImgs[mCur];
     mCur = i;
     mBtns.forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', String(k === i)); });
