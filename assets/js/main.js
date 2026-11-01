@@ -71,8 +71,6 @@
     const indexes = $$('.bean-index', section);
     const bar = $('#bean-progress');
     const FRAMES = 80;
-    const callout = $('#bean-callout');
-    const ui = $('.bean-ui', section);
     const src = (i) => `assets/seq/grao-${String(i).padStart(3, '0')}.webp`;
     const images = new Array(FRAMES);
     let current = -1;
@@ -149,14 +147,10 @@
       draw(p);
       bar.style.transform = `scaleX(${p})`;
       bar.parentElement.style.opacity = p > 0.97 ? '0' : '1';
-      const stage = p < 0.3 ? 0 : p < 0.56 ? 1 : 2;
-      // no fim, a poeira assenta e entra a frase da casa
-      const end = clamp((p - 0.72) / 0.14, 0, 1);
-      callout.style.opacity = end.toFixed(2);
-      callout.style.transform = `translateY(${((1 - end) * 18).toFixed(1)}px)`;
-      ui.style.opacity = (1 - end).toFixed(2);
+      // a frase da casa entra no lugar do texto depois de "A experiência"
+      const stage = p < 0.28 ? 0 : p < 0.5 ? 1 : p < 0.74 ? 2 : 3;
       steps.forEach((el, k) => el.classList.toggle('is-on', k === stage));
-      indexes.forEach((el, k) => el.classList.toggle('is-on', k === stage));
+      indexes.forEach((el, k) => el.classList.toggle('is-on', k === Math.min(stage, 2)));
     };
 
     load(0).then(() => draw(lastProgress));
@@ -172,6 +166,8 @@
   const roast = (() => {
     const track = $('#roast-track');
     const figure = $('#roast-figure');
+    const sticky = $('#roast-sticky');
+    const cue = $('#roast-cue');
     const canvas = $('#roast-canvas');
     const ctx = canvas.getContext('2d');
     const stageEl = $('#roast-stage');
@@ -210,8 +206,8 @@
       canvas.width = Math.round(r.width * dpr);
       canvas.height = Math.round(r.height * dpr);
       // a imagem fica fixa exatamente no centro vertical da tela
-      stickyTop = Math.max(84, (vh - figure.offsetHeight) / 2 + 20);
-      figure.style.top = `${stickyTop}px`;
+      stickyTop = Math.max(84, (vh - sticky.offsetHeight) / 2 + 20);
+      sticky.style.top = `${stickyTop}px`;
       draw(lastV);
     };
 
@@ -265,7 +261,8 @@
     const update = () => {
       const r = track.getBoundingClientRect();
       // 0 quando a imagem chega ao centro; 1 quando o trilho termina
-      progress = clamp((stickyTop - r.top) / Math.max(1, r.height - figure.offsetHeight), 0, 1);
+      progress = clamp((stickyTop - r.top) / Math.max(1, r.height - sticky.offsetHeight), 0, 1);
+      cue.classList.toggle('is-gone', progress > 0.04);
       // pausa curta em cada ponto de torra e transição contínua até o próximo
       const k = Math.min(progress * (STAGES.length - 0.6), STAGES.length - 0.0001);
       const idx = Math.floor(k);
@@ -640,6 +637,7 @@
   fillMethod(0);
   function pickMethod(i) {
     if (i === mCur) return;
+    if (!desktop.matches) setTimeout(() => $('#mName').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' }), 250);
     const old = prodImgs[mCur];
     mCur = i;
     mBtns.forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', String(k === i)); });
@@ -651,6 +649,58 @@
     mInfo.forEach((el) => el.classList.add('is-swapping'));
     setTimeout(() => { fillMethod(i); mInfo.forEach((el) => el.classList.remove('is-swapping')); }, prefersReducedMotion ? 0 : 200);
   }
+
+  // Foto da mesa de cada estação (verso do card). object-position = foco do recorte
+  const STATION_TABLES = [
+    { img: 'mesa-basica', pos: '62% 55%', alt: 'Barista servindo café no Hario V60, ao lado da prensa francesa e da balança', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
+    { img: 'mesa-filtrados', pos: '45% 30%', alt: 'Mesa vista de cima com V60, Koar, Chemex, prensa francesa e chaleira', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
+    { img: 'mesa-espressos', pos: '45% 88%', alt: 'Espresso, cappuccino com latte art e macchiato em frente à máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
+    { img: 'mesa-premium-plus', pos: '50% 28%', alt: 'Noivos brindando com café na ilha da Pielini, com sodas italianas e copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados' },
+  ];
+  $$('.station-card').forEach((card, i) => {
+    const front = document.createElement('div');
+    front.className = 'card-front';
+    // fundo, borda e espaçamento ficam na face da frente: se ficassem no card,
+    // cortariam a foto ao meio durante a virada 3D
+    [...card.classList].filter((cl) => /^(bg-|from-|to-|border|p-\d)/.test(cl)).forEach((cl) => {
+      card.classList.remove(cl);
+      front.classList.add(cl);
+    });
+    while (card.firstChild) front.appendChild(card.firstChild);
+    card.appendChild(front);
+    // o selo "A Queridinha" continua visível dos dois lados
+    const badge = $('span.absolute', front);
+    if (badge && badge.textContent.includes('Queridinha')) card.appendChild(badge);
+    const t = STATION_TABLES[i];
+    const name = $('h3', front).textContent.trim();
+    const back = document.createElement('div');
+    back.className = 'card-back';
+    back.innerHTML = `<img src="assets/img/${t.img}.jpg" alt="${t.alt}" class="card-back-img" style="object-position:${t.pos}" loading="lazy" decoding="async">
+      <div class="card-back-shade" aria-hidden="true"></div>
+      <div class="card-back-content">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
+        <p class="card-back-title mt-1 font-display leading-tight">${name}</p>
+        <p class="mt-2 text-sm leading-relaxed text-creme/75">${t.tools}</p>
+        <button type="button" class="card-back-btn mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
+      </div>`;
+    card.appendChild(back);
+    $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
+    // celular: a foto da mesa aparece no topo da frente do card (sem virar)
+    front.insertAdjacentHTML('afterbegin', `<img src="assets/img/${t.img}.jpg" alt="" class="card-photo" style="object-position:${t.pos}" loading="lazy" decoding="async">`);
+    // o selo "A Queridinha" fica por cima de tudo, inclusive da foto no verso
+    if (badge && badge.textContent.includes('Queridinha')) { card.appendChild(badge); badge.classList.add('card-badge'); }
+  });
+
+  // Celular: o carrossel começa centralizado na Estação Espressos
+  (() => {
+    const row = $('#station-grid');
+    const target = $$('.station-card', row)[2];
+    const center = () => {
+      if (row.scrollWidth > row.clientWidth + 4) row.scrollLeft = target.offsetLeft - (row.clientWidth - target.offsetWidth) / 2;
+    };
+    center();
+    window.addEventListener('load', center, { once: true });
+  })();
 
   /* ===================================================================
      5b. WIDGET 3 — SIMULADOR DE COPO EM TEMPO REAL
@@ -776,7 +826,7 @@
       title: 'Proposta sob medida',
       text: 'Para eventos maiores, dimensionamos a ilha e montamos o orçamento de acordo com o seu evento. Envie os dados e respondemos pelo WhatsApp.',
       label: 'Solicitar proposta personalizada',
-      intro: 'Gostaria de uma *proposta personalizada* para um evento com mais de 100 convidados.',
+      intro: 'Gostaria de uma *proposta personalizada* para o meu evento.',
     },
   };
   // guarda o texto de preço de cada estação no simulador (some no corporativo)

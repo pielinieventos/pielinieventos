@@ -14,7 +14,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Geist:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Geist:wght@400;500;600&family=Oswald:wght@500;600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -133,6 +133,7 @@
     ========================================================== -->
     <section id="inicio" data-nav-theme="light" class="hero relative isolate h-[100svh] min-h-[560px] overflow-hidden">
       <div class="hero-phrase">
+        <span class="glass hero-tag-mobile">Cafeteria e torrefação</span>
         <h1>Cafés especiais<br>para momentos especiais.</h1>
       </div>
       <div class="hero-big-logo text-torra" id="hero-logo" aria-hidden="true">
@@ -140,7 +141,7 @@
       </div>
       <div class="hero-labels">
         <a href="#do-grao" class="glass scroll-cue"><span class="arrow" aria-hidden="true">↓</span>Role para descer</a>
-        <span class="glass">Cafeteria e torrefação</span>
+        <span class="glass hero-tag-desktop">Cafeteria e torrefação</span>
       </div>
     </section>
 
@@ -150,9 +151,6 @@
     <section id="do-grao" data-nav-theme="light" class="relative h-[340vh]" aria-label="Do grão à xícara">
       <div class="sticky top-0 flex h-[100svh] items-center overflow-hidden">
         <canvas id="bean-canvas" class="bean-canvas absolute inset-0 h-full w-full" role="img" aria-label="Grão de café torrado se partindo e virando pó"></canvas>
-        <div class="bean-callout" id="bean-callout" aria-live="polite">
-          <p>Cada evento tem seu próprio aroma.<br><em>O próximo é o seu.</em></p>
-        </div>
         <div class="bean-ui container-site relative grid h-full items-center lg:grid-cols-12">
           <!-- Texto -->
           <div class="pointer-events-none absolute inset-x-5 bottom-[7svh] z-10 text-center sm:inset-x-8 lg:static lg:col-span-4 lg:text-left">
@@ -169,6 +167,10 @@
               <div class="bean-step absolute inset-0" data-step="2">
                 <h2 class="font-display text-4xl font-medium leading-tight sm:text-5xl">A <em class="text-pielini">experiência</em></h2>
                 <p class="mx-auto mt-3 max-w-sm text-torra/70 lg:mx-0">Extraído ao vivo, diante dos seus convidados.</p>
+              </div>
+              <div class="bean-step bean-quote absolute inset-0" data-step="3">
+                <p class="font-display text-4xl font-medium leading-[1.02] sm:text-5xl">Cada evento tem seu próprio aroma.</p>
+                <p class="mt-3 font-display text-3xl italic text-caramelo-dark sm:text-4xl">O próximo é o seu.</p>
               </div>
             </div>
           </div>
@@ -201,7 +203,8 @@
             O café como <em class="text-pielini">protagonista</em>
           </h2>
           <div id="roast-track" class="relative mt-10 h-[230svh]">
-            <figure id="roast-figure" class="sticky mx-auto w-full max-w-[440px] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15 [clip-path:inset(0_round_999px_999px_1.5rem_1.5rem)]" style="top:15svh">
+            <div id="roast-sticky" class="sticky" style="top:15svh">
+            <figure id="roast-figure" class="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-torra shadow-2xl shadow-torra/15 [clip-path:inset(0_round_999px_999px_1.5rem_1.5rem)]">
               <canvas id="roast-canvas" class="block aspect-[4/5] w-full bg-torra" role="img" aria-label="Grãos de café sendo torrados: do grão verde à torra completa, conforme a rolagem"></canvas>
               <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-torra/95 via-torra/70 to-transparent p-6 pt-24 text-creme sm:p-7 sm:pt-28">
                 <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.25em]">
@@ -217,6 +220,8 @@
                 </ol>
               </figcaption>
             </figure>
+              <a href="#roast-track" class="glass scroll-cue roast-cue" id="roast-cue"><span class="arrow" aria-hidden="true">↓</span>Role para torrar</a>
+            </div>
           </div>
         </div>
 
@@ -293,20 +298,20 @@
     <section id="metodos" data-nav-theme="light" class="relative py-24 sm:py-32">
       <div class="container-site">
         <div class="m-grid">
+          <span class="chapter-slide eyebrow m-eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 02 · Nossos métodos</span>
           <div class="scene" id="scene" data-reveal>
+            <p class="sc-hint">Toque em um método para trocar o que está na mesa.</p>
             <div class="sc-layer" id="scProds"></div>
             <div class="sc-layer sc-grain" aria-hidden="true"></div>
             <div class="sc-list" id="scList" role="tablist" aria-label="Métodos de preparo"></div>
           </div>
           <div class="m-info" data-reveal style="--rd:.1s">
-            <span class="chapter-slide eyebrow text-pielini"><span class="h-px w-8 bg-pielini"></span> Capítulo 02 · Nossos métodos</span>
             <h2 id="mName" class="m-name">Hario V60</h2>
             <p class="m-desc" id="mDesc"></p>
             <dl class="m-facts">
               <div><dt>Tempo de preparo</dt><dd id="mTime"></dd></div>
               <div><dt>Incluído a partir da</dt><dd id="mPlan"></dd></div>
             </dl>
-            <p class="m-hint">Toque em um método para trocar o que está na mesa.</p>
           </div>
         </div>
       </div>
@@ -685,22 +690,29 @@
     <!-- =========================================================
          6. CONVERSÃO — VAMOS TOMAR UM CAFÉ?
     ========================================================== -->
-    <section id="degustacao" data-nav-theme="light" class="relative isolate overflow-hidden py-24 text-torra sm:py-32">
+    <section id="degustacao" data-nav-theme="light" class="relative isolate overflow-hidden pb-24 pt-14 text-torra sm:pb-32 sm:pt-20">
       <div class="absolute inset-0 -z-10" aria-hidden="true">
         <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_20%_0%,rgba(200,138,75,.12),transparent_60%),radial-gradient(ellipse_60%_60%_at_100%_100%,rgba(44,94,79,.10),transparent_60%)]"></div>
         
       </div>
 
       <div class="container-site grid gap-14 lg:grid-cols-12">
-        <div class="lg:col-span-5" data-reveal>
-          <svg class="h-20 w-20 text-pielini" aria-hidden="true"><use href="#pielini-emblema"/></svg>
-          <h2 class="mt-8 font-display text-6xl font-medium leading-[0.95] sm:text-7xl">Vamos tomar um <em class="text-caramelo-dark">Café?</em></h2>
-          <p class="mt-8 text-lg leading-relaxed text-torra/80">
+        <div class="invite lg:col-span-5" data-reveal>
+          <p class="invite-kicker">Convite · Degustação exclusiva</p>
+          <h2 class="invite-title">
+            <span class="invite-lead">Vamos tomar um</span>
+            <span class="invite-word" aria-hidden="true">CAFÉ</span>
+            <span class="invite-script">café?</span>
+            <span class="sr-only">Vamos tomar um café?</span>
+            <img src="assets/img/graos/bean-d.webp" alt="" class="invite-bean invite-bean-1" loading="lazy">
+            <img src="assets/img/graos/bean-c.webp" alt="" class="invite-bean invite-bean-2" loading="lazy">
+            <img src="assets/img/graos/bean-a.webp" alt="" class="invite-bean invite-bean-3" loading="lazy">
+          </h2>
+          <p class="invite-text">
             Sabemos que o encanto do café especial não se explica, se prova. Queremos convidar você para uma Degustação Exclusiva em nossa cafeteria. Venha conhecer nossa estrutura, provar nossos grãos recém-torrados e poder levar para seus eventos a qualidade que sabemos que você preza.
           </p>
-          <p class="mt-8 border-l-2 border-caramelo pl-5 font-display text-2xl italic text-caramelo-dark">
-            Agende sua degustação e leve o padrão Pielini para os seus próximos eventos.
-          </p>
+          <p class="invite-quote">Agende sua degustação e leve o padrão Pielini para os seus próximos eventos.</p>
+          <p class="invite-where">R. Primeiro de Março, 1111 · Loja 14 · Pátria Nova, Novo Hamburgo</p>
         </div>
 
         <!-- Widget 4: Gerador de mensagem WhatsApp -->

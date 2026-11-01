@@ -408,3 +408,60 @@ body.logo-docked-off .nav-wordmark { opacity: 0; transform: translateY(-4px); }
 .plan-price { font-family: "Geist", "Plus Jakarta Sans", sans-serif; font-weight: 500; font-size: 1.85rem; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .station-card .card-front .text-xs.uppercase { font-weight: 500; letter-spacing: .16em; }
 @media (prefers-reduced-motion: reduce) { .big-logo { transform: none; opacity: 1; } }
+
+/* Início no celular: etiqueta acima da frase, "Role para descer" central */
+.hero-tag-mobile { display: none; }
+@media (max-width: 767px) {
+  .hero-tag-mobile { display: inline-flex; margin-bottom: 18px; font-style: normal; }
+  .hero-tag-desktop { display: none; }
+  .hero-phrase { display: flex; flex-direction: column; align-items: center; }
+  .hero-labels { justify-content: center; }
+}
+
+/* Grão: frase da casa como última etapa do texto */
+.bean-quote p { color: var(--torra); }
+
+/* Torra: dica "Role para torrar" logo abaixo da imagem */
+.roast-cue { position: relative; display: flex; width: max-content; margin: 18px auto 0; transition: opacity .5s ease, transform .5s ease; }
+.roast-cue.is-gone { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+
+/* Métodos: capítulo e dica acima da lista */
+.m-grid { grid-template-areas: "eyebrow info" "scene info"; row-gap: 18px; }
+.m-eyebrow { grid-area: eyebrow; }
+.scene { grid-area: scene; }
+.m-info { grid-area: info; }
+.sc-hint { position: absolute; z-index: 6; left: 14.5%; width: 46%; top: 7.6%; text-align: center; font-family: "Geist", sans-serif; font-size: 2.15cqw; font-weight: 500; color: #3b2f27; background: rgba(250,246,242,.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-radius: 999px; padding: 1cqw 2.4cqw; }
+@media (max-width: 900px) {
+  .m-grid { grid-template-areas: "eyebrow" "scene" "info"; }
+  .scene { height: min(68svh, 640px); width: auto; max-width: 100%; aspect-ratio: 900 / 1341; margin: 0 auto; justify-self: center; }
+  .m-info { text-align: left; }
+  .m-name { font-size: 44px; margin: 6px 0 12px; }
+  .sc-hint { font-size: 2.7cqw; left: 10%; width: 56%; top: 6.6%; }
+}
+
+/* ------------------------------------------------------------------
+   Convite "Vamos tomar um café?" (fundo branco, letras grandes e grãos)
+------------------------------------------------------------------- */
+.invite-kicker { font-family: "Geist", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .42em; text-transform: uppercase; color: var(--caramelo-dark, #A86D33); }
+.invite-title { position: relative; margin-top: 14px; isolation: isolate; }
+.invite-lead { position: relative; z-index: 4; display: block; font-family: "Oswald", "Geist", sans-serif; font-weight: 600; text-transform: uppercase; font-size: clamp(30px, 3.4vw, 50px); line-height: 1; color: #3b2a1e; }
+/* palavra gigante ao fundo, com os grãos e o "café?" manuscrito por cima */
+.invite-word { position: relative; z-index: 1; display: inline-block; margin-top: .16em; font-family: "Oswald", "Geist", sans-serif; font-weight: 700; font-size: clamp(130px, 14.5vw, 220px); line-height: .84; letter-spacing: -.01em; color: #D9B992; }
+.invite-script { position: absolute; z-index: 3; left: 52%; bottom: -2%; transform: translateX(-50%) rotate(-7deg); font-family: "Great Vibes", cursive; font-size: clamp(80px, 8.4vw, 136px); line-height: 1; white-space: nowrap; color: var(--caramelo-dark, #A86D33); text-shadow: 0 2px 0 #fff, 0 8px 22px rgba(255,255,255,.9); }
+.invite-bean { position: absolute; z-index: 2; height: auto; filter: drop-shadow(0 18px 22px rgba(60,40,25,.28)); pointer-events: none; }
+.invite-bean-1 { width: clamp(70px, 6.5vw, 100px); left: -9%; top: 18%; transform: rotate(-30deg); }
+.invite-bean-2 { width: clamp(84px, 8vw, 120px); right: -4%; bottom: -10%; transform: rotate(20deg); }
+.invite-bean-3 { width: clamp(40px, 4vw, 58px); right: 4%; top: -4%; transform: rotate(40deg); filter: blur(1.5px) drop-shadow(0 10px 12px rgba(60,40,25,.25)); opacity: .9; }
+.invite-text { position: relative; z-index: 4; margin-top: 34px; font-size: 1.05rem; line-height: 1.7; color: rgba(30,22,16,.78); }
+.invite-quote { margin-top: 22px; font-family: "Oswald", "Geist", sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; font-size: 15px; line-height: 1.6; color: #3b2a1e; border-left: 2px solid var(--caramelo); padding-left: 16px; }
+.invite-where { margin-top: 18px; font-family: "Geist", sans-serif; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: rgba(30,22,16,.5); }
+.invite .invite-bean-1 { animation: bean-float 7s ease-in-out infinite; }
+.invite .invite-bean-2 { animation: bean-float 8s ease-in-out infinite reverse; }
+@keyframes bean-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@media (max-width: 767px) {
+  .invite-word { font-size: 34vw; }
+  .invite-script { font-size: 22vw; }
+  .invite-bean-1 { left: -5%; width: 16vw; top: 10%; }
+  .invite-bean-2 { right: -4%; width: 18vw; }
+}
+@media (prefers-reduced-motion: reduce) { .invite .invite-bean-1, .invite .invite-bean-2 { animation: none; } }
