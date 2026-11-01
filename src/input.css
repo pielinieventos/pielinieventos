@@ -328,9 +328,9 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .38  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 .sc-list { position: absolute; inset: 0; z-index: 5; }
 .m-btn {
-  position: absolute; left: 16.45%; width: 38.1%; height: 6.1%; border-radius: 999px; display: flex; align-items: center; padding: 0 5.2cqw 0 4.4cqw; gap: 2cqw;
+  position: absolute; left: 14.5%; width: 46%; height: 6.4%; border-radius: 999px; display: flex; align-items: center; padding: 0 5.2cqw 0 4.4cqw; gap: 2cqw;
   color: #fff; font-family: "Geist", "Plus Jakarta Sans", sans-serif; font-weight: 500; font-size: 2.3cqw; letter-spacing: .03em; white-space: nowrap; text-transform: uppercase; overflow: hidden;
-  background: linear-gradient(180deg, rgba(158,142,131,.8), rgba(116,102,93,.84));
+  background: linear-gradient(180deg, rgb(150,134,123), rgb(112,98,89));
   -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15);
   border: 1px solid rgba(255,255,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.06), 0 10px 24px -14px rgba(60,40,30,.55);
   transition: background .45s, color .45s, transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .45s;
@@ -339,10 +339,10 @@ body.hero-in .hero-fade.d4 { transition-delay: 1s; }
 .m-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .m-btn .ic { flex: none; width: 4.4cqw; height: 4.4cqw; }
 .m-btn .ic svg { width: 100%; height: 100%; display: block; }
-.m-btn .nm { flex: 1; text-align: center; line-height: 1.05; overflow: hidden; text-overflow: ellipsis; }
-.m-btn.long { font-size: 1.95cqw; letter-spacing: .02em; }
+.m-btn .nm { flex: 1; min-width: 0; text-align: center; line-height: 1.05; }
+.m-btn.long { font-size: 2.05cqw; letter-spacing: .01em; }
 .m-btn .nm small { display: block; font-size: 1.7cqw; text-transform: none; letter-spacing: 0; font-weight: 400; opacity: 0; height: 0; transition: opacity .4s; }
-.m-btn .dots { flex: none; font-size: 2.4cqw; letter-spacing: .12em; opacity: .85; }
+.m-btn .dots { flex: none; font-size: 2.2cqw; letter-spacing: .08em; opacity: .85; }
 .m-btn.on { background: rgba(250,246,242,.95); color: #2a2a2a; box-shadow: 0 14px 30px -14px rgba(60,40,30,.55); }
 .m-btn.on .nm small { opacity: .55; height: auto; margin-top: .3em; }
 .m-btn.on .ic { color: #b79b85; }

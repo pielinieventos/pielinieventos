@@ -70,7 +70,7 @@
     const steps = $$('.bean-step', section);
     const indexes = $$('.bean-index', section);
     const bar = $('#bean-progress');
-    const FRAMES = 29;
+    const FRAMES = 80;
     const callout = $('#bean-callout');
     const ui = $('.bean-ui', section);
     const src = (i) => `assets/seq/grao-${String(i).padStart(3, '0')}.webp`;
@@ -622,7 +622,7 @@
     b.className = `m-btn${i === 0 ? ' on' : ''}${m.nome.length > 12 ? ' long' : ''}`;
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-selected', String(i === 0));
-    b.style.top = `${ROWS[i]}%`;
+    b.style.top = `${ROWS[i] - 0.15}%`;
     b.innerHTML = `<span class="ic" aria-hidden="true">${m.icon}</span><span class="nm">${m.nome}<small>Ativo</small></span><span class="dots" aria-hidden="true">•••</span>`;
     b.addEventListener('click', () => pickMethod(i));
     scList.appendChild(b);
