@@ -115,7 +115,10 @@
       ['Convidados', P.conv], ['Duração', P.horas ? `${P.horas} horas de serviço` : ''],
     ].filter(([, v]) => v);
 
-    const accept = encodeURIComponent(`Olá, Juan! ☕ Sou ${P.cli || ''} e quero confirmar a proposta ${P.n || ''} (${brl(total)}). Podemos seguir com o contrato?`);
+    const showPrices = P.sv !== 1;
+    const accept = encodeURIComponent(showPrices
+      ? `Olá, Juan! ☕ Sou ${P.cli || ''} e quero confirmar a proposta ${P.n || ''} (${brl(total)}). Podemos seguir com o contrato?`
+      : `Olá, Juan! ☕ Sou ${P.cli || ''} e gostei da proposta ${P.n || ''} (${P.plano || (plan ? plan.name : '')}). Pode me enviar os valores?`);
 
     app.innerHTML = `
       <article class="sheet">
@@ -145,7 +148,7 @@
           </div>
         </section>
 
-        <section class="block">
+        ${showPrices ? `<section class="block">
           <h3>Investimento</h3>
           <table class="inv">${lines.map((l) => `<tr${Number(l[1]) === 0 ? ' class="sub"' : ''}><td>${esc(l[0])}</td><td class="v">${Number(l[1]) ? brl(l[1]) : 'incluso'}</td></tr>`).join('')}</table>
           <div class="total">
@@ -157,7 +160,7 @@
             </div>
           </div>
           <p class="note">Também parcelamos no cartão de crédito, na quantidade de vezes que preferir, com as taxas da maquininha por conta do contratante.</p>
-        </section>
+        </section>` : `<section class="block"><div class="obs">Os valores desta proposta serão enviados diretamente pelo WhatsApp, junto com as condições de pagamento.</div></section>`}
 
         ${P.obs ? `<section class="block"><h3>Observações</h3><div class="obs">${esc(P.obs)}</div></section>` : ''}
 
@@ -180,7 +183,7 @@
       </article>
 
       <div class="actions">
-        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${accept}" target="_blank" rel="noopener">Quero fechar</a>
+        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${accept}" target="_blank" rel="noopener">${showPrices ? 'Quero fechar' : 'Quero os valores'}</a>
         <button class="btn ghost" type="button" id="pdf">Baixar PDF</button>
       </div>`;
 

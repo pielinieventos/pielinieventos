@@ -49,6 +49,10 @@
     .bar { position: fixed; z-index: 10; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 8px; border-radius: 26px; background: rgba(255,255,255,.92); box-shadow: 0 16px 40px -18px rgba(30,22,16,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); width: max-content; max-width: calc(100vw - 20px); }
     .toast { position: fixed; z-index: 20; left: 50%; top: 18px; transform: translateX(-50%) translateY(-20px); opacity: 0; background: var(--torra); color: var(--creme); border-radius: 999px; padding: 10px 18px; font-size: 14px; transition: .3s; pointer-events: none; }
     .toast.on { opacity: 1; transform: translateX(-50%); }
+    .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--creme); border-radius: 14px; padding: 4px; }
+    .seg label { margin: 0; text-align: center; padding: 9px 8px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--torra); }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label:has(input:checked) { background: var(--torra); color: var(--creme); }
     .hist a { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; font-size: 14px; }
     .hist a span { color: var(--sec); font-variant-numeric: tabular-nums; }
     @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } .f3 { grid-template-columns: 1fr 1fr; } }
@@ -110,6 +114,14 @@
 
       <aside>
         <section class="card">
+          <h2>Tipo de proposta</h2>
+          <div class="seg" role="radiogroup" aria-label="Tipo de proposta">
+            <label><input type="radio" name="mode" value="1" checked> Com valores</label>
+            <label><input type="radio" name="mode" value="0"> Sem valores</label>
+          </div>
+          <p class="hint">Sem valores: o cliente vê o plano escolhido, o cardápio e o que está incluso. O botão dele vira "Quero os valores".</p>
+        </section>
+        <section class="card" id="resumo">
           <h2>Resumo</h2>
           <div class="totbox">
             <div><span>Total</span><span class="big" id="tTotal">R$ 0,00</span></div>
@@ -122,6 +134,19 @@
           <h2>Mensagem para o cliente</h2>
           <textarea id="out" rows="7" readonly></textarea>
           <p class="hint">Cole no WhatsApp do cliente. O link abre a proposta completa, com botão de baixar PDF.</p>
+        </section>
+        <section class="card">
+          <h2>Link "Nossos planos"</h2>
+          <p class="hint" style="margin:0 0 10px">Para quem não passou pelo site: mostra as 4 estações. Usa o nome do cliente (campo acima), se preenchido.</p>
+          <div class="seg" role="radiogroup" aria-label="Planos com ou sem valores">
+            <label><input type="radio" name="pmode" value="1" checked> Com valores</label>
+            <label><input type="radio" name="pmode" value="0"> Sem valores</label>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <a class="btn sm primary" id="pOpen" target="_blank" rel="noopener">Ver planos</a>
+            <button class="btn sm" id="pCopy" type="button">Copiar link</button>
+            <a class="btn sm wa" id="pSend" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+          </div>
         </section>
         <section class="card hist">
           <h2>Últimas propostas</h2>
@@ -234,8 +259,29 @@
       obs: $('obs').value.trim(),
       val: Number($('val').value) || TERMS.validityDays,
       emit: new Date().toISOString().slice(0, 10),
+      ...(withPrices() ? {} : { sv: 1 }),
     });
+    const withPrices = () => document.querySelector('input[name="mode"]:checked').value === '1';
     const base = location.href.replace(/orcamento\.html.*$/, '');
+    const plansLink = () => {
+      const q = new URLSearchParams();
+      const n = $('cli').value.trim();
+      if (n) q.set('n', n);
+      if (document.querySelector('input[name="pmode"]:checked').value === '0') q.set('v', '0');
+      const qs = q.toString();
+      return `${base}planos.html${qs ? `?${qs}` : ''}`;
+    };
+    const plansMessage = () => {
+      const first = $('cli').value.trim().split(/\s+/)[0] || '';
+      return [
+        `Olá${first ? `, ${first}` : ''}! ☕ Aqui é o Juan, da Pielini Coffee.`,
+        '',
+        'Separei aqui as nossas estações de café para eventos, com o cardápio de cada uma:',
+        plansLink(),
+        '',
+        'Me conta a data, o local e o número de convidados que eu monto a sua proposta.',
+      ].join('\n');
+    };
     const link = () => `${base}proposta.html?d=${encode(data())}`;
     const message = () => {
       const d = data();
@@ -244,10 +290,9 @@
       return [
         `Olá${first ? `, ${first}` : ''}! ☕ Aqui é o Juan, da Pielini Coffee.`,
         '',
-        `Preparei a sua proposta${d.ev ? ` para o ${d.ev.toLowerCase()}` : ''}, com base nas informações que você enviou pelo site:`,
+        `Preparei a sua proposta${d.ev ? ` para o ${d.ev.toLowerCase()}` : ''}, com base nas informações que você me passou:`,
         link(),
-        '',
-        `Total: *${brl(total)}* (ou ${brl(total * (1 - TERMS.cashDiscount))} à vista no Pix).`,
+        ...(withPrices() ? ['', `Total: *${brl(total)}* (ou ${brl(total * (1 - TERMS.cashDiscount))} à vista no Pix).`] : []),
         'Qualquer dúvida, é só me chamar por aqui. Será um prazer fazer parte desse momento!',
       ].join('\n');
     };
@@ -260,6 +305,9 @@
       $('out').value = message();
       $('open').href = link();
       $('send').href = `https://wa.me/?text=${encodeURIComponent(message())}`;
+      $('resumo').style.opacity = withPrices() ? '1' : '.45';
+      $('pOpen').href = plansLink();
+      $('pSend').href = `https://wa.me/?text=${encodeURIComponent(plansMessage())}`;
     };
 
     const toast = (t) => { const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 1800); };
@@ -288,6 +336,8 @@
     $('plan').addEventListener('change', suggest);
     document.querySelector('.wrap').addEventListener('input', render);
     $('copyLink').addEventListener('click', () => copy(link(), 'Link copiado'));
+    $('pCopy').addEventListener('click', () => copy(plansLink(), 'Link dos planos copiado'));
+    document.querySelectorAll('input[name="mode"], input[name="pmode"]').forEach((r) => r.addEventListener('change', render));
     $('copyMsg').addEventListener('click', () => copy(message(), 'Mensagem copiada'));
     $('open').addEventListener('click', save);
     $('send').addEventListener('click', save);

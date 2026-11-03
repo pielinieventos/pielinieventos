@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nossos planos · Pielini Coffee</title>
+  <meta name="description" content="Estações de cafés especiais para eventos: Básica, Filtrados, Espressos e Premium Plus.">
+  <meta name="theme-color" content="#F5F2EB">
+  <link rel="icon" type="image/svg+xml" href="assets/svg/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --creme:#F5F2EB; --torra:#1E1610; --pielini:#2C5E4F; --caramelo:#C88A4B; --caramelo-dark:#A86D33; --line:rgba(30,22,16,.12); --sec:rgba(30,22,16,.6); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Geist", system-ui, sans-serif; color: var(--torra); background: #FDFCF9 url("assets/img/papel-filtro.jpg"); background-size: 512px; -webkit-font-smoothing: antialiased; line-height: 1.55; }
+    .serif { font-family: "Cormorant Garamond", Georgia, serif; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: clamp(20px, 5vw, 56px) clamp(16px, 4vw, 40px) 120px; }
+    .sheet { background: rgba(255,255,255,.92); border-radius: 28px; box-shadow: 0 30px 70px -40px rgba(30,22,16,.35); overflow: hidden; }
+    header.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; padding: 32px clamp(20px, 5vw, 48px) 0; }
+    header.top img { width: 130px; height: auto; display: block; }
+    .num { text-align: right; font-size: 12px; color: var(--sec); letter-spacing: .08em; }
+    .num b { display: block; font-size: 15px; color: var(--torra); letter-spacing: .02em; }
+    .hero { padding: 28px clamp(20px, 5vw, 48px) 8px; }
+    .kicker { font-size: 12px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--caramelo-dark); }
+    h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(38px, 6vw, 60px); line-height: 1; letter-spacing: -.015em; margin-top: 10px; }
+    h1 em { color: var(--pielini); }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 24px; }
+    .fact { background: var(--creme); border-radius: 16px; padding: 12px 16px; }
+    .fact span { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sec); }
+    .fact b { display: block; margin-top: 2px; font-weight: 500; }
+    .photo { position: relative; margin: 28px clamp(20px, 5vw, 48px) 0; border-radius: 22px; overflow: hidden; aspect-ratio: 16 / 9; background: #2a1f17; }
+    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo .cap { position: absolute; inset: auto 0 0 0; padding: 60px 24px 20px; color: #fff; background: linear-gradient(to top, rgba(30,22,16,.92), rgba(30,22,16,0)); }
+    .photo .cap h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
+    .photo .cap p { font-size: 14px; opacity: .85; }
+    section.block { padding: 30px clamp(20px, 5vw, 48px) 0; }
+    h3 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: 28px; line-height: 1.1; margin-bottom: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 14px; background: #fff; }
+    ul.check { list-style: none; display: grid; gap: 8px; }
+    ul.check li { position: relative; padding-left: 26px; font-size: 15px; }
+    ul.check li::before { content: ""; position: absolute; left: 2px; top: .45em; width: 12px; height: 7px; border-left: 2px solid var(--pielini); border-bottom: 2px solid var(--pielini); transform: rotate(-45deg); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    table.inv { width: 100%; border-collapse: collapse; font-size: 15px; }
+    table.inv td { padding: 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.inv td.v { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-left: 16px; }
+    table.inv tr.sub td { color: var(--pielini); }
+    .total { margin-top: 18px; border-radius: 22px; background: var(--torra); color: var(--creme); padding: 22px 24px; display: grid; gap: 14px; }
+    .total .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+    .total .big { font-size: clamp(30px, 5vw, 42px); font-weight: 500; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .total .lbl { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
+    .total .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; border-top: 1px solid rgba(245,242,235,.15); padding-top: 14px; }
+    .total .opt span { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+    .total .opt b { font-weight: 500; font-size: 18px; font-variant-numeric: tabular-nums; }
+    .total .opt.hl b { color: #DDA971; }
+    .note { margin-top: 12px; font-size: 13px; color: var(--sec); }
+    .obs { background: var(--creme); border-left: 3px solid var(--caramelo); border-radius: 0 14px 14px 0; padding: 14px 18px; white-space: pre-line; font-size: 15px; }
+    .validity { margin: 30px clamp(20px, 5vw, 48px) 0; padding: 16px 20px; border: 1px dashed rgba(168,109,51,.5); border-radius: 16px; font-size: 14px; color: var(--caramelo-dark); text-align: center; }
+    footer.sig { padding: 34px clamp(20px, 5vw, 48px) 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--sec); }
+    footer.sig p.serif { font-size: 24px; font-style: italic; color: var(--torra); }
+    .actions { position: fixed; z-index: 10; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 10px; padding: 8px; border-radius: 999px; background: rgba(255,255,255,.88); box-shadow: 0 16px 40px -18px rgba(30,22,16,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); width: max-content; max-width: calc(100vw - 24px); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; padding: 13px 20px; font: 600 14px "Geist", sans-serif; cursor: pointer; text-decoration: none; white-space: nowrap; }
+    .btn.wa { background: #25D366; color: #fff; }
+    .btn.ghost { background: var(--creme); color: var(--torra); }
+    .empty { text-align: center; padding: 80px 20px; }
+    @media (max-width: 640px) {
+      .cols { grid-template-columns: 1fr; }
+      header.top img { width: 108px; }
+      .btn { padding: 12px 15px; font-size: 13px; }
+    }
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: #fff; }
+      .wrap { padding: 0; max-width: none; }
+      .sheet { box-shadow: none; border-radius: 0; }
+      .actions { display: none; }
+      .photo { aspect-ratio: 21 / 8; margin-top: 18px; }
+      .hero { padding-top: 18px; }
+      section.block { padding-top: 20px; }
+      .photo, .total, .validity, table.inv, ul.check { break-inside: avoid; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  
+    .plans { display: grid; gap: 22px; padding: 26px clamp(20px, 5vw, 48px) 0; }
+    .plan { display: grid; grid-template-columns: 300px 1fr; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: #fff; position: relative; }
+    .plan.hl { border-color: var(--caramelo); box-shadow: 0 18px 40px -26px rgba(200,138,75,.6); }
+    .plan .pic { min-height: 240px; background: #2a1f17; }
+    .plan .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .plan .body { padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .plan h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: 32px; line-height: 1.05; }
+    .plan .tl { color: var(--sec); font-size: 15px; }
+    .plan .price { font-size: 13px; color: var(--sec); }
+    .plan .price b { display: block; font-size: 30px; font-weight: 500; letter-spacing: -.02em; color: var(--torra); font-variant-numeric: tabular-nums; }
+    .plan .badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--caramelo); color: var(--torra); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; border-radius: 999px; padding: 6px 12px; }
+    .plan .gift { font-size: 13px; color: var(--caramelo-dark); font-weight: 500; }
+    .addons { margin-top: 4px; }
+    @media (max-width: 680px) { .plan { grid-template-columns: 1fr; } .plan .pic { height: 210px; min-height: 0; } }
+    @media print { .plan { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="app"></main>
+  <script src="assets/js/proposta-data.js"></script>
+  <script>
+  (() => {
+    const { PLANS, INCLUDED, TERMS, WHATSAPP, brl } = window.PIELINI;
+    const q = new URLSearchParams(location.search);
+    const showPrices = q.get('v') !== '0';
+    const name = (q.get('n') || '').trim();
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const first = name.split(/\s+/)[0] || '';
+    const ask = encodeURIComponent(`Olá, Juan! ☕ ${first ? `Sou ${name} e ` : ''}vi os planos da Pielini Coffee e gostaria de ${showPrices ? 'um orçamento para o meu evento' : 'saber os valores'}.`);
+
+    document.getElementById('app').innerHTML = `
+      <article class="sheet">
+        <header class="top">
+          <img src="assets/svg/pielini-logotipo.svg" alt="Pielini Coffee">
+          <div class="num">ILHAS DE CAFÉ<b>Nossos planos</b>para eventos</div>
+        </header>
+        <div class="hero">
+          <p class="kicker">Cafeteria &amp; Torrefação</p>
+          <h1>${first ? `${esc(first)}, conheça as nossas <em>estações</em>` : 'Conheça as nossas <em>estações</em>'}</h1>
+          <p style="margin-top:12px;color:var(--sec);max-width:60ch">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e barista dedicado. ${showPrices ? 'Valores de referência para até 100 convidados.' : ''}</p>
+        </div>
+
+        <div class="plans">
+          ${PLANS.map((p, i) => `
+            <div class="plan${i === 2 ? ' hl' : ''}">
+              ${i === 2 ? '<span class="badge">A queridinha dos eventos</span>' : ''}
+              <div class="pic"><img src="assets/img/${p.img}.jpg" alt="" style="object-position:${p.pos}" loading="lazy"></div>
+              <div class="body">
+                <h2>${esc(p.name)}</h2>
+                <p class="tl">${esc(p.tagline)}</p>
+                <div class="chips">${p.methods.map((m) => `<span class="chip">${esc(m)}</span>`).join('')}</div>
+                ${i === 3 ? '<p class="gift">🎁 Personalização dos copos de brinde</p>' : ''}
+                ${showPrices ? `<p class="price">a partir de<b>${brl(p.price)}</b></p>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+
+        <section class="block cols">
+          <div><h3>Incluso em todas</h3><ul class="check">${INCLUDED.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
+          <div><h3>Bom saber</h3><ul class="check">
+            <li>3 horas de serviço.</li>
+            <li>Deslocamento incluso até 10 km da cafeteria${showPrices ? '; acima disso, R$ 1 por km' : ''}.</li>
+            <li>Acima de 100 convidados e eventos corporativos: proposta sob medida.</li>
+            ${showPrices ? `<li>À vista no Pix: ${Math.round(TERMS.cashDiscount * 100)}% de desconto. Ou 50% na assinatura e 50% na semana do evento.</li>` : ''}
+          </ul></div>
+        </section>
+
+        <div class="validity">${showPrices ? 'Valores de referência, sujeitos a confirmação conforme data, local e número de convidados.' : 'Os valores são enviados pelo WhatsApp, de acordo com a data, o local e o número de convidados do seu evento.'}</div>
+
+        <footer class="sig">
+          <div><p class="serif">Cafés especiais para momentos especiais.</p><p>Pielini Coffee · Cafeteria &amp; Torrefação · Novo Hamburgo/RS</p></div>
+          <div style="text-align:right">(51) 99516-8104<br>@pielinicoffee · pielinicoffee.com</div>
+        </footer>
+      </article>
+      <div class="actions">
+        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${ask}" target="_blank" rel="noopener">${showPrices ? 'Pedir meu orçamento' : 'Quero os valores'}</a>
+        <button class="btn ghost" type="button" id="pdf">Baixar PDF</button>
+      </div>`;
+    document.getElementById('pdf').addEventListener('click', () => window.print());
+  })();
+  </script>
+</body>
+</html>
