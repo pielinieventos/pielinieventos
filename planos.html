@@ -95,6 +95,11 @@
     .plan .badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--caramelo); color: var(--torra); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; border-radius: 999px; padding: 6px 12px; }
     .plan .gift { font-size: 13px; color: var(--caramelo-dark); font-weight: 500; }
     .addons { margin-top: 4px; }
+    .btn.pick { align-self: flex-start; margin-top: auto; background: var(--pielini); color: #fff; padding: 12px 22px; transition: transform .2s, background .2s; }
+    .btn.pick:hover { background: #1F4539; transform: translateY(-1px); }
+    .plan.hl .btn.pick { background: var(--caramelo); color: var(--torra); }
+    @media (max-width: 680px) { .btn.pick { align-self: stretch; } }
+    @media print { .btn.pick { display: none; } }
     @media (max-width: 680px) { .plan { grid-template-columns: 1fr; } .plan .pic { height: 210px; min-height: 0; } }
     @media print { .plan { break-inside: avoid; } }
   </style>
@@ -104,10 +109,21 @@
   <script src="assets/js/proposta-data.js"></script>
   <script>
   (() => {
-    const { PLANS, INCLUDED, TERMS, WHATSAPP, brl } = window.PIELINI;
+    const { PLANS, INCLUDED, TERMS, WHATSAPP, brl, decode } = window.PIELINI;
     const q = new URLSearchParams(location.search);
-    const showPrices = q.get('v') !== '0';
-    const name = (q.get('n') || '').trim();
+    let D = {};
+    try { if (q.get('d')) D = decode(q.get('d')) || {}; } catch (e) { D = {}; }
+    const showPrices = D.sv ? false : q.get('v') !== '0';
+    const name = String(D.cli || q.get('n') || '').trim();
+    const fmtDate = (iso) => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
+    const custom = Array.isArray(D.tot);
+    const priceOf = (i) => (custom && D.tot[i] ? Number(D.tot[i]) : PLANS[i].price);
+    const facts = [['Evento', D.ev], ['Data', fmtDate(D.data)], ['Local', D.local], ['Convidados', D.conv]].filter(([, v]) => v);
+    const pickMsg = (i) => {
+      const p = PLANS[i];
+      const parts = [D.ev ? `para o ${String(D.ev).toLowerCase()}` : '', D.data ? `em ${fmtDate(D.data)}` : '', D.local ? `no local ${D.local}` : '', D.conv ? `com ${D.conv} convidados` : ''].filter(Boolean).join(', ');
+      return `Olá, Juan! ☕ ${name ? `Sou ${name}. ` : ''}Escolhi a *${p.name}*${showPrices ? ` (${brl(priceOf(i))})` : ''}${parts ? ` ${parts}` : ''}. Quero fechar esse plano, vamos dar sequência no contrato?`;
+    };
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const first = name.split(/\s+/)[0] || '';
     const ask = encodeURIComponent(`Olá, Juan! ☕ ${first ? `Sou ${name} e ` : ''}vi os planos da Pielini Coffee e gostaria de ${showPrices ? 'um orçamento para o meu evento' : 'saber os valores'}.`);
@@ -121,7 +137,8 @@
         <div class="hero">
           <p class="kicker">Cafeteria &amp; Torrefação</p>
           <h1>${first ? `${esc(first)}, conheça as nossas <em>estações</em>` : 'Conheça as nossas <em>estações</em>'}</h1>
-          <p style="margin-top:12px;color:var(--sec);max-width:60ch">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e barista dedicado. ${showPrices ? 'Valores de referência para até 100 convidados.' : ''}</p>
+          <p style="margin-top:12px;color:var(--sec);max-width:60ch">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e barista dedicado. ${showPrices ? (custom ? 'Os valores abaixo já foram calculados para o seu evento.' : 'Valores de referência para até 100 convidados.') : ''}</p>
+          ${facts.length ? `<div class="facts">${facts.map(([k, v]) => `<div class="fact"><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
         </div>
 
         <div class="plans">
@@ -134,7 +151,8 @@
                 <p class="tl">${esc(p.tagline)}</p>
                 <div class="chips">${p.methods.map((m) => `<span class="chip">${esc(m)}</span>`).join('')}</div>
                 ${i === 3 ? '<p class="gift">🎁 Personalização dos copos de brinde</p>' : ''}
-                ${showPrices ? `<p class="price">a partir de<b>${brl(p.price)}</b></p>` : ''}
+                ${showPrices ? `<p class="price">${custom ? 'para o seu evento' : 'a partir de'}<b>${brl(priceOf(i))}</b></p>` : ''}
+                <a class="btn pick" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(pickMsg(i))}" target="_blank" rel="noopener">Quero este plano</a>
               </div>
             </div>`).join('')}
         </div>
@@ -144,8 +162,9 @@
           <div><h3>Bom saber</h3><ul class="check">
             <li>3 horas de serviço.</li>
             <li>Deslocamento incluso até 10 km da cafeteria${showPrices ? '; acima disso, R$ 1 por km' : ''}.</li>
-            <li>Acima de 100 convidados e eventos corporativos: proposta sob medida.</li>
-            ${showPrices ? `<li>À vista no Pix: ${Math.round(TERMS.cashDiscount * 100)}% de desconto. Ou 50% na assinatura e 50% na semana do evento.</li>` : ''}
+            ${custom ? '' : '<li>Acima de 100 convidados e eventos corporativos: proposta sob medida.</li>'}
+            ${showPrices ? `<li>À vista no Pix: ${Math.round(TERMS.cashDiscount * 100)}% de desconto. Ou 50% na assinatura e 50% na semana do evento.</li><li>Cartão de crédito: parcelamos, com as taxas da maquininha por conta do contratante.</li>` : ''}
+            <li>A data fica reservada após a assinatura do contrato e o pagamento do sinal.</li>
           </ul></div>
         </section>
 
@@ -157,7 +176,7 @@
         </footer>
       </article>
       <div class="actions">
-        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${ask}" target="_blank" rel="noopener">${showPrices ? 'Pedir meu orçamento' : 'Quero os valores'}</a>
+        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${ask}" target="_blank" rel="noopener">${showPrices ? 'Tirar uma dúvida' : 'Quero os valores'}</a>
         <button class="btn ghost" type="button" id="pdf">Baixar PDF</button>
       </div>`;
     document.getElementById('pdf').addEventListener('click', () => window.print());

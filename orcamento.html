@@ -62,13 +62,13 @@
   <main class="wrap">
     <header><img src="assets/svg/pielini-logotipo.svg" alt="Pielini Coffee"><span>Uso interno</span></header>
     <h1>Gerador de <em>orçamento</em></h1>
-    <p class="lead">Cole a mensagem que o cliente mandou pelo WhatsApp, confira os valores e envie a proposta pronta.</p>
+    <p class="lead">Cole as respostas do cliente, envie o link dos planos para ele escolher, ou monte a proposta pronta de um plano.</p>
 
     <div class="grid">
       <div>
         <section class="card">
           <h2><i>1</i> Mensagem do cliente</h2>
-          <textarea id="msg" rows="7" placeholder="Cole aqui a mensagem que chegou pelo site (Olá, Juan! ☕ Meu nome é…)"></textarea>
+          <textarea id="msg" rows="7" placeholder="Cole aqui a mensagem do cliente: a que chegou pelo site ou as respostas dele no WhatsApp (nome, evento, data, local, convidados…)"></textarea>
           <div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap">
             <button class="btn primary" id="parse" type="button">Preencher com a mensagem</button>
             <span class="hint" id="parsed"></span>
@@ -90,10 +90,33 @@
             <div class="field"><label for="local">Local / cidade</label><input id="local" placeholder="Sítio Areia Branca, Parobé"></div>
             <div class="field"><label for="conv">Convidados</label><input id="conv" placeholder="100"></div>
           </div>
+          <div class="f2">
+            <div class="field"><label for="km">Distância até a cafeteria (km)</label><input id="km" type="number" min="0" placeholder="0"></div>
+            <div class="field"><label for="att">Outras atrações no evento?</label><select id="att"><option value="">Não sei</option><option value="sim">Sim</option><option value="nao">Não, o café é a atração principal</option></select></div>
+          </div>
+        </section>
+
+        <section class="card" id="choose">
+          <h2><i>3</i> Planos para o cliente escolher</h2>
+          <p class="hint" style="margin:0 0 12px">O cliente recebe as 4 estações com o que vai em cada uma e o valor para o evento dele. Cada estação tem o botão "Quero este plano", que abre o seu WhatsApp com o pedido para fechar.</p>
+          <div class="f2" id="planPrices"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+            <button class="btn sm" type="button" id="pRecalc">Recalcular pela tabela</button>
+            <div class="seg" role="radiogroup" aria-label="Planos com ou sem valores" style="flex:1;min-width:220px">
+              <label><input type="radio" name="pmode" value="1" checked> Com valores</label>
+              <label><input type="radio" name="pmode" value="0"> Sem valores</label>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            <a class="btn primary" id="pOpen" target="_blank" rel="noopener">Ver planos</a>
+            <button class="btn" id="pCopy" type="button">Copiar link</button>
+            <button class="btn gold" id="pCopyMsg" type="button">Copiar mensagem</button>
+            <a class="btn wa" id="pSend" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+          </div>
         </section>
 
         <section class="card">
-          <h2><i>3</i> Estação e valores</h2>
+          <h2><i>4</i> Proposta pronta de um plano <span style="text-transform:none;letter-spacing:0;font-weight:400">(opcional)</span></h2>
           <div class="f2">
             <div class="field"><label for="plan">Estação</label><select id="plan"></select></div>
             <div class="field"><label for="plano">Nome na proposta</label><input id="plano" placeholder="Estação Espressos Plus (com cafés gelados)"></div>
@@ -135,19 +158,6 @@
           <textarea id="out" rows="7" readonly></textarea>
           <p class="hint">Cole no WhatsApp do cliente. O link abre a proposta completa, com botão de baixar PDF.</p>
         </section>
-        <section class="card">
-          <h2>Link "Nossos planos"</h2>
-          <p class="hint" style="margin:0 0 10px">Para quem não passou pelo site: mostra as 4 estações. Usa o nome do cliente (campo acima), se preenchido.</p>
-          <div class="seg" role="radiogroup" aria-label="Planos com ou sem valores">
-            <label><input type="radio" name="pmode" value="1" checked> Com valores</label>
-            <label><input type="radio" name="pmode" value="0"> Sem valores</label>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-            <a class="btn sm primary" id="pOpen" target="_blank" rel="noopener">Ver planos</a>
-            <button class="btn sm" id="pCopy" type="button">Copiar link</button>
-            <a class="btn sm wa" id="pSend" target="_blank" rel="noopener">Enviar no WhatsApp</a>
-          </div>
-        </section>
         <section class="card hist">
           <h2>Últimas propostas</h2>
           <div id="hist"><p class="hint">Nenhuma ainda.</p></div>
@@ -173,7 +183,10 @@
     const FREE_KM = 10;
     const PER_KM = 1;
     const HIST_KEY = 'pielini-propostas';
-    let hint = { km: 0, guests: 0, attractions: null, corporate: false, cup: '' };
+    let hint = { corporate: false, cup: '' };
+    const ctxKm = () => Number($('km').value) || 0;
+    const ctxGuests = () => parseInt($('conv').value, 10) || 0;
+    const ctxAtt = () => $('att').value || null;
 
     PLANS.forEach((p, i) => $('plan').insertAdjacentHTML('beforeend', `<option value="${i}">${p.name} · ${brl(p.price)}</option>`));
     $('plan').insertAdjacentHTML('beforeend', '<option value="-1">Personalizada (sem foto)</option>');
@@ -200,9 +213,9 @@
       const plan = PLANS[idx];
       if (plan) addLine(plan.name, hint.corporate ? '' : plan.price);
       else addLine('Estação personalizada', '');
-      const extraKm = Math.max(0, Math.round(hint.km) - FREE_KM);
+      const extraKm = Math.max(0, Math.round(ctxKm()) - FREE_KM);
       addLine(extraKm ? `Deslocamento (${extraKm} km além de 10 km)` : 'Deslocamento até 10 km', extraKm * PER_KM);
-      const staff = (idx >= 2 && hint.guests > 80 ? 1 : 0) + (hint.attractions === 'nao' ? 1 : 0);
+      const staff = (idx >= 2 && ctxGuests() > 80 ? 1 : 0) + (ctxAtt() === 'nao' ? 1 : 0);
       if (staff) addLine('Atendimento ampliado (barista extra)', staff * EXTRA_STAFF);
       if (idx === 3) addLine('Personalização dos copos (brinde Premium Plus)', 0);
       else if (hint.cup) addLine(`Personalização dos copos (${hint.cup})`, '');
@@ -211,36 +224,57 @@
 
     // ---------- leitura da mensagem do WhatsApp ----------
     const pick = (txt, label) => { const m = txt.match(new RegExp(`•\\s*${label}:\\s*(.+)`, 'i')); return m ? m[1].trim() : ''; };
+    const MONTHS = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+    const freeDate = (t) => {
+      let m = t.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
+      if (m) { const y = m[3] ? (m[3].length === 2 ? `20${m[3]}` : m[3]) : String(new Date().getFullYear() + (Number(m[2]) < new Date().getMonth() + 1 ? 1 : 0)); return `${y}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`; }
+      m = t.toLowerCase().match(new RegExp(`(\\d{1,2})\\s+de\\s+(${MONTHS.join('|')})(?:\\s+de\\s+(\\d{4}))?`));
+      if (m) { const mm = MONTHS.indexOf(m[2]) + 1; const y = m[3] || String(new Date().getFullYear() + (mm < new Date().getMonth() + 1 ? 1 : 0)); return `${y}-${String(mm).padStart(2, '0')}-${m[1].padStart(2, '0')}`; }
+      return '';
+    };
+    const EVENTS = ['Casamento', '15 Anos', 'Formatura', 'Aniversário', 'Batizado', 'Chá de bebê', 'Noivado', 'Corporativo', 'Convenção', 'Confraternização'];
     $('parse').addEventListener('click', () => {
       const t = $('msg').value;
       if (!t.trim()) return toast('Cole a mensagem primeiro');
-      const nome = (t.match(/Meu nome é ([^.\n]+)/i) || [])[1];
+      const fromSite = /•\s*Evento:/i.test(t);
+      const nome = (t.match(/(?:Meu nome é|me chamo|aqui é (?:a |o )?|sou (?:a |o )?)([A-ZÁÉÍÓÚÂÊÔÃÕÇ][^.,!\n]{1,40})/) || [])[1];
       if (nome) $('cli').value = nome.trim();
-      const ev = pick(t, 'Evento'); if (ev) $('ev').value = ev;
-      const dt = pick(t, 'Data do evento');
-      const dm = dt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      $('data').value = dm ? `${dm[3]}-${dm[2]}-${dm[1]}` : '';
+      const ev = pick(t, 'Evento') || EVENTS.find((e) => new RegExp(e.replace(' ', '\\s*'), 'i').test(t)) || (/\b15\b/.test(t) && /anos/i.test(t) ? '15 Anos' : '');
+      if (ev) $('ev').value = ev;
+      const dt = fromSite ? pick(t, 'Data do evento') : t;
+      const iso = freeDate(dt);
+      if (iso) $('data').value = iso;
       const est = pick(t, 'Estação');
       const pi = PLANS.findIndex((p) => est && est.toLowerCase().includes(p.name.toLowerCase().replace('estação ', '')));
       if (pi >= 0) { $('plan').value = pi; $('plano').value = ''; }
-      const conv = pick(t, 'Convidados'); if (conv) $('conv').value = conv;
+      const conv = pick(t, 'Convidados') || (t.match(/(\d{2,4})\s*(?:convidados|pessoas|convites)/i) || [])[1] || '';
+      if (conv) $('conv').value = conv;
       const cid = pick(t, 'Cidade');
       if (cid) $('local').value = cid.replace(/\s*\(~\d+\s*km\)/, '');
-      const km = cid.match(/~(\d+)\s*km/);
+      const km = cid.match(/~(\d+)\s*km/) || t.match(/(\d{1,3})\s*km/i);
+      if (km) $('km').value = km[1];
       const att = pick(t, 'Outras atrações no evento');
+      if (/^não/i.test(att)) $('att').value = 'nao'; else if (/^sim/i.test(att)) $('att').value = 'sim';
+      else if (/open bar|bar de drinks|drinks|food ?truck|chopp|cervej|banda|dj\b|atraç/i.test(t)) $('att').value = 'sim';
       const cup = pick(t, 'Copo personalizado');
-      hint = {
-        km: km ? Number(km[1]) : 0,
-        guests: parseInt(conv, 10) || 0,
-        attractions: /^não/i.test(att) ? 'nao' : /^sim/i.test(att) ? 'sim' : null,
-        corporate: /corporativ/i.test(t),
-        cup,
-      };
+      hint = { corporate: /corporativ|convenç|empresa/i.test(t), cup };
       if (cup) $('obs').value = `Copo personalizado: ${cup}`;
       $('num').value = newNumber();
       suggest();
-      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os valores${hint.corporate ? ' — evento corporativo: informe o valor da estação' : ''}.`;
+      fillPlanPrices();
+      const big = ctxGuests() > 100;
+      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os campos${hint.corporate ? ' — evento corporativo: ajuste os valores das estações' : ''}${big ? ' — mais de 100 convidados: ajuste os valores (2+ baristas)' : ''}.`;
     });
+
+    // ---------- valores por estação (link dos planos) ----------
+    PLANS.forEach((pl, i) => $('planPrices').insertAdjacentHTML('beforeend', `<div class="field"><label for="pp${i}">${pl.name}</label><input id="pp${i}" type="number" step="0.01"></div>`));
+    const planTotal = (i) => {
+      const extraKm = Math.max(0, Math.round(ctxKm()) - FREE_KM) * PER_KM;
+      const staff = ((i >= 2 && ctxGuests() > 80 ? 1 : 0) + (ctxAtt() === 'nao' ? 1 : 0)) * EXTRA_STAFF;
+      return PLANS[i].price + extraKm + staff;
+    };
+    const fillPlanPrices = () => { PLANS.forEach((_, i) => { $(`pp${i}`).value = planTotal(i); }); render(); };
+    ['km', 'conv', 'att'].forEach((id) => $(id).addEventListener('change', fillPlanPrices));
 
     // ---------- proposta ----------
     const data = () => ({
@@ -263,23 +297,26 @@
     });
     const withPrices = () => document.querySelector('input[name="mode"]:checked').value === '1';
     const base = location.href.replace(/orcamento\.html.*$/, '');
-    const plansLink = () => {
-      const q = new URLSearchParams();
-      const n = $('cli').value.trim();
-      if (n) q.set('n', n);
-      if (document.querySelector('input[name="pmode"]:checked').value === '0') q.set('v', '0');
-      const qs = q.toString();
-      return `${base}planos.html${qs ? `?${qs}` : ''}`;
-    };
+    const plansData = () => ({
+      cli: $('cli').value.trim(),
+      ev: $('ev').value.trim(),
+      data: $('data').value,
+      local: $('local').value.trim(),
+      conv: $('conv').value.trim(),
+      tot: PLANS.map((_, i) => Number($(`pp${i}`).value) || PLANS[i].price),
+      ...(document.querySelector('input[name="pmode"]:checked').value === '0' ? { sv: 1 } : {}),
+    });
+    const plansLink = () => `${base}planos.html?d=${encode(plansData())}`;
     const plansMessage = () => {
-      const first = $('cli').value.trim().split(/\s+/)[0] || '';
+      const d = plansData();
+      const first = d.cli.split(/\s+/)[0] || '';
       return [
         `Olá${first ? `, ${first}` : ''}! ☕ Aqui é o Juan, da Pielini Coffee.`,
         '',
-        'Separei aqui as nossas estações de café para eventos, com o cardápio de cada uma:',
+        `Separei as nossas estações de café${d.ev ? ` para o seu ${d.ev.toLowerCase()}` : ''}, com o que vai em cada uma${d.sv ? '' : ' e o valor para o seu evento'}:`,
         plansLink(),
         '',
-        'Me conta a data, o local e o número de convidados que eu monto a sua proposta.',
+        'É só escolher a que mais combina com você e tocar em "Quero este plano". Qualquer dúvida, estou por aqui!',
       ].join('\n');
     };
     const link = () => `${base}proposta.html?d=${encode(data())}`;
@@ -337,6 +374,8 @@
     document.querySelector('.wrap').addEventListener('input', render);
     $('copyLink').addEventListener('click', () => copy(link(), 'Link copiado'));
     $('pCopy').addEventListener('click', () => copy(plansLink(), 'Link dos planos copiado'));
+    $('pCopyMsg').addEventListener('click', () => copy(plansMessage(), 'Mensagem copiada'));
+    $('pRecalc').addEventListener('click', fillPlanPrices);
     document.querySelectorAll('input[name="mode"], input[name="pmode"]').forEach((r) => r.addEventListener('change', render));
     $('copyMsg').addEventListener('click', () => copy(message(), 'Mensagem copiada'));
     $('open').addEventListener('click', save);
@@ -344,6 +383,7 @@
 
     $('plan').value = 2;
     suggest();
+    fillPlanPrices();
     showHist();
   })();
   </script>
