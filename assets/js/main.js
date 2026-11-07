@@ -25,7 +25,7 @@
     km: 0,
     eventDate: '',         // AAAA-MM-DD
     noDate: false,         // "Ainda não tenho data definida"
-    answers: { 'q-budget': null, 'q-phase': null },
+    answers: { 'q-phase': null },
     qualified: false,
     leadName: '',
     cup: { name: '', subMode: 'date', date: '', sub: '' },
@@ -681,7 +681,7 @@
         <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-caramelo-light">A mesa da</p>
         <p class="card-back-title mt-1 font-display leading-tight">${name}</p>
         <p class="mt-2 text-sm leading-relaxed text-creme/75">${t.tools}</p>
-        <button type="button" class="card-back-btn mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Simular investimento →</button>
+        <button type="button" class="card-back-btn mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-caramelo px-5 py-3 text-sm font-semibold text-torra transition hover:bg-caramelo-light">Pedir orçamento →</button>
       </div>`;
     card.appendChild(back);
     $('.card-back-btn', back).addEventListener('click', (e) => { e.stopPropagation(); $('[data-choose]', front).click(); });
@@ -758,7 +758,7 @@
   }));
 
   /* ===================================================================
-     6. FUNIL — simulador de investimento, filtro e mensagem do WhatsApp
+     6. FUNIL — pedido de orçamento (sem valores), filtro e mensagem do WhatsApp
   =================================================================== */
   const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   const preview = $('#wa-preview');
@@ -796,7 +796,9 @@
     const lead = state.leadName.trim();
     return lead ? `Olá, Juan! ☕ Meu nome é ${lead}.` : 'Olá, Juan! ☕';
   };
-  const summaryLines = (withPrice) => {
+  // A landing não mostra valores: o orçamento é calculado no gerador (orcamento.html)
+  // a partir desta mensagem — mantenha os rótulos "• Campo:" que ele lê.
+  const summaryLines = () => {
     const lines = [
       `• Evento: ${state.event || 'ainda vou definir'}`,
       `• Data do evento: ${dateLabel()}`,
@@ -807,7 +809,6 @@
     ];
     if (!isQuoteOnly() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
     if (state.plan === PRICING.giftPlan) lines.push('• 🎁 Brinde Premium Plus: personalização dos copos grátis');
-    if (withPrice && !isQuoteOnly()) lines.push(`• Investimento estimado: ${brl(quote().total)}`);
     return lines;
   };
 
@@ -829,9 +830,6 @@
       intro: 'Gostaria de uma *proposta personalizada* para o meu evento.',
     },
   };
-  // guarda o texto de preço de cada estação no simulador (some no corporativo)
-  simPlans.forEach((b) => { const pr = b.lastElementChild; pr.dataset.price = pr.textContent; });
-
   function renderSim() {
     const custom = isQuoteOnly();
     const copy = CUSTOM_COPY[state.corporate ? 'corporate' : 'large'];
@@ -839,24 +837,13 @@
     $('#sim-custom-title').textContent = copy.title;
     $('#sim-custom-text').textContent = copy.text;
     $('#sim-custom-label').textContent = copy.label;
-    simPlans.forEach((b) => { const pr = b.lastElementChild; pr.textContent = state.corporate ? 'valor sob consulta' : pr.dataset.price; });
     $('#sim-guests-out').textContent = guestsLabel();
     $('#sim-standard').hidden = custom;
     $('#sim-custom').hidden = !custom;
     if (custom) { filterBox.hidden = true; passBox.hidden = true; failBox.hidden = true; }
 
-    const q = quote();
-    $('#sim-total').textContent = brl(q.total);
-    $('#sim-hint').hidden = !!state.attractions;
     renderOffer();
-    $('#sim-lines').innerHTML = [
-      lineRow(PRICING.plans[state.plan].name, brl(q.base)),
-      lineRow('Deslocamento', q.travel ? `+ ${brl(q.travel)} <span class="text-creme/50">(${q.extraKm} km além de 10 km)</span>` : 'incluso'),
-      q.staff ? lineRow('Atendimento ampliado', `+ ${brl(q.staff)}`) : '',
-      lineRow('Atendimento de barista', 'incluso'),
-      lineRow('Insumos, bancada e equipamentos', 'inclusos'),
-    ].join('');
-    $('#sim-custom-lines').innerHTML = [
+    const orderLines = [
       lineRow('Evento', state.event || 'a definir'),
       lineRow('Data', dateLabel()),
       lineRow('Estação', PRICING.plans[state.plan].name),
@@ -864,11 +851,12 @@
       lineRow('Cidade', cityLabel()),
       lineRow('Outras atrações', attractionsLabel()),
     ].join('');
+    $('#sim-lines').innerHTML = orderLines;
+    $('#sim-custom-lines').innerHTML = orderLines;
 
-    $('#sim-custom-cta').href = waLink([greeting(), copy.intro, '', ...summaryLines(false), '', 'Podem me enviar uma proposta?'].join('\n'));
-    const menuMsg = [greeting(), 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines(true)].join('\n');
-    $('#sim-menu-link').href = waLink(menuMsg);
-    $('#sim-menu-cta').href = waLink(menuMsg);
+    $('#sim-custom-cta').href = waLink([greeting(), copy.intro, '', ...summaryLines(), '', 'Podem me enviar uma proposta?'].join('\n'));
+    $('#sim-quote-cta').href = waLink([greeting(), 'Gostaria de receber o *orçamento* para o meu evento.', '', ...summaryLines(), '', 'Podem me enviar os valores?'].join('\n'));
+    $('#sim-menu-cta').href = waLink([greeting(), 'Gostaria de receber o *cardápio* com os planos e valores.', '', ...summaryLines()].join('\n'));
 
     simPlans.forEach((b, i) => b.setAttribute('aria-pressed', String(i === state.plan)));
     stationCards.forEach((c, i) => c.classList.toggle('is-chosen', i === state.plan));
@@ -880,7 +868,7 @@
   // Botões que levam ao WhatsApp ficam travados até o simulador estar completo
   function updateGates() {
     const ready = SIM_CHECKS().every(([ok]) => ok());
-    ['#sim-custom-cta', '#sim-menu-link', '#sim-continue'].forEach((sel) => {
+    ['#sim-custom-cta', '#sim-quote-cta', '#sim-continue'].forEach((sel) => {
       const el = $(sel);
       el.classList.toggle('is-locked', !ready);
       el.setAttribute('aria-disabled', String(!ready));
@@ -888,7 +876,7 @@
     $$('.sim-gate-hint').forEach((h) => { h.hidden = ready; });
   }
 
-  // Upgrade: quem está na Espressos vê quanto falta para a Plus (com brinde);
+  // Upgrade: quem está na Espressos vê a oferta da Plus (com brinde, sem valores);
   // quem já escolheu a Plus vê o brinde confirmado
   function renderOffer() {
     const box = $('#sim-offer');
@@ -899,14 +887,9 @@
         <p class="mt-2 flex items-baseline justify-between text-sm"><span class="text-creme/65">Personalização dos copos</span><span class="font-semibold text-caramelo-light">Grátis</span></p>
       </div>`;
     } else if (state.plan === PRICING.upsellFrom) {
-      const cur = quote();
-      const prev = state.plan;
-      state.plan = PRICING.giftPlan;
-      const up = quote();
-      state.plan = prev;
       box.innerHTML = `<div class="offer-upsell mt-6 rounded-2xl bg-pielini p-5">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-caramelo-light">Upgrade especial</p>
-        <p class="mt-1 font-display text-2xl leading-snug">Por apenas <span class="text-caramelo-light">+ ${brl(up.total - cur.total)}</span>, leve a Premium Plus</p>
+        <p class="mt-1 font-display text-2xl leading-snug">Por um pequeno acréscimo, leve a <span class="text-caramelo-light">Premium Plus</span></p>
         <ul class="mt-3 space-y-1.5 text-sm text-creme/85">
           <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> Sodas Italianas ou cafés gelados</li>
           <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> <strong>Personalização dos copos grátis</strong> 🎁</li>
@@ -992,7 +975,7 @@
   ];
   const FILTER_CHECKS = () => Object.keys(state.answers).map((id) => [() => !!state.answers[id], $(`#${id}`).closest('fieldset'), 'Escolha uma opção.']);
   // Links do funil para o WhatsApp só abrem com tudo respondido
-  ['#sim-menu-link', '#sim-menu-cta', '#sim-custom-cta'].forEach((sel) => $(sel).addEventListener('click', (e) => {
+  ['#sim-quote-cta', '#sim-menu-cta', '#sim-custom-cta'].forEach((sel) => $(sel).addEventListener('click', (e) => {
     if (!requireFields(SIM_CHECKS())) e.preventDefault();
   }));
   cta.addEventListener('click', (e) => {
@@ -1058,7 +1041,7 @@
     renderMessage();
   });
 
-  // Resumo da simulação no bloco de agendamento
+  // Resumo do pedido no bloco de agendamento
   function renderSummary() {
     const items = [
       ['Nome', state.leadName.trim() || 'A informar'],
@@ -1067,7 +1050,6 @@
       ['Convidados', guestsLabel()],
       ['Cidade', cityLabel()],
       ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
-      ['Investimento estimado', isQuoteOnly() ? 'Sob consulta' : brl(quote().total)],
       ...(state.plan === PRICING.giftPlan ? [['Brinde', '🎁 Personalização dos copos grátis']] : []),
       ['Data do evento', dateLabel()],
     ];
@@ -1081,7 +1063,7 @@
   });
 
   const buildMessage = () => {
-    const lines = [greeting(), `Gostaria de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines(true)];
+    const lines = [greeting(), `Gostaria de agendar uma *Degustação Exclusiva* na cafeteria.`, '', ...summaryLines()];
     const phase = state.answers['q-phase'];
     if (phase) lines.push(`• Planejamento: ${phase.value}`);
     const cupNameValue = state.cup.name.trim();

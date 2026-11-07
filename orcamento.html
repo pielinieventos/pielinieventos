@@ -237,7 +237,7 @@
       const t = $('msg').value;
       if (!t.trim()) return toast('Cole a mensagem primeiro');
       const fromSite = /•\s*Evento:/i.test(t);
-      const nome = (t.match(/(?:Meu nome é|me chamo|aqui é (?:a |o )?|sou (?:a |o )?)([A-ZÁÉÍÓÚÂÊÔÃÕÇ][^.,!\n]{1,40})/) || [])[1];
+      const nome = (t.match(/(?:Meu nome é|me chamo|aqui é(?: a| o)?|\bsou(?: a| o)?)\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ][^.,!\n]{1,40})/) || [])[1];
       if (nome) $('cli').value = nome.trim();
       const ev = pick(t, 'Evento') || EVENTS.find((e) => new RegExp(e.replace(' ', '\\s*'), 'i').test(t)) || (/\b15\b/.test(t) && /anos/i.test(t) ? '15 Anos' : '');
       if (ev) $('ev').value = ev;
@@ -263,7 +263,8 @@
       suggest();
       fillPlanPrices();
       const big = ctxGuests() > 100;
-      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os campos${hint.corporate ? ' — evento corporativo: ajuste os valores das estações' : ''}${big ? ' — mais de 100 convidados: ajuste os valores (2+ baristas)' : ''}.`;
+      const chosen = fromSite && pi >= 0 ? ` O cliente escolheu a <b>${PLANS[pi].name}</b> no site: a proposta com valores já está montada no bloco 4 — é só tocar em “Enviar no WhatsApp”.` : '';
+      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os campos${hint.corporate ? ' — evento corporativo: ajuste os valores das estações' : ''}${big ? ' — mais de 100 convidados: ajuste os valores (2+ baristas)' : ''}.${chosen}`;
     });
 
     // ---------- valores por estação (link dos planos) ----------
