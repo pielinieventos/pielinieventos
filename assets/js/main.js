@@ -443,11 +443,11 @@
   ];
   // foto de fundo de cada momento (object-position = foco do recorte)
   const MOMENT_PHOTOS = [
-    ['fotos/ilha-jardim', '50% 40%'],
-    ['fotos/xicaras-latte', '50% 62%'],
-    ['fotos/entrega', '50% 65%'],
-    ['fotos/barista-gelado', '50% 70%'],
-    ['fotos/garrafas-pielini', '50% 52%'],
+    ['fotos/ilha-jardim', '50% 58%'],
+    ['fotos/xicaras-latte', '50% 78%'],
+    ['fotos/entrega', '50% 76%'],
+    ['fotos/barista-gelado', '50% 84%'],
+    ['fotos/garrafas-pielini', '50% 66%'],
   ];
   MOMENT_PHOTOS.forEach(([f]) => { const im = new Image(); im.src = `assets/img/${f}.jpg`; });
 
@@ -652,10 +652,10 @@
 
   // Foto da mesa de cada estação (verso do card). object-position = foco do recorte
   const STATION_TABLES = [
-    { img: 'fotos/v60-preparo', pos: '50% 45%', alt: 'Barista da Pielini passando café no Hario V60 durante um evento', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
-    { img: 'fotos/barista-chemex', pos: '50% 45%', alt: 'Barista da Pielini servindo café filtrado na ilha montada em um evento', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
-    { img: 'fotos/calda', pos: '50% 40%', alt: 'Barista da Pielini finalizando uma bebida com calda ao lado da máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
-    { img: 'fotos/noivos-brinde', pos: '50% 30%', alt: 'Noivos brindando com os cafés da Pielini em copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados' },
+    { img: 'fotos/v60-preparo', pos: '50% 61%', alt: 'Barista da Pielini passando café no Hario V60 durante um evento', tools: 'Hario V60 · Prensa Francesa · moedor e balança' },
+    { img: 'fotos/barista-chemex', pos: '60% 62%', alt: 'Barista da Pielini servindo café filtrado na ilha montada em um evento', tools: 'V60 · Prensa · Koar · Chemex · moedor e balança' },
+    { img: 'fotos/calda', pos: '70% 48%', alt: 'Barista da Pielini finalizando uma bebida com calda ao lado da máquina de espresso', tools: 'Máquina de espresso · bebidas com leite vaporizado · filtrados' },
+    { img: 'fotos/noivos-brinde', pos: '50% 56%', alt: 'Noivos brindando com os cafés da Pielini em copos personalizados', tools: 'Espressos · filtrados · sodas italianas · copos personalizados' },
   ];
   $$('.station-card').forEach((card, i) => {
     const front = document.createElement('div');
