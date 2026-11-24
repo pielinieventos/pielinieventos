@@ -8,22 +8,22 @@ window.PIELINI = (() => {
 
   const PLANS = [
     {
-      name: 'Estação Básica', price: 990, img: 'mesa-basica', pos: '62% 55%',
+      name: 'Estação Básica', price: 990, img: 'fotos/v60-preparo', pos: '50% 45%',
       tagline: 'O ritual essencial do café passado na hora.',
       methods: ['Hario V60', 'Prensa Francesa'],
     },
     {
-      name: 'Estação Filtrados', price: 1290, img: 'mesa-filtrados', pos: '45% 30%',
+      name: 'Estação Filtrados', price: 1290, img: 'fotos/barista-chemex', pos: '50% 45%',
       tagline: 'A experiência visual e sensorial dos métodos filtrados.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex'],
     },
     {
-      name: 'Estação Espressos', price: 2190, img: 'mesa-espressos', pos: '45% 88%',
+      name: 'Estação Espressos', price: 2190, img: 'fotos/calda', pos: '50% 40%',
       tagline: 'Os filtrados e os clássicos da cafeteria.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex', 'Espresso', 'Cappuccino', 'Caramel Macchiato', 'Mocaccino'],
     },
     {
-      name: 'Estação Premium Plus', price: 2390, img: 'mesa-premium-plus', pos: '50% 28%',
+      name: 'Estação Premium Plus', price: 2390, img: 'fotos/noivos-brinde', pos: '50% 30%',
       tagline: 'A experiência completa, com bebidas geladas.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex', 'Espresso', 'Cappuccino', 'Caramel Macchiato', 'Mocaccino', 'Sodas Italianas ou cafés gelados'],
     },
