@@ -1,0 +1,14 @@
+{
+  "name": "pielini-coffee-landing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page scrollytelling da Pielini Coffee — ilhas de cafés especiais para eventos.",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify && node scripts/build-icons.js",
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "lucide": "0.460.0",
+    "tailwindcss": "3.4.17"
+  }
+}
