@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Guia para cerimonialistas · Pielini Coffee</title>
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Valores, adicionais e condições das ilhas de café da Pielini Coffee para cerimonialistas.">
+  <meta name="theme-color" content="#F5F2EB">
+  <link rel="icon" type="image/svg+xml" href="assets/svg/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --creme:#F5F2EB; --torra:#1E1610; --pielini:#2C5E4F; --caramelo:#C88A4B; --caramelo-dark:#A86D33; --line:rgba(30,22,16,.12); --sec:rgba(30,22,16,.6); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Geist", system-ui, sans-serif; color: var(--torra); background: #FDFCF9 url("assets/img/papel-filtro.jpg"); background-size: 512px; -webkit-font-smoothing: antialiased; line-height: 1.55; }
+    .serif { font-family: "Cormorant Garamond", Georgia, serif; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: clamp(20px, 5vw, 56px) clamp(16px, 4vw, 40px) 120px; }
+    .sheet { background: rgba(255,255,255,.92); border-radius: 28px; box-shadow: 0 30px 70px -40px rgba(30,22,16,.35); overflow: hidden; }
+    header.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; padding: 32px clamp(20px, 5vw, 48px) 0; }
+    header.top img { width: 130px; height: auto; display: block; }
+    .num { text-align: right; font-size: 12px; color: var(--sec); letter-spacing: .08em; }
+    .num b { display: block; font-size: 15px; color: var(--torra); letter-spacing: .02em; }
+    .hero { padding: 28px clamp(20px, 5vw, 48px) 8px; }
+    .kicker { font-size: 12px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: var(--caramelo-dark); }
+    h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(38px, 6vw, 60px); line-height: 1; letter-spacing: -.015em; margin-top: 10px; }
+    h1 em { color: var(--pielini); }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 24px; }
+    .fact { background: var(--creme); border-radius: 16px; padding: 12px 16px; }
+    .fact span { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sec); }
+    .fact b { display: block; margin-top: 2px; font-weight: 500; }
+    .photo { position: relative; margin: 28px clamp(20px, 5vw, 48px) 0; border-radius: 22px; overflow: hidden; aspect-ratio: 16 / 9; background: #2a1f17; }
+    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo .cap { position: absolute; inset: auto 0 0 0; padding: 60px 24px 20px; color: #fff; background: linear-gradient(to top, rgba(30,22,16,.92), rgba(30,22,16,0)); }
+    .photo .cap h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
+    .photo .cap p { font-size: 14px; opacity: .85; }
+    section.block { padding: 30px clamp(20px, 5vw, 48px) 0; }
+    h3 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 500; font-size: 28px; line-height: 1.1; margin-bottom: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 14px; background: #fff; }
+    ul.check { list-style: none; display: grid; gap: 8px; }
+    ul.check li { position: relative; padding-left: 26px; font-size: 15px; }
+    ul.check li::before { content: ""; position: absolute; left: 2px; top: .45em; width: 12px; height: 7px; border-left: 2px solid var(--pielini); border-bottom: 2px solid var(--pielini); transform: rotate(-45deg); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    table.inv { width: 100%; border-collapse: collapse; font-size: 15px; }
+    table.inv td { padding: 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    table.inv td.v { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-left: 16px; }
+    table.inv tr.sub td { color: var(--pielini); }
+    .total { margin-top: 18px; border-radius: 22px; background: var(--torra); color: var(--creme); padding: 22px 24px; display: grid; gap: 14px; }
+    .total .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+    .total .big { font-size: clamp(30px, 5vw, 42px); font-weight: 500; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .total .lbl { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
+    .total .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; border-top: 1px solid rgba(245,242,235,.15); padding-top: 14px; }
+    .total .opt span { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+    .total .opt b { font-weight: 500; font-size: 18px; font-variant-numeric: tabular-nums; }
+    .total .opt.hl b { color: #DDA971; }
+    .note { margin-top: 12px; font-size: 13px; color: var(--sec); }
+    .obs { background: var(--creme); border-left: 3px solid var(--caramelo); border-radius: 0 14px 14px 0; padding: 14px 18px; white-space: pre-line; font-size: 15px; }
+    .validity { margin: 30px clamp(20px, 5vw, 48px) 0; padding: 16px 20px; border: 1px dashed rgba(168,109,51,.5); border-radius: 16px; font-size: 14px; color: var(--caramelo-dark); text-align: center; }
+    footer.sig { padding: 34px clamp(20px, 5vw, 48px) 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--sec); }
+    footer.sig p.serif { font-size: 24px; font-style: italic; color: var(--torra); }
+    .actions { position: fixed; z-index: 10; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 10px; padding: 8px; border-radius: 999px; background: rgba(255,255,255,.88); box-shadow: 0 16px 40px -18px rgba(30,22,16,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); width: max-content; max-width: calc(100vw - 24px); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; padding: 13px 20px; font: 600 14px "Geist", sans-serif; cursor: pointer; text-decoration: none; white-space: nowrap; }
+    .btn.wa { background: #25D366; color: #fff; }
+    .btn.ghost { background: var(--creme); color: var(--torra); }
+    .empty { text-align: center; padding: 80px 20px; }
+    @media (max-width: 640px) {
+      .cols { grid-template-columns: 1fr; }
+      header.top img { width: 108px; }
+      .btn { padding: 12px 15px; font-size: 13px; }
+    }
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: #fff; }
+      .wrap { padding: 0; max-width: none; }
+      .sheet { box-shadow: none; border-radius: 0; }
+      .actions { display: none; }
+      .photo { aspect-ratio: 21 / 8; margin-top: 18px; }
+      .hero { padding-top: 18px; }
+      section.block { padding-top: 20px; }
+      .photo, .total, .validity, table.inv, ul.check { break-inside: avoid; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  
+    .pricetab { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+    .pricetab th, .pricetab td { padding: 12px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+    .pricetab th { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--sec); }
+    .pricetab th:first-child, .pricetab td:first-child { text-align: left; padding-left: 0; }
+    .pricetab td:last-child, .pricetab th:last-child { padding-right: 0; }
+    .pricetab td b { font-weight: 500; }
+    .pricetab td small { display: block; font-size: 12px; color: var(--sec); }
+    .pricetab tr.hl td { background: rgba(200,138,75,.08); }
+    .pricetab .nm { font-family: "Cormorant Garamond", Georgia, serif; font-size: 21px; line-height: 1.1; }
+    .pricetab .mt { display: block; font-size: 12px; color: var(--sec); font-family: "Geist", sans-serif; margin-top: 2px; }
+    .gal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 26px clamp(20px, 5vw, 48px) 0; }
+    .gal img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 16px; display: block; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .card { background: var(--creme); border-radius: 18px; padding: 16px 18px; }
+    .card span { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sec); }
+    .card b { display: block; font-size: 22px; font-weight: 500; margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .card p { font-size: 13.5px; color: var(--sec); margin-top: 4px; }
+    ol.steps { list-style: none; counter-reset: s; display: grid; gap: 12px; }
+    ol.steps li { counter-increment: s; position: relative; padding-left: 44px; font-size: 15px; }
+    ol.steps li::before { content: counter(s); position: absolute; left: 0; top: -2px; width: 30px; height: 30px; border-radius: 50%; background: var(--pielini); color: #fff; font-size: 14px; font-weight: 600; display: grid; place-items: center; }
+    ol.steps li b { display: block; }
+    .lead { margin-top: 14px; color: var(--sec); max-width: 62ch; font-size: 16px; }
+    @media (max-width: 560px) {
+      .pricetab { font-size: 13.5px; }
+      .pricetab th, .pricetab td { padding: 10px 4px; }
+      .pricetab .nm { font-size: 17px; }
+      .pricetab .mt { display: none; }
+      .gal { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    }
+    @media print { .gal img { aspect-ratio: 1 / 1; } .pricetab, .cards, ol.steps { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="app"></main>
+  <script src="assets/js/proposta-data.js"></script>
+  <script>
+  (() => {
+    const { PLANS, TIERS, EXTRAS, INCLUDED, TERMS, WHATSAPP, brl } = window.PIELINI;
+    const q = new URLSearchParams(location.search);
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const name = String(q.get('n') || '').trim();
+    const first = name.split(/\s+/)[0] || '';
+    const methods = ['V60 e Prensa Francesa', '+ Koar e Chemex', 'Filtrados + espresso, cappuccino e mocaccino', 'Tudo + sodas italianas ou cafés gelados'];
+    // distâncias aproximadas de carro a partir da cafeteria (Novo Hamburgo)
+    const CITIES = [['Porto Alegre', 42], ['Gramado', 72], ['Canela', 80], ['Caxias do Sul', 95], ['Bento Gonçalves', 110]];
+    const kmFee = (km) => Math.max(0, km - EXTRAS.freeKm) * EXTRAS.perKm;
+    const ask = encodeURIComponent(`Olá, Juan! ☕ ${first ? `Aqui é ${name}, ` : ''}cerimonialista. Tenho um evento e quero consultar a disponibilidade da Pielini Coffee.\n\n• Data: \n• Local / cidade: \n• Convidados: \n• Estação de interesse: `);
+
+    document.getElementById('app').innerHTML = `
+      <article class="sheet">
+        <header class="top">
+          <img src="assets/svg/pielini-logotipo.svg" alt="Pielini Coffee">
+          <div class="num">PARCERIA<b>Guia para cerimonialistas</b>ilhas de café para eventos</div>
+        </header>
+        <div class="hero">
+          <p class="kicker">Cafeteria &amp; Torrefação</p>
+          <h1>${first ? `${esc(first)}, tudo o que você precisa para <em>indicar</em> a Pielini` : 'Tudo o que você precisa para <em>indicar</em> a Pielini'}</h1>
+          <p class="lead">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e baristas dedicados. Aqui estão os valores, o que levamos e o que precisamos no local, para você montar o orçamento e o layout do evento com segurança.</p>
+        </div>
+
+        <div class="gal">
+          <img src="assets/img/fotos/ilha-jardim.jpg" alt="Ilha da Pielini Coffee montada em um casamento ao ar livre" style="object-position:50% 50%">
+          <img src="assets/img/fotos/barista-chemex.jpg" alt="Barista da Pielini passando café na Chemex durante um evento" style="object-position:62% 50%">
+          <img src="assets/img/fotos/noivos-brinde.jpg" alt="Noivos brindando com os cafés da Pielini" style="object-position:50% 60%">
+        </div>
+
+        <section class="block">
+          <h3>Valores por número de convidados</h3>
+          <table class="pricetab">
+            <thead><tr><th>Estação</th>${TIERS.map((t) => `<th>até ${t}</th>`).join('')}</tr></thead>
+            <tbody>
+              ${PLANS.map((p, i) => `<tr${i === 2 ? ' class="hl"' : ''}>
+                <td><span class="nm">${esc(p.name)}</span><span class="mt">${esc(methods[i])}</span></td>
+                ${p.prices.map((v, k) => `<td><b>${brl(v).replace(',00', '')}</b><small>${p.baristas[k]} barista${p.baristas[k] > 1 ? 's' : ''}</small></td>`).join('')}
+              </tr>`).join('')}
+            </tbody>
+          </table>
+          <p class="note">${EXTRAS.hours} horas de mesa · deslocamento incluso até ${EXTRAS.freeKm} km · personalização já inclusa. Acima de ${TIERS[TIERS.length - 1]} convidados e eventos corporativos: proposta sob medida.</p>
+        </section>
+
+        <section class="block">
+          <h3>Adicionais</h3>
+          <div class="cards">
+            <div class="card"><span>Personalização adicional</span><b>${brl(EXTRAS.customization).replace(',00', '')}</b><p>Além da personalização que já vem inclusa.</p></div>
+            <div class="card"><span>Km além de ${EXTRAS.freeKm} km</span><b>${brl(EXTRAS.perKm)} por km</b><p>Contado a partir da cafeteria, em Novo Hamburgo.</p></div>
+          </div>
+          <table class="inv" style="margin-top:14px">
+            ${CITIES.map(([c, km]) => `<tr><td>${c} <span style="color:var(--sec)">(~${km} km)</span></td><td class="v">+ ${brl(kmFee(km)).replace(',00', '')}</td></tr>`).join('')}
+          </table>
+          <p class="note">Valores de deslocamento aproximados; o valor exato sai no orçamento, conforme o endereço do evento.</p>
+        </section>
+
+        <section class="block cols">
+          <div><h3>Incluso em todas</h3><ul class="check">${INCLUDED.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
+          <div><h3>O que precisamos no local</h3><ul class="check">${TERMS.client.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
+        </section>
+
+        <section class="block">
+          <h3>Como funciona com o cerimonial</h3>
+          <ol class="steps">
+            <li><b>Você consulta a data</b>Manda a data, o local e o número de convidados pelo WhatsApp.</li>
+            <li><b>Devolvemos o valor fechado</b>No mesmo dia, já com o deslocamento, para você repassar aos noivos ou à empresa.</li>
+            <li><b>Reserva da data</b>Com o contrato assinado e o sinal de 50%. O restante, na semana do evento.</li>
+            <li><b>Alinhamos com você</b>Horário de serviço, posição da ilha e cronograma, direto com o cerimonial.</li>
+            <li><b>No dia</b>Chegamos 1h30 antes, montamos, servimos e desmontamos sem atrapalhar o andamento do evento.</li>
+          </ol>
+        </section>
+
+        <section class="block">
+          <h3>Pagamento</h3>
+          <ul class="check">${TERMS.payment.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+        </section>
+
+        <div class="validity">Valores de referência, sujeitos a confirmação conforme data, local e número de convidados.</div>
+
+        <footer class="sig">
+          <div><p class="serif">Cafés especiais para momentos especiais.</p><p>Pielini Coffee · Cafeteria &amp; Torrefação · Novo Hamburgo/RS</p></div>
+          <div style="text-align:right">(51) 99516-8104<br>@pielinicoffee · pielinicoffee.com</div>
+        </footer>
+      </article>
+      <div class="actions">
+        <a class="btn wa" href="https://wa.me/${WHATSAPP}?text=${ask}" target="_blank" rel="noopener">Consultar uma data</a>
+        <button class="btn ghost" type="button" id="pdf">Baixar PDF</button>
+      </div>`;
+    document.getElementById('pdf').addEventListener('click', () => window.print());
+  })();
+  </script>
+</body>
+</html>

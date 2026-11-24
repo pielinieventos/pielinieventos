@@ -34,10 +34,10 @@
   /* Tabela de preços (até 100 convidados) — edite aqui quando reajustar */
   const PRICING = {
     plans: [
-      { name: 'Estação Básica', price: 990 },
-      { name: 'Estação Filtrados', price: 1290 },
-      { name: 'Estação Espressos', price: 2190 },
-      { name: 'Estação Premium Plus', price: 2390 },
+      { name: 'Filtrados Basic', price: 990 },
+      { name: 'Filtrados Completo', price: 1290 },
+      { name: 'Espressos', price: 2190 },
+      { name: 'Espressos Plus', price: 2390 },
     ],
     maxGuests: 100,          // acima disso: proposta sob medida pelo WhatsApp
     // Equipe extra (o cliente vê só "atendimento ampliado", nunca a quantidade de baristas):
@@ -45,7 +45,7 @@
     // +1 barista quando o café for a atração principal (sem outras atrações no evento)
     espressoGuestsLimit: 80,
     extraStaffFee: 200,      // valor cobrado por barista extra — ajuste aqui
-    giftPlan: 3,             // Premium Plus ganha a personalização dos copos de brinde
+    giftPlan: 3,             // destino do upgrade (Espressos Plus)
     upsellFrom: 2,           // quem escolhe Espressos vê a oferta de upgrade para a Plus
     freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
     perKm: 1,                // R$ por km acima do limite
@@ -435,11 +435,11 @@
      3. WIDGET 1 — MOMENTOS DA FESTA
   =================================================================== */
   const moments = [
-    { title: 'Boas-vindas', text: 'O aroma do café moído na hora recebe os convidados e a ilha vira o primeiro ponto de encontro.', rec: { station: 'Estação Filtrados', text: 'Hario V60 e Chemex' } },
-    { title: 'Mesa de Doces', text: 'O café equilibra o açúcar e valoriza cada doce da confeitaria.', rec: { station: 'Estação Espressos', text: 'Cappuccino e Caramel Macchiato' } },
-    { title: 'Pós-Jantar', text: 'Um espresso bem extraído fecha a refeição com elegância.', rec: { station: 'Estação Espressos', text: 'Espresso e Mocaccino' } },
-    { title: 'Pista de Dança', text: 'Bebidas geladas e cafés com energia mantêm a festa no ritmo.', rec: { station: 'Estação Premium Plus', text: 'Sodas Italianas e Mocaccino' } },
-    { title: 'Empresarial', text: 'Coffee break, convenções e recepção de clientes: café especial servido ao vivo valoriza a marca e mantém a equipe energizada.', rec: { station: 'Estação Espressos', text: 'Espresso, Cappuccino e filtrados' } },
+    { title: 'Boas-vindas', text: 'O aroma do café moído na hora recebe os convidados e a ilha vira o primeiro ponto de encontro.', rec: { station: 'Filtrados Completo', text: 'Hario V60 e Chemex' } },
+    { title: 'Mesa de Doces', text: 'O café equilibra o açúcar e valoriza cada doce da confeitaria.', rec: { station: 'Espressos', text: 'Cappuccino e Caramel Macchiato' } },
+    { title: 'Pós-Jantar', text: 'Um espresso bem extraído fecha a refeição com elegância.', rec: { station: 'Espressos', text: 'Espresso e Mocaccino' } },
+    { title: 'Pista de Dança', text: 'Bebidas geladas e cafés com energia mantêm a festa no ritmo.', rec: { station: 'Espressos Plus', text: 'Sodas Italianas e Mocaccino' } },
+    { title: 'Empresarial', text: 'Coffee break, convenções e recepção de clientes: café especial servido ao vivo valoriza a marca e mantém a equipe energizada.', rec: { station: 'Espressos', text: 'Espresso, Cappuccino e filtrados' } },
   ];
   // foto de fundo de cada momento (object-position = foco do recorte)
   const MOMENT_PHOTOS = [
@@ -514,7 +514,7 @@
   // leva a "Explore os métodos"; a estação recomendada já fica marcada no simulador
   $('[data-m="rec-btn"]', momentPanel).addEventListener('click', (e) => {
     const station = e.currentTarget.dataset.station;
-    const idx = ['Estação Básica', 'Estação Filtrados', 'Estação Espressos', 'Estação Premium Plus'].indexOf(station);
+    const idx = ['Filtrados Basic', 'Filtrados Completo', 'Espressos', 'Espressos Plus'].indexOf(station);
     setPlan(idx);
     lockedStation = idx;
     showLevel(idx);
@@ -594,13 +594,13 @@
   =================================================================== */
   const ic = (p) => `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   const METODOS = [
-    { key: 'hario', nome: 'Hario V60', tempo: '2 min 30 s a 3 min 30 s', plano: 'Estação Básica', desc: 'Filtrado em cone, gota a gota: xícara limpa, aromática e delicada.', icon: ic('<path d="M6 8h20l-7 12h-6z" fill="currentColor" stroke="none"/><path d="M26 10c3 0 3 5 0 5"/><path d="M9 24h14M12 20v4M20 20v4"/>') },
-    { key: 'french', nome: 'Prensa francesa', tempo: 'cerca de 4 min', plano: 'Estação Básica', desc: 'Café em imersão: mais corpo e uma textura aveludada.', icon: ic('<rect x="9" y="9" width="12" height="16" rx="1.5"/><path d="M21 12h3v9h-3M15 5v4M12 5h6M9 13h12"/>') },
-    { key: 'koar', nome: 'Koar', tempo: 'cerca de 3 min', plano: 'Estação Filtrados', desc: 'Filtro de pétalas que valoriza a doçura e a acidez do grão.', icon: ic('<path d="M5 9h22l-7 12h-8z"/><path d="M9 9l4 12M13 9l2 12M19 9l-2 12M23 9l-4 12M11 25h10"/>') },
-    { key: 'chemex', nome: 'Chemex', tempo: '3 a 4 min', plano: 'Estação Filtrados', desc: 'Filtro de papel grosso, bebida limpa e brilhante, servida em jarra.', icon: ic('<path d="M10 5h12l-5 10 5 12H10l5-12z"/><path d="M13 14h6"/><path d="M11 22h10l1 5H10z" fill="currentColor" stroke="none" opacity=".35"/>') },
-    { key: 'espresso', nome: 'Espresso', tempo: '25 a 30 s (extração)', plano: 'Estação Espressos', desc: 'A base dos clássicos: espresso, cappuccino, caramel macchiato e mocaccino.', icon: ic('<path d="M7 12h16v6a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 12h16v6a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M23 14h2a2.5 2.5 0 0 1 0 5h-2.5M5 27h22"/>') },
-    { key: 'gelado', nome: 'Gelado', tempo: 'cerca de 2 min', plano: 'Estação Premium Plus', desc: 'Café gelado e cremoso, para dias quentes e para a pista de dança.', icon: ic('<path d="M16 5l10 5v12l-10 5-10-5V10z"/><path d="M6 10l10 5 10-5M16 15v12"/>') },
-    { key: 'soda', nome: 'Soda italiana', tempo: 'cerca de 1 min', plano: 'Estação Premium Plus', desc: 'Xarope, água com gás e gelo: colorida, refrescante e sem álcool.', icon: ic('<path d="M9 8h14l-2 19H11z"/><path d="M10 13h12"/><circle cx="15" cy="18" r="1"/><circle cx="18" cy="22" r="1"/><circle cx="14" cy="24" r=".8"/><circle cx="17" cy="5" r=".8"/>') },
+    { key: 'hario', nome: 'Hario V60', tempo: '2 min 30 s a 3 min 30 s', plano: 'Filtrados Basic', desc: 'Filtrado em cone, gota a gota: xícara limpa, aromática e delicada.', icon: ic('<path d="M6 8h20l-7 12h-6z" fill="currentColor" stroke="none"/><path d="M26 10c3 0 3 5 0 5"/><path d="M9 24h14M12 20v4M20 20v4"/>') },
+    { key: 'french', nome: 'Prensa francesa', tempo: 'cerca de 4 min', plano: 'Filtrados Basic', desc: 'Café em imersão: mais corpo e uma textura aveludada.', icon: ic('<rect x="9" y="9" width="12" height="16" rx="1.5"/><path d="M21 12h3v9h-3M15 5v4M12 5h6M9 13h12"/>') },
+    { key: 'koar', nome: 'Koar', tempo: 'cerca de 3 min', plano: 'Filtrados Completo', desc: 'Filtro de pétalas que valoriza a doçura e a acidez do grão.', icon: ic('<path d="M5 9h22l-7 12h-8z"/><path d="M9 9l4 12M13 9l2 12M19 9l-2 12M23 9l-4 12M11 25h10"/>') },
+    { key: 'chemex', nome: 'Chemex', tempo: '3 a 4 min', plano: 'Filtrados Completo', desc: 'Filtro de papel grosso, bebida limpa e brilhante, servida em jarra.', icon: ic('<path d="M10 5h12l-5 10 5 12H10l5-12z"/><path d="M13 14h6"/><path d="M11 22h10l1 5H10z" fill="currentColor" stroke="none" opacity=".35"/>') },
+    { key: 'espresso', nome: 'Espresso', tempo: '25 a 30 s (extração)', plano: 'Espressos', desc: 'A base dos clássicos: espresso, cappuccino, caramel macchiato e mocaccino.', icon: ic('<path d="M7 12h16v6a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 12h16v6a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M23 14h2a2.5 2.5 0 0 1 0 5h-2.5M5 27h22"/>') },
+    { key: 'gelado', nome: 'Gelado', tempo: 'cerca de 2 min', plano: 'Espressos Plus', desc: 'Café gelado e cremoso, para dias quentes e para a pista de dança.', icon: ic('<path d="M16 5l10 5v12l-10 5-10-5V10z"/><path d="M6 10l10 5 10-5M16 15v12"/>') },
+    { key: 'soda', nome: 'Soda italiana', tempo: 'cerca de 1 min', plano: 'Espressos Plus', desc: 'Xarope, água com gás e gelo: colorida, refrescante e sem álcool.', icon: ic('<path d="M9 8h14l-2 19H11z"/><path d="M10 13h12"/><circle cx="15" cy="18" r="1"/><circle cx="18" cy="22" r="1"/><circle cx="14" cy="24" r=".8"/><circle cx="17" cy="5" r=".8"/>') },
   ];
   // posição vertical (em %) de cada botão, alinhada à lista desenhada na foto
   const ROWS = [14.12, 21.40, 28.68, 35.96, 43.24, 50.52, 57.80];
@@ -808,8 +808,7 @@
       `• Outras atrações no evento: ${attractionsLabel()}`,
     ];
     if (!isQuoteOnly() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
-    if (state.plan === PRICING.giftPlan) lines.push('• 🎁 Brinde Premium Plus: personalização dos copos grátis');
-    return lines;
+        return lines;
   };
 
   const lineRow = (label, value, strong = false) => `<li class="flex items-baseline justify-between gap-4"><span class="text-creme/65">${label}</span><span class="${strong ? 'font-semibold text-creme' : 'text-creme/90'}">${value}</span></li>`;
@@ -880,21 +879,15 @@
   // quem já escolheu a Plus vê o brinde confirmado
   function renderOffer() {
     const box = $('#sim-offer');
-    if (state.plan === PRICING.giftPlan) {
-      box.innerHTML = `<div class="offer-gift mt-6 rounded-2xl border border-caramelo/40 bg-caramelo/10 p-5">
-        <p class="flex items-center gap-2 font-display text-2xl text-caramelo-light"><span aria-hidden="true">🎁</span> Presente Pielini</p>
-        <p class="mt-1 text-sm text-creme/80">Por escolher a <strong>Premium Plus</strong>, a <strong>personalização dos copos</strong> com a identidade do seu evento é por nossa conta.</p>
-        <p class="mt-2 flex items-baseline justify-between text-sm"><span class="text-creme/65">Personalização dos copos</span><span class="font-semibold text-caramelo-light">Grátis</span></p>
-      </div>`;
-    } else if (state.plan === PRICING.upsellFrom) {
+    if (state.plan === PRICING.upsellFrom) {
       box.innerHTML = `<div class="offer-upsell mt-6 rounded-2xl bg-pielini p-5">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-caramelo-light">Upgrade especial</p>
-        <p class="mt-1 font-display text-2xl leading-snug">Por um pequeno acréscimo, leve a <span class="text-caramelo-light">Premium Plus</span></p>
+        <p class="mt-1 font-display text-2xl leading-snug">Por um pequeno acréscimo, leve a <span class="text-caramelo-light">Espressos Plus</span></p>
         <ul class="mt-3 space-y-1.5 text-sm text-creme/85">
           <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> Sodas Italianas ou cafés gelados</li>
-          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> <strong>Personalização dos copos grátis</strong> 🎁</li>
+          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> A experiência completa da Pielini</li>
         </ul>
-        <button type="button" id="sim-upgrade" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-creme px-5 py-3 text-sm font-bold text-torra transition hover:bg-white">Quero o upgrade para a Premium Plus</button>
+        <button type="button" id="sim-upgrade" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-creme px-5 py-3 text-sm font-bold text-torra transition hover:bg-white">Quero o upgrade para a Espressos Plus</button>
       </div>`;
       $('#sim-upgrade').addEventListener('click', () => {
         setPlan(PRICING.giftPlan);
@@ -907,7 +900,7 @@
       box.innerHTML = '';
     }
     const badge = $('#cup-badge');
-    if (badge) badge.innerHTML = state.plan === PRICING.giftPlan ? '<span class="font-semibold text-caramelo-dark">🎁 Grátis na Premium Plus</span>' : 'Opcional · disponível em qualquer estação';
+    if (badge) badge.innerHTML = '<span class="font-semibold text-caramelo-dark">Inclusa em todas as estações</span>';
   }
 
   function setPlan(idx) {
@@ -1050,7 +1043,6 @@
       ['Convidados', guestsLabel()],
       ['Cidade', cityLabel()],
       ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
-      ...(state.plan === PRICING.giftPlan ? [['Brinde', '🎁 Personalização dos copos grátis']] : []),
       ['Data do evento', dateLabel()],
     ];
     $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');

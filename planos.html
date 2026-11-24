@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Nossos planos · Pielini Coffee</title>
-  <meta name="description" content="Estações de cafés especiais para eventos: Básica, Filtrados, Espressos e Premium Plus.">
+  <meta name="description" content="Estações de cafés especiais para eventos: Filtrados Basic, Filtrados Completo, Espressos e Espressos Plus.">
   <meta name="theme-color" content="#F5F2EB">
   <link rel="icon" type="image/svg+xml" href="assets/svg/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,6 +93,13 @@
     .plan .price { font-size: 13px; color: var(--sec); }
     .plan .price b { display: block; font-size: 30px; font-weight: 500; letter-spacing: -.02em; color: var(--torra); font-variant-numeric: tabular-nums; }
     .plan .badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--caramelo); color: var(--torra); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; border-radius: 999px; padding: 6px 12px; }
+    .plan .body, .tiers, .tier { min-width: 0; }
+    .tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .tier { background: var(--creme); border-radius: 14px; padding: 9px 12px; }
+    .tier span { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sec); }
+    .tier b { display: block; font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+    .tier small { font-size: 12px; color: var(--sec); }
+    @media (max-width: 400px) { .tier { padding: 8px 9px; } .tier b { font-size: 16px; } }
     .plan .gift { font-size: 13px; color: var(--caramelo-dark); font-weight: 500; }
     .addons { margin-top: 4px; }
     .btn.pick { align-self: flex-start; margin-top: auto; background: var(--pielini); color: #fff; padding: 12px 22px; transition: transform .2s, background .2s; }
@@ -100,7 +107,7 @@
     .plan.hl .btn.pick { background: var(--caramelo); color: var(--torra); }
     @media (max-width: 680px) { .btn.pick { align-self: stretch; } }
     @media print { .btn.pick { display: none; } }
-    @media (max-width: 680px) { .plan { grid-template-columns: 1fr; } .plan .pic { height: 210px; min-height: 0; } }
+    @media (max-width: 680px) { .plan { grid-template-columns: minmax(0, 1fr); } .plan .pic { height: 210px; min-height: 0; } }
     @media print { .plan { break-inside: avoid; } }
   </style>
 </head>
@@ -109,7 +116,7 @@
   <script src="assets/js/proposta-data.js"></script>
   <script>
   (() => {
-    const { PLANS, INCLUDED, TERMS, WHATSAPP, brl, decode } = window.PIELINI;
+    const { PLANS, TIERS, EXTRAS, INCLUDED, TERMS, WHATSAPP, brl, decode } = window.PIELINI;
     const q = new URLSearchParams(location.search);
     let D = {};
     try { if (q.get('d')) D = decode(q.get('d')) || {}; } catch (e) { D = {}; }
@@ -137,7 +144,7 @@
         <div class="hero">
           <p class="kicker">Cafeteria &amp; Torrefação</p>
           <h1>${first ? `${esc(first)}, conheça as nossas <em>estações</em>` : 'Conheça as nossas <em>estações</em>'}</h1>
-          <p style="margin-top:12px;color:var(--sec);max-width:60ch">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e barista dedicado. ${showPrices ? (custom ? 'Os valores abaixo já foram calculados para o seu evento.' : 'Valores de referência para até 100 convidados.') : ''}</p>
+          <p style="margin-top:12px;color:var(--sec);max-width:60ch">Ilhas de cafés especiais com preparo ao vivo, café de torra própria e barista dedicado. ${showPrices ? (custom ? 'Os valores abaixo já foram calculados para o seu evento.' : 'Valores de referência por número de convidados, com 3 horas de mesa.') : ''}</p>
           ${facts.length ? `<div class="facts">${facts.map(([k, v]) => `<div class="fact"><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
         </div>
 
@@ -150,8 +157,7 @@
                 <h2>${esc(p.name)}</h2>
                 <p class="tl">${esc(p.tagline)}</p>
                 <div class="chips">${p.methods.map((m) => `<span class="chip">${esc(m)}</span>`).join('')}</div>
-                ${i === 3 ? '<p class="gift">🎁 Personalização dos copos de brinde</p>' : ''}
-                ${showPrices ? `<p class="price">${custom ? 'para o seu evento' : 'a partir de'}<b>${brl(priceOf(i))}</b></p>` : ''}
+                ${showPrices ? (custom ? `<p class="price">para o seu evento<b>${brl(priceOf(i))}</b></p>` : `<div class="tiers">${TIERS.map((t, k) => `<div class="tier"><span>até ${t}</span><b>${brl(p.prices[k]).replace(',00', '')}</b><small>${p.baristas[k]} barista${p.baristas[k] > 1 ? 's' : ''}</small></div>`).join('')}</div>`) : ''}
                 <a class="btn pick" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(pickMsg(i))}" target="_blank" rel="noopener">Quero este plano</a>
               </div>
             </div>`).join('')}
@@ -160,9 +166,10 @@
         <section class="block cols">
           <div><h3>Incluso em todas</h3><ul class="check">${INCLUDED.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
           <div><h3>Bom saber</h3><ul class="check">
-            <li>3 horas de serviço.</li>
+            <li>${EXTRAS.hours} horas de mesa.</li>
+            <li>Personalização já inclusa${showPrices ? `; personalização adicional: ${brl(EXTRAS.customization)}` : ''}.</li>
             <li>Deslocamento incluso até 10 km da cafeteria${showPrices ? '; acima disso, R$ 1 por km' : ''}.</li>
-            ${custom ? '' : '<li>Acima de 100 convidados e eventos corporativos: proposta sob medida.</li>'}
+            ${custom ? '' : '<li>Acima de 200 convidados e eventos corporativos: proposta sob medida.</li>'}
             ${showPrices ? `<li>À vista no Pix: ${Math.round(TERMS.cashDiscount * 100)}% de desconto. Ou 50% na assinatura e 50% na semana do evento.</li><li>Cartão de crédito: parcelamos, com as taxas da maquininha por conta do contratante.</li>` : ''}
             <li>A data fica reservada após a assinatura do contrato e o pagamento do sinal.</li>
           </ul></div>

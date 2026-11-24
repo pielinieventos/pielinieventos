@@ -151,7 +151,7 @@
             <div><span>À vista (10% off)</span><span id="tCash">R$ 0,00</span></div>
             <div><span>Sinal 50% / restante 50%</span><span id="tHalf">R$ 0,00</span></div>
           </div>
-          <p class="hint">Os valores sugeridos seguem a tabela do site. Ajuste à vontade antes de enviar — especialmente em eventos corporativos e acima de 100 convidados.</p>
+          <p class="hint">Os valores sugeridos seguem a tabela do site. Ajuste à vontade antes de enviar — especialmente em eventos corporativos e acima de 200 convidados.</p>
         </section>
         <section class="card">
           <h2>Mensagem para o cliente</h2>
@@ -177,7 +177,7 @@
   <script src="assets/js/proposta-data.js"></script>
   <script>
   (() => {
-    const { PLANS, TERMS, brl, encode } = window.PIELINI;
+    const { PLANS, TERMS, priceFor, brl, encode } = window.PIELINI;
     const $ = (id) => document.getElementById(id);
     const EXTRA_STAFF = 200;      // atendimento ampliado (barista extra) — igual ao simulador do site
     const FREE_KM = 10;
@@ -211,14 +211,13 @@
       linesBox.innerHTML = '';
       const idx = Number($('plan').value);
       const plan = PLANS[idx];
-      if (plan) addLine(plan.name, hint.corporate ? '' : plan.price);
+      if (plan) addLine(plan.name, hint.corporate ? '' : (priceFor(plan, ctxGuests()) ?? ''));
       else addLine('Estação personalizada', '');
       const extraKm = Math.max(0, Math.round(ctxKm()) - FREE_KM);
       addLine(extraKm ? `Deslocamento (${extraKm} km além de 10 km)` : 'Deslocamento até 10 km', extraKm * PER_KM);
-      const staff = (idx >= 2 && ctxGuests() > 80 ? 1 : 0) + (ctxAtt() === 'nao' ? 1 : 0);
+      const staff = ctxAtt() === 'nao' ? 1 : 0;
       if (staff) addLine('Atendimento ampliado (barista extra)', staff * EXTRA_STAFF);
-      if (idx === 3) addLine('Personalização dos copos (brinde Premium Plus)', 0);
-      else if (hint.cup) addLine(`Personalização dos copos (${hint.cup})`, '');
+      if (hint.cup) addLine(`Personalização adicional (${hint.cup})`, 90);
       render();
     };
 
@@ -262,17 +261,17 @@
       $('num').value = newNumber();
       suggest();
       fillPlanPrices();
-      const big = ctxGuests() > 100;
+      const big = ctxGuests() > 200;
       const chosen = fromSite && pi >= 0 ? ` O cliente escolheu a <b>${PLANS[pi].name}</b> no site: a proposta com valores já está montada no bloco 4 — é só tocar em “Enviar no WhatsApp”.` : '';
-      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os campos${hint.corporate ? ' — evento corporativo: ajuste os valores das estações' : ''}${big ? ' — mais de 100 convidados: ajuste os valores (2+ baristas)' : ''}.${chosen}`;
+      $('parsed').innerHTML = `<span class="ok">✓ Preenchido.</span> Confira os campos${hint.corporate ? ' — evento corporativo: ajuste os valores das estações' : ''}${big ? ' — mais de 200 convidados: ajuste os valores' : ''}.${chosen}`;
     });
 
     // ---------- valores por estação (link dos planos) ----------
     PLANS.forEach((pl, i) => $('planPrices').insertAdjacentHTML('beforeend', `<div class="field"><label for="pp${i}">${pl.name}</label><input id="pp${i}" type="number" step="0.01"></div>`));
     const planTotal = (i) => {
       const extraKm = Math.max(0, Math.round(ctxKm()) - FREE_KM) * PER_KM;
-      const staff = ((i >= 2 && ctxGuests() > 80 ? 1 : 0) + (ctxAtt() === 'nao' ? 1 : 0)) * EXTRA_STAFF;
-      return PLANS[i].price + extraKm + staff;
+      const staff = (ctxAtt() === 'nao' ? 1 : 0) * EXTRA_STAFF;
+      return (priceFor(PLANS[i], ctxGuests()) ?? PLANS[i].prices[2]) + extraKm + staff;
     };
     const fillPlanPrices = () => { PLANS.forEach((_, i) => { $(`pp${i}`).value = planTotal(i); }); render(); };
     ['km', 'conv', 'att'].forEach((id) => $(id).addEventListener('change', fillPlanPrices));

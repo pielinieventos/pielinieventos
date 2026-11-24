@@ -8,26 +8,32 @@ window.PIELINI = (() => {
 
   const PLANS = [
     {
-      name: 'Estação Básica', price: 990, img: 'fotos/v60-preparo', pos: '50% 61%',
+      name: 'Filtrados Basic', price: 990, baristas: [1, 2, 2], prices: [990, 1490, 1890], img: 'fotos/v60-preparo', pos: '50% 61%',
       tagline: 'O ritual essencial do café passado na hora.',
       methods: ['Hario V60', 'Prensa Francesa'],
     },
     {
-      name: 'Estação Filtrados', price: 1290, img: 'fotos/barista-chemex', pos: '60% 62%',
+      name: 'Filtrados Completo', price: 1290, baristas: [1, 2, 2], prices: [1290, 1790, 2190], img: 'fotos/barista-chemex', pos: '60% 62%',
       tagline: 'A experiência visual e sensorial dos métodos filtrados.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex'],
     },
     {
-      name: 'Estação Espressos', price: 2190, img: 'fotos/calda', pos: '70% 48%',
+      name: 'Espressos', price: 2190, baristas: [2, 2, 2], prices: [2190, 2450, 2850], img: 'fotos/calda', pos: '70% 48%',
       tagline: 'Os filtrados e os clássicos da cafeteria.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex', 'Espresso', 'Cappuccino', 'Caramel Macchiato', 'Mocaccino'],
     },
     {
-      name: 'Estação Premium Plus', price: 2390, img: 'fotos/noivos-brinde', pos: '50% 56%',
+      name: 'Espressos Plus', price: 2390, baristas: [2, 2, 2], prices: [2390, 2650, 3050], img: 'fotos/noivos-brinde', pos: '50% 56%',
       tagline: 'A experiência completa, com bebidas geladas.',
       methods: ['Hario V60', 'Prensa Francesa', 'Koar', 'Chemex', 'Espresso', 'Cappuccino', 'Caramel Macchiato', 'Mocaccino', 'Sodas Italianas ou cafés gelados'],
     },
   ];
+
+  // faixas de convidados da tabela (prices[i] e baristas[i] de cada estação seguem esta ordem)
+  const TIERS = [100, 150, 200];
+  const EXTRAS = { hours: 3, freeKm: 10, perKm: 1, customization: 90 };
+  // preço da estação para N convidados (acima de 200: proposta sob medida → null)
+  const priceFor = (plan, guests) => { const g = Number(guests) || 0; const i = TIERS.findIndex((t) => g <= t); return i < 0 ? null : plan.prices[i]; };
 
   // incluso em todas as estações
   const INCLUDED = [
@@ -35,7 +41,8 @@ window.PIELINI = (() => {
     'Café especial de torra própria',
     'Moedor, balança, bancada e demais equipamentos',
     'Copos, água, filtros, açúcar, adoçante e palitinhos',
-    'Personalização e impressos',
+    '3 horas de mesa',
+  'Personalização e impressos',
     'Montagem, reabastecimento e desmontagem',
     'Transporte até 10 km da cafeteria',
   ];
@@ -78,5 +85,5 @@ window.PIELINI = (() => {
     return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
   };
 
-  return { WHATSAPP, PLANS, INCLUDED, TERMS, brl, encode, decode };
+  return { WHATSAPP, PLANS, TIERS, EXTRAS, priceFor, INCLUDED, TERMS, brl, encode, decode };
 })();
