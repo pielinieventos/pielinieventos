@@ -31,7 +31,7 @@ window.PIELINI = (() => {
 
   // faixas de convidados da tabela (prices[i] e baristas[i] de cada estação seguem esta ordem)
   const TIERS = [100, 150, 200];
-  const EXTRAS = { hours: 3, freeKm: 10, perKm: 1, customization: 90 };
+  const EXTRAS = { hours: 3, freeKm: 10, perKm: 1, customization: 150, customizationIn: 3 };
   // preço da estação para N convidados (acima de 200: proposta sob medida → null)
   const priceFor = (plan, guests) => { const g = Number(guests) || 0; const i = TIERS.findIndex((t) => g <= t); return i < 0 ? null : plan.prices[i]; };
 
@@ -42,7 +42,7 @@ window.PIELINI = (() => {
     'Moedor, balança, bancada e demais equipamentos',
     'Copos, água, filtros, açúcar, adoçante e palitinhos',
     '3 horas de mesa',
-  'Personalização e impressos',
+  'Impressos',
     'Montagem, reabastecimento e desmontagem',
     'Transporte até 10 km da cafeteria',
   ];

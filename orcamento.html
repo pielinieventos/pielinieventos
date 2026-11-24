@@ -174,7 +174,7 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <script src="assets/js/proposta-data.js?v=2"></script>
+  <script src="assets/js/proposta-data.js?v=3"></script>
   <script>
   (() => {
     const { PLANS, TERMS, priceFor, brl, encode } = window.PIELINI;
@@ -217,7 +217,8 @@
       addLine(extraKm ? `Deslocamento (${extraKm} km além de 10 km)` : 'Deslocamento até 10 km', extraKm * PER_KM);
       const staff = ctxAtt() === 'nao' ? 1 : 0;
       if (staff) addLine('Atendimento ampliado (barista extra)', staff * EXTRA_STAFF);
-      if (hint.cup) addLine(`Personalização adicional (${hint.cup})`, 90);
+      if (idx === 3) addLine('Personalização dos copos (inclusa na Espressos Plus)', 0);
+      else if (hint.cup) addLine(`Personalização dos copos (${hint.cup})`, 150);
       render();
     };
 

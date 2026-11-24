@@ -113,7 +113,7 @@
 </head>
 <body>
   <main class="wrap" id="app"></main>
-  <script src="assets/js/proposta-data.js?v=2"></script>
+  <script src="assets/js/proposta-data.js?v=3"></script>
   <script>
   (() => {
     const { PLANS, TIERS, EXTRAS, INCLUDED, TERMS, WHATSAPP, brl, decode } = window.PIELINI;
@@ -157,6 +157,7 @@
                 <h2>${esc(p.name)}</h2>
                 <p class="tl">${esc(p.tagline)}</p>
                 <div class="chips">${p.methods.map((m) => `<span class="chip">${esc(m)}</span>`).join('')}</div>
+                ${i === EXTRAS.customizationIn ? '<p class="gift">🎁 Personalização dos copos inclusa</p>' : ''}
                 ${showPrices ? (custom ? `<p class="price">para o seu evento<b>${brl(priceOf(i))}</b></p>` : `<div class="tiers">${TIERS.map((t, k) => `<div class="tier"><span>até ${t}</span><b>${brl(p.prices[k]).replace(',00', '')}</b><small>${p.baristas[k]} barista${p.baristas[k] > 1 ? 's' : ''}</small></div>`).join('')}</div>`) : ''}
                 <a class="btn pick" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(pickMsg(i))}" target="_blank" rel="noopener">Quero este plano</a>
               </div>
@@ -167,7 +168,7 @@
           <div><h3>Incluso em todas</h3><ul class="check">${INCLUDED.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
           <div><h3>Bom saber</h3><ul class="check">
             <li>${EXTRAS.hours} horas de mesa.</li>
-            <li>Personalização já inclusa${showPrices ? `; personalização adicional: ${brl(EXTRAS.customization)}` : ''}.</li>
+            <li>Personalização dos copos inclusa na Espressos Plus${showPrices ? `; nas demais estações, ${brl(EXTRAS.customization).replace(',00', '')}` : ''}.</li>
             <li>Deslocamento incluso até 10 km da cafeteria${showPrices ? '; acima disso, R$ 1 por km' : ''}.</li>
             ${custom ? '' : '<li>Acima de 200 convidados e eventos corporativos: proposta sob medida.</li>'}
             ${showPrices ? `<li>À vista no Pix: ${Math.round(TERMS.cashDiscount * 100)}% de desconto. Ou 50% na assinatura e 50% na semana do evento.</li><li>Cartão de crédito: parcelamos, com as taxas da maquininha por conta do contratante.</li>` : ''}

@@ -117,7 +117,7 @@
 </head>
 <body>
   <main class="wrap" id="app"></main>
-  <script src="assets/js/proposta-data.js?v=2"></script>
+  <script src="assets/js/proposta-data.js?v=3"></script>
   <script>
   (() => {
     const { PLANS, TIERS, EXTRAS, INCLUDED, TERMS, WHATSAPP, brl } = window.PIELINI;
@@ -125,9 +125,9 @@
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const name = String(q.get('n') || '').trim();
     const first = name.split(/\s+/)[0] || '';
-    const methods = ['V60 e Prensa Francesa', '+ Koar e Chemex', 'Filtrados + espresso, cappuccino e mocaccino', 'Tudo + sodas italianas ou cafés gelados'];
+    const methods = ['V60 e Prensa Francesa', '+ Koar e Chemex', 'Filtrados + espresso, cappuccino e mocaccino', 'Tudo + sodas italianas ou cafés gelados · 🎁 copos personalizados'];
     // distâncias aproximadas de carro a partir da cafeteria (Novo Hamburgo)
-    const CITIES = [['Porto Alegre', 42], ['Gramado', 72], ['Canela', 80], ['Caxias do Sul', 95], ['Bento Gonçalves', 110]];
+    const CITIES = [['Porto Alegre', 42], ['Gramado', 72], ['Canela', 80], ['Caxias do Sul', 95], ['Bento Gonçalves', 110], ['Litoral Sul · Rio Grande / Cassino', 340], ['Litoral catarinense · Florianópolis', 450], ['Litoral catarinense · Balneário Camboriú', 540]];
     const kmFee = (km) => Math.max(0, km - EXTRAS.freeKm) * EXTRAS.perKm;
     const ask = encodeURIComponent(`Olá, Juan! ☕ ${first ? `Aqui é ${name}, ` : ''}cerimonialista. Tenho um evento e quero consultar a disponibilidade da Pielini Coffee.\n\n• Data: \n• Local / cidade: \n• Convidados: \n• Estação de interesse: `);
 
@@ -160,19 +160,19 @@
               </tr>`).join('')}
             </tbody>
           </table>
-          <p class="note">${EXTRAS.hours} horas de mesa · deslocamento incluso até ${EXTRAS.freeKm} km · personalização já inclusa. Acima de ${TIERS[TIERS.length - 1]} convidados e eventos corporativos: proposta sob medida.</p>
+          <p class="note">${EXTRAS.hours} horas de mesa · deslocamento incluso até ${EXTRAS.freeKm} km · personalização dos copos inclusa na Espressos Plus. Acima de ${TIERS[TIERS.length - 1]} convidados e eventos corporativos: proposta sob medida.</p>
         </section>
 
         <section class="block">
           <h3>Adicionais</h3>
           <div class="cards">
-            <div class="card"><span>Personalização adicional</span><b>${brl(EXTRAS.customization).replace(',00', '')}</b><p>Além da personalização que já vem inclusa.</p></div>
+            <div class="card"><span>Adicione personalização dos copos</span><b>${brl(EXTRAS.customization).replace(',00', '')}</b><p>Nas estações Filtrados Basic, Filtrados Completo e Espressos. Na Espressos Plus já vem inclusa.</p></div>
             <div class="card"><span>Km além de ${EXTRAS.freeKm} km</span><b>${brl(EXTRAS.perKm)} por km</b><p>Contado a partir da cafeteria, em Novo Hamburgo.</p></div>
           </div>
           <table class="inv" style="margin-top:14px">
             ${CITIES.map(([c, km]) => `<tr><td>${c} <span style="color:var(--sec)">(~${km} km)</span></td><td class="v">+ ${brl(kmFee(km)).replace(',00', '')}</td></tr>`).join('')}
           </table>
-          <p class="note">Valores de deslocamento aproximados; o valor exato sai no orçamento, conforme o endereço do evento.</p>
+          <p class="note">Valores de deslocamento aproximados; o valor exato sai no orçamento, conforme o endereço do evento. Em viagens longas (litoral), a hospedagem e a alimentação da equipe são combinadas à parte.</p>
         </section>
 
         <section class="block cols">

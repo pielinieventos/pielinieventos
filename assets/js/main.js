@@ -45,7 +45,7 @@
     // +1 barista quando o café for a atração principal (sem outras atrações no evento)
     espressoGuestsLimit: 80,
     extraStaffFee: 200,      // valor cobrado por barista extra — ajuste aqui
-    giftPlan: 3,             // destino do upgrade (Espressos Plus)
+    giftPlan: 3,             // Espressos Plus ganha a personalização dos copos
     upsellFrom: 2,           // quem escolhe Espressos vê a oferta de upgrade para a Plus
     freeKm: 10,              // deslocamento incluso até 10 km da cafeteria
     perKm: 1,                // R$ por km acima do limite
@@ -808,7 +808,8 @@
       `• Outras atrações no evento: ${attractionsLabel()}`,
     ];
     if (!isQuoteOnly() && quote().extraStaff) lines.push('• Atendimento ampliado: sim');
-        return lines;
+    if (state.plan === PRICING.giftPlan) lines.push('• 🎁 Brinde Espressos Plus: personalização dos copos inclusa');
+    return lines;
   };
 
   const lineRow = (label, value, strong = false) => `<li class="flex items-baseline justify-between gap-4"><span class="text-creme/65">${label}</span><span class="${strong ? 'font-semibold text-creme' : 'text-creme/90'}">${value}</span></li>`;
@@ -879,13 +880,19 @@
   // quem já escolheu a Plus vê o brinde confirmado
   function renderOffer() {
     const box = $('#sim-offer');
-    if (state.plan === PRICING.upsellFrom) {
+    if (state.plan === PRICING.giftPlan) {
+      box.innerHTML = `<div class="offer-gift mt-6 rounded-2xl border border-caramelo/40 bg-caramelo/10 p-5">
+        <p class="flex items-center gap-2 font-display text-2xl text-caramelo-light"><span aria-hidden="true">🎁</span> Presente Pielini</p>
+        <p class="mt-1 text-sm text-creme/80">Por escolher a <strong>Espressos Plus</strong>, a <strong>personalização dos copos</strong> com a identidade do seu evento é por nossa conta.</p>
+        <p class="mt-2 flex items-baseline justify-between text-sm"><span class="text-creme/65">Personalização dos copos</span><span class="font-semibold text-caramelo-light">Inclusa</span></p>
+      </div>`;
+    } else if (state.plan === PRICING.upsellFrom) {
       box.innerHTML = `<div class="offer-upsell mt-6 rounded-2xl bg-pielini p-5">
         <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-caramelo-light">Upgrade especial</p>
         <p class="mt-1 font-display text-2xl leading-snug">Por um pequeno acréscimo, leve a <span class="text-caramelo-light">Espressos Plus</span></p>
         <ul class="mt-3 space-y-1.5 text-sm text-creme/85">
           <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> Sodas Italianas ou cafés gelados</li>
-          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> A experiência completa da Pielini</li>
+          <li class="flex items-center gap-2"><span class="text-caramelo-light">✓</span> <strong>Personalização dos copos inclusa</strong> 🎁</li>
         </ul>
         <button type="button" id="sim-upgrade" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-creme px-5 py-3 text-sm font-bold text-torra transition hover:bg-white">Quero o upgrade para a Espressos Plus</button>
       </div>`;
@@ -900,7 +907,7 @@
       box.innerHTML = '';
     }
     const badge = $('#cup-badge');
-    if (badge) badge.innerHTML = '<span class="font-semibold text-caramelo-dark">Inclusa em todas as estações</span>';
+    if (badge) badge.innerHTML = state.plan === PRICING.giftPlan ? '<span class="font-semibold text-caramelo-dark">🎁 Inclusa na Espressos Plus</span>' : 'Opcional nas demais estações';
   }
 
   function setPlan(idx) {
@@ -1043,6 +1050,7 @@
       ['Convidados', guestsLabel()],
       ['Cidade', cityLabel()],
       ['Outras atrações', state.attractions ? { sim: 'Sim', nao: 'Não' }[state.attractions] : 'A informar'],
+      ...(state.plan === PRICING.giftPlan ? [['Brinde', '🎁 Personalização dos copos inclusa']] : []),
       ['Data do evento', dateLabel()],
     ];
     $('#sim-summary').innerHTML = items.map(([k, v]) => `<div class="rounded-2xl bg-creme/70 px-4 py-3"><dt class="text-[10px] font-semibold uppercase tracking-[0.18em] text-torra/45">${k}</dt><dd class="mt-0.5 font-medium">${escapeHTML(v)}</dd></div>`).join('');
